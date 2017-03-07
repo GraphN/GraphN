@@ -1,0 +1,108 @@
+\documentclass[french]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lipsum}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage{lastpage}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage[normalem]{ulem}
+
+\geometry{
+ 	a4paper,
+ 	total={210mm,297mm},
+ 	left=20mm,
+ 	right=20mm,
+ 	top=20mm,
+ 	bottom=20mm,
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setlist[enumerate,1]{leftmargin=2cm}
+
+\lhead{Lucien Badoux, Andrea Colza, Adrian Di Pietro, \\Kevin Moreira, François Quellec}
+\chead{}
+\rhead{PRO: Cahier des charges}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+	\centering
+	\LARGE{\textbf{Cahier des charges}}
+  \large
+
+	\justify
+
+  \section{Objectifs}
+
+  \section{Public cible}
+
+	\section{Spécification}
+		L'objectif global de ce projet est la réalisation d'une application de résolution de problèmes classiques des graphes dans le cadre du cours PRO. Elle sera réalisée en Qt afin de pouvoir être déployée sur les plateformes Linux, Mac OS et Windows mais ne sera que testée sur cette dernière.
+
+  \section{Charte graphique}
+
+	\section{Fonctionalités}
+		Les fonctionnalités suivantes devront être réalisées avant le 30 mai (semaine 14 du semestre). Les optionnelles seront faites si le temps le permet et les futures sont des améliorations de l'application non prévues dans le cadre du projet.
+		\begin{enumerate}
+			\item Mode Graphique (usage scolaire)
+			\begin{enumerate}
+        \item Click \& Drop avec verrous:
+        \begin{enumerate}
+          \item Sommets (Nom)
+          \item Arêtes (pondéré ou non)
+          \item Arcs (pondéré ou non)
+          \item Ajout d'une zone de texte
+          \item (Optionnel) Arcs avec capacité
+        \end{enumerate}
+				\item Exportation du graphe au formats (png, jpg)
+        \item Resolution des différents algorithmes étapes par étapes (avec rendu visuel)
+        \item (Future) Représentation de graphes importé au format CSV
+			 \end{enumerate}
+
+		   \item Mode non Graphique (usage professionnel)
+       \begin{enumerate}
+ 				\item Importation de graphes au format CSV.
+ 				\item Exportation des graphes après manipulation au format CSV.
+        \item Affichage textuelle des manipulations
+ 				\item (Optionnelle) Manipulation des graphes (ajouter/supprimer des noeuds/arêtes)
+ 			\end{enumerate}
+
+      \item Fonctions Utilitaires
+			\begin{enumerate}
+				\item Sauvegarde et ouverture de graphes (à spécifier)
+				\item Bouton d'aide
+				\item (Optionnelle) Gestion d'onglets différents
+			\end{enumerate}
+		\end{enumerate}
+
+		\subsection{Application des Algorithmes}
+			Les algorithmes suivant seront implémentés et pourront être exécuté depuis
+      l'application :
+			\begin{itemize}
+				\item Parcours en profondeur
+        \item Parcours en largeur
+        \item Algorithme de Kosaraju
+        \item Algorithme de Tarjan
+        \item Algorithme de Prim
+        \item Algorithme de Kruskal
+        \item Algorithme de Chu-Liu
+        \item Algorithme de Bellman-Ford
+        \item Algorithme de Dijkstra
+        \item Algorithme de Johnson
+        \item Tri topologique
+        \item (Optionnel) Algorithme de Floyd-Warshall
+        \item (Optionnel) Algorithme de Ford-Fulkerson
+        \item (Optionnel) Algorithme de Busacker-Gowen
+				\item (Optionnel) Problème de transbordement
+			\end{itemize}
+
+	\section{Planification}
+
+
+
+\end{document}
