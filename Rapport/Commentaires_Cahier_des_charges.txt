@@ -1,0 +1,6 @@
+Commentaires Cahier des charges PRO
+1. Titre avec logo projet + ecole, destinataire, acteurs.
+2. Table des matière.
+3. Numero des Figures.
+4. Contexte du projet.
+5. Ne pas hésitez à dire quand certaines notions sont flou.
