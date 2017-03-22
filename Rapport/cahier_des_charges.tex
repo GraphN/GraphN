@@ -48,11 +48,11 @@
   Cette application se place avant tout dans le domaine éducatif, elle concernerait surtout les professeurs et les étudiants qui appliquent les différents algorithmes décrits plus bas.
   Cela permettrait à un élève d'obtenir la correction de différents problèmes de graphes et réseaux afin de mieux les comprendre étape par étape.
   Dans un second temps cette application peut convenir à des professionels afin d'appliquer sur de gros graphes ces algorithmes et récupérer le résultat dans fichier qu'ils pourront
-  ensuite traiter/analyser facilement depuis un outil comme Excel. 
+  ensuite traiter/analyser facilement depuis un outil comme Excel.
 
 	\section{Spécifications}
+  Afin d'implémenter notre application nous allons utilisé le langage de programmation JAVA. Les interfaces graphiques seront implémentées à l'aide de Java FX.
 
-  \section{Charte graphique}
 
 
 	\section{Fonctionalités}
@@ -66,11 +66,12 @@
           \item Arêtes (pondéré ou non)
           \item Arcs (pondéré ou non)
           \item Ajout d'une zone de texte
-          \item (Optionnel) Arcs avec capacité
+          \item (Optionnelle) Arcs avec capacité
         \end{enumerate}
 				\item Exportation du graphe au formats (png, jpg)
         \item Resolution des différents algorithmes étapes par étapes (avec rendu visuel)
         \item (Future) Représentation de graphes importé au format CSV
+        \item (Future) Replacement automatique des sommets afin d'obtenir un graphe planaire le plus possible.
 			 \end{enumerate}
 
 		   \item Mode non Graphique (usage professionnel)
@@ -90,7 +91,7 @@
 		\end{enumerate}
 
 		\subsection{Application des Algorithmes}
-			Les algorithmes suivant seront implémentés et pourront être exécuté depuis
+			Les algorithmes suivant seront implémentés et pourront être exécutés depuis
       l'application :
 			\begin{itemize}
 				\item Parcours en profondeur
@@ -104,13 +105,57 @@
         \item Algorithme de Dijkstra
         \item Algorithme de Johnson
         \item Tri topologique
-        \item (Optionnel) Algorithme de Floyd-Warshall
-        \item (Optionnel) Algorithme de Ford-Fulkerson
-        \item (Optionnel) Algorithme de Busacker-Gowen
-				\item (Optionnel) Problème de transbordement
+        \item (Optionnelle) Calcul des chemins critiques
+        \item (Optionnelle) Algorithme de Floyd-Warshall
+        \item (Optionnelle) Algorithme de Ford-Fulkerson
+        \item (Optionnelle) Algorithme de Busacker-Gowen
+				\item (Optionnelle) Problème de transbordement
 			\end{itemize}
 
-	\section{Planification}
+  \section{Charte graphique}
+    \subsection{Interface Edition}
+    \begin{minipage}{\linewidth}
+    \center
+       \includegraphics[scale=0.5]{Interface_Edition.jpg}
+    \end{minipage}
+    \\
+    \\
+    Cette vue est l'interface principale de notre programme, c'est d'ici que nous pourrons dessiner des graphes et accéder aux différentes fonctionnalités utilitaires(créer, sauvegarder, exporter, importer, aide, etc).
+    Le panel d'outil à gauche permet de selectionner les composants que l'on souhaite dessiner (arêtes, sommets), en haut on trouve les boutons des fonctionnalités utilitaires citées plus haut.
+    Juste en dessous de ce panel apparaissent les différents onglets et enfin le bouton en haut à gauche permet de passer en mode Algorithme.
+
+    \subsection{Interface Algorithme}
+    \begin{minipage}{\linewidth}
+    \center
+       \includegraphics[scale=0.5]{Interface_Algorithme.jpg}
+    \end{minipage}
+    \\
+    \\
+    Une fois que l'utilisateur aura créé son graphe il pourra appliquer une panoplie d'algorithmes sur celui-ci à partir de l'interface suivante.
+    Il lui faudra alors choisir l'algorithme  à appliquer à partir du panel sur la gauche.
+    Ensuite les boutons situés en haut de l'interface permettront d'appliquer l'algorithme pas-à-pas. Les états des structures de données(à gauche) et la description(à droite) de chaque étape seront affichés dans les deux Panels du bas.
+    Enfin une fois les algorithmes appliqués, il sera possible de basculer le graphe résultant en mode édition à partir du bouton en haut à droite.
+
+    \subsection{Interfaces CSV}
+    \begin{minipage}{\linewidth}
+    \center
+       \includegraphics[scale=0.8]{Interface_CSV.jpg}
+    \end{minipage}
+    \\
+    \\
+    A partir de l'interface édition il sera possible d'importer un graphe en CSV. La fênetre suivante permet ensuite de pouvoir sélectionner un type de représentation.
+    On pourra ensuite spécifier le fichier à importer.
+    Le programme charge alors le dit fichier et nous donne quelque information sur celui-ci afin de vérifier sa conformité.
+    Il est ensuite possible d'appliquer un algorithme dessus.
+    Enfin une fois l'algorithme appliqué la fenêtre suivante nous permettra de sélectionner le chemin dans lequel on souhaite enregistrer le graphe résultant.
+
+  \section{Planification}
+  Nous avons planifié les différentes étapes de notre projet avec l'outil GanttProject, un pdf récapitulatif est joint à ce dossier.
+  La répartition des heures est résumée ci-dessous :
+  \newline
+  \begin{minipage}{\linewidth}
+     \includegraphics[scale=0.25]{repartition_des_heures.jpg}
+  \end{minipage}
 
 
 
