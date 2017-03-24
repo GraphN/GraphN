@@ -8,17 +8,17 @@ public class Edge implements Comparable<Edge>{
     private int weigth;
 
     // Les sommets qui connenctent l'arête Pour un graphe oriente v1 est le sommet de depart
-    private int v1, v2;
+    private Vertex v1, v2;
 
     // Constructeur arête avec poids
-    public Edge(int v1, int v2, int weigth){
+    public Edge(Vertex v1, Vertex v2, int weigth){
         this.v1 = v1;
         this.v2 = v2;
         this.weigth = weigth;
     }
 
     // Constructeur arête non pondéré, poids = 0;
-    public Edge(int v1, int v2){
+    public Edge(Vertex v1, Vertex v2){
         this(v1, v2, 0);
     }
 
@@ -26,8 +26,8 @@ public class Edge implements Comparable<Edge>{
         return weigth;
     }
 
-    public int getV1(){ return v1;}
-    public int getV2(){ return v2;}
+    public Vertex getV1(){ return v1;}
+    public Vertex getV2(){ return v2;}
 
     // Compares this object with the specified object for order. Returns a negative integer,
     // zero, or a positive integer as this object is less than, equal to, or greater than the specified object.

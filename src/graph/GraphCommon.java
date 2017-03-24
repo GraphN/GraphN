@@ -1,5 +1,8 @@
 package graph;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.Clock;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -11,34 +14,41 @@ public abstract class GraphCommon {
 
     //Constructeur par defaut
     public GraphCommon(String filename){
-        // On cree un scanner pour lire notre fichier
-        Scanner scanner = new Scanner(filename);
-        String line;
-        int nbNode = 0;
-        int nbEdges = 0;
+        try {
+            // On cree un scanner pour lire notre fichier
+            Scanner scanner = new Scanner(new File(filename));
+            String line;
+            int nbNode = 0;
+            int nbEdges = 0;
+            int weightedGraph = 0;
 
-        // On lit la premiere ligne pour connaitre les dimensions de notre graphe
-        if(scanner.hasNextLine()){
-            if(scanner.hasNextInt())
+            // On lit la premiere ligne pour connaitre les dimensions de notre graphe
+            if (scanner.hasNextLine()) {
                 nbNode = scanner.nextInt();
-            if(scanner.hasNextInt())
                 nbEdges = scanner.nextInt();
-        }
-
-        initList(nbNode);
-
-        //  On lit les lignes suivante pour stocker le graphe
-
-        while (scanner.hasNextLine()) {
-            if(scanner.hasNextInt()){
-                int node1 = scanner.nextInt();
-                if(scanner.hasNextInt()){
-                    int node2 = scanner.nextInt();
-                    int weigth = 0;
-                    if(scanner.hasNextInt()) weigth = scanner.nextInt();
-                    addEdge(node1, node2, weigth);
-                }
+                weightedGraph = scanner.nextInt();
             }
+
+            System.out.println("nbNode = " + nbNode + "\nnbEdges = " + nbEdges);
+
+            initList(nbNode);
+
+            //  On lit les lignes suivante pour stocker le graphe
+
+            for(int i = 0; i < nbEdges; i++) {
+                Vertex node1 = new Vertex(scanner.nextInt());
+                Vertex node2 = new Vertex(scanner.nextInt());
+
+                int weigth = 0;
+                if(weightedGraph != 0)
+                    weigth = scanner.nextInt();
+
+                System.out.println("addEdge = v1: " + node1 + ", v2: " + node2 + ", w: " + weigth);
+                addEdge(node1, node2, weigth);
+            }
+
+        }catch(IOException e){
+            System.err.print(e);
         }
     }
 
@@ -53,8 +63,18 @@ public abstract class GraphCommon {
             adjacencyLists[i] = new LinkedList<Edge>();
     }
 
-    public abstract void addEdge(int v, int w);
-    public abstract void addEdge(int v, int w, int weigth);
-    public abstract LinkedList<Edge> adjacent(int v);
+    // Debug Function
+    public void print(){
+        for(int i = 0; i < adjacencyLists.length; i++){
+            System.out.print("Sommet " + i + " : ");
+            for(Edge e : adjacencyLists[i])
+                System.out.print("Edge(v1: " + e.getV1().getId() + ", v2: " + e.getV2().getId() + "); ");
+            System.out.println();
+        }
+    }
+
+    public abstract void addEdge(Vertex v, Vertex w);
+    public abstract void addEdge(Vertex v, Vertex w, int weigth);
+    public abstract LinkedList<Edge> adjacent(Vertex v);
     public abstract int V();
 }

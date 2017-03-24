@@ -15,18 +15,18 @@ public class Graph extends GraphCommon{
         super(filename);
     }
 
-    public void addEdge(int v, int w) {
+    public void addEdge(Vertex v, Vertex w) {
         addEdge(v, w, 0);
     }
 
-    public void addEdge(int v, int w, int weigth) {
+    public void addEdge(Vertex v, Vertex w, int weigth) {
         Edge e = new Edge(v, w, weigth);
-        adjacencyLists[v].push(e);
-        adjacencyLists[w].push(e);
+        adjacencyLists[v.getId()].push(e);
+        adjacencyLists[w.getId()].push(e);
     }
 
-    public LinkedList<Edge> adjacent(int v) {
-        return adjacencyLists[v];
+    public LinkedList<Edge> adjacent(Vertex v) {
+        return adjacencyLists[v.getId()];
     }
 
     public int V() {
