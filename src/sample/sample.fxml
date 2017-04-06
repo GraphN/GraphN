@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.effect.ImageInput?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <Pane prefHeight="645.0" prefWidth="1066.0" style="-fx-background-color: #39393B;">
+         <children>
+            <ToolBar layoutX="60.0" prefHeight="40.0" prefWidth="1006.0" style="-fx-background-color: #39393B;">
+              <items>
+                <Button contentDisplay="TOP" graphicTextGap="1.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="23.0" text="Button">
+                  <effect>
+                   <ImageInput y="2.0">
+                      <source>
+                         <Image url="@src/sample/assets/save.png" />
+                      </source>
+                   </ImageInput>
+                  </effect>
+                </Button>
+              </items>
+            </ToolBar>
+            <ToolBar layoutY="45.0" orientation="VERTICAL" prefHeight="600.0" prefWidth="59.0" style="-fx-background-color: #39393B;">
+              <items>
+                <Button mnemonicParsing="false" text="But" />
+              </items>
+            </ToolBar>
+            <ImageView fitHeight="40.0" fitWidth="39.0" layoutX="12.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../Downloads/logoGraphene.png" />
+               </image>
+            </ImageView>
+            <Pane fx:id="workspace" layoutX="60.0" layoutY="45.0" prefHeight="600.0" prefWidth="1006.0" style="-fx-background-color: #656567;">
+               <children>
+                  <Slider layoutX="844.0" layoutY="562.0" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</GridPane>

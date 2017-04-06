@@ -2,16 +2,15 @@
  * Created by LBX on 31/03/2017.
  */
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.paint.Paint;
-
-
-import java.security.PublicKey;
 
 public class MainPageController {
     private MainApp mainApp;
@@ -19,6 +18,8 @@ public class MainPageController {
     private TabPane tabPane;
 
     private int indiceTab;
+    private double orgSceneX, orgSceneY;
+    private double orgTranslateX, orgTranslateY;
 
     public MainPageController(){
         indiceTab = 0;
@@ -48,20 +49,18 @@ public class MainPageController {
         // Ajouter tout ce qu'on veut dans la  tab
         AnchorPane pane = new AnchorPane();
         tab.setContent(pane);
-        pane.getChildren().add(newNode(pane));
         tabPane.getTabs().add(tab);
 
+        // Add Vertex
+        Circle circle_Red = new Circle(50.0f, Color.RED);
+        circle_Red.setCenterX(pane.getLayoutX());
+        circle_Red.setCenterY(pane.getLayoutY());
+        circle_Red.setOnMousePressed(circleOnMousePressedEventHandler);
+        circle_Red.setOnMouseDragged(circleOnMouseDraggedEventHandler);
 
-    }
-    // petit test
-    private Circle newNode(AnchorPane pane){
-        class Cercle extends Circle {
-            public Cercle(AnchorPane pane){
-                super(pane.getLayoutX(), pane.getLayoutY(), 40);
-                this.setFill(Paint.valueOf("BLUE"));
-            }
-        }
-        return new Cercle(pane);
+        Group root = new Group();
+        root.getChildren().add(circle_Red);
+        pane.getChildren().add(root);
     }
 
     public void handleNewFromAlgoPage(){
@@ -98,6 +97,39 @@ public class MainPageController {
     private void handleNote(){
     }
 
+    EventHandler<MouseEvent> circleOnMousePressedEventHandler =
+            new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent t) {
+                    orgSceneX = t.getSceneX();
+                    orgSceneY = t.getSceneY();
+                    orgTranslateX = ((Circle)(t.getSource())).getTranslateX();
+                    orgTranslateY = ((Circle)(t.getSource())).getTranslateY();
+                }
+            };
+
+    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
+            new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent t) {
+                    double offsetX = t.getSceneX() - orgSceneX;
+                    double offsetY = t.getSceneY() - orgSceneY;
+                    double newTranslateX = orgTranslateX + offsetX;
+                    double newTranslateY = orgTranslateY + offsetY;
+
+                    System.out.println(tabPane.getWidth()-((Circle)(t.getSource())).getRadius());
+                    if(newTranslateX < 0)
+                        newTranslateX = 0;
+
+                    if(newTranslateX > tabPane.getWidth())
+                        newTranslateX = tabPane.getWidth();
+
+                    ((Circle)(t.getSource())).setTranslateX(newTranslateX);
+                    ((Circle)(t.getSource())).setTranslateY(newTranslateY);
+                }
+            };
 
 
 }
