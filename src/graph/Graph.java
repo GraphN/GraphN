@@ -25,7 +25,7 @@ public class Graph extends GraphCommon{
         adjacencyLists[w.getId()].push(e);
     }
 
-    public LinkedList<Edge> adjacent(Vertex v) {
+    public LinkedList<Edge> adjacentEdges(Vertex v) {
         return adjacencyLists[v.getId()];
     }
 

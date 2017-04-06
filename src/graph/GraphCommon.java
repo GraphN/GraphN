@@ -52,7 +52,7 @@ public abstract class GraphCommon {
         }
     }
 
-    //On constructeur d'initialisation
+    // Constructeur d'initialisation
     public GraphCommon(int V){
         initList(V);
     }
@@ -75,6 +75,7 @@ public abstract class GraphCommon {
 
     public abstract void addEdge(Vertex v, Vertex w);
     public abstract void addEdge(Vertex v, Vertex w, int weigth);
-    public abstract LinkedList<Edge> adjacent(Vertex v);
+    public abstract LinkedList<Edge> adjacentEdges(Vertex v);
+    //public abstract LinkedList<Vertex> adjacentVertex(Vertex v);
     public abstract int V();
 }
