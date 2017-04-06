@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPageController">
+   <left>
+      <AnchorPane prefHeight="340.0" prefWidth="63.0" styleClass="background" stylesheets="@algorithm.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="19.0" layoutY="42.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleVectrice" prefHeight="31.0" prefWidth="25.0" stylesheets="@buttonFleche.css" text="Vectrice" />
+            <Button layoutX="19.0" layoutY="75.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleVectrice2" prefHeight="31.0" prefWidth="25.0" stylesheets="@buttonFleche.css" text="Vectrice2" />
+            <Button layoutX="19.0" layoutY="124.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleEdge" prefHeight="31.0" prefWidth="25.0" stylesheets="@buttonFleche.css" text="Edge" />
+            <Button layoutX="19.0" layoutY="158.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleDiEdge" prefHeight="31.0" prefWidth="25.0" stylesheets="@buttonFleche.css" text="DiEdge" />
+            <Button layoutX="19.0" layoutY="193.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleDiEdgeWeighted" prefHeight="31.0" prefWidth="25.0" stylesheets="@buttonFleche.css" text="DiEdgeWeighted" />
+            <Button layoutX="19.0" layoutY="241.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleText" prefHeight="31.0" prefWidth="25.0" stylesheets="@buttonFleche.css" text="Text" />
+            <Button layoutX="19.0" layoutY="277.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleNote" prefHeight="31.0" prefWidth="25.0" stylesheets="@buttonFleche.css" text="Note" />
+            <Separator layoutX="7.0" layoutY="112.0" prefHeight="4.0" prefWidth="49.0" />
+            <Separator layoutX="7.0" layoutY="229.0" prefHeight="4.0" prefWidth="49.0" />
+         </children>
+      </AnchorPane>
+   </left>
+   <top>
+      <AnchorPane prefHeight="28.0" prefWidth="600.0" styleClass="background" stylesheets="@toptop.css" BorderPane.alignment="CENTER">
+         <children>
+            <ButtonBar buttonMinWidth="0.0" layoutX="108.0" layoutY="-3.0" prefHeight="63.0" prefWidth="149.0" styleClass="background" stylesheets="@top.css" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="-3.0">
+              <buttons>
+                  <Button maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleNew" prefHeight="26.0" prefWidth="25.0" stylesheets="@buttonFleche.css" text="New" />
+                  <Button maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="31.0" prefWidth="25.0" stylesheets="@buttonSave.css" text="Save" />
+                  <Button maxHeight="25.0" maxWidth="25.0" mnemonicParsing="false" onAction="#handleOpen" stylesheets="@buttonOpen.css" text="Open" translateY="3.0" />
+                  <Button maxHeight="25.0" maxWidth="25.0" mnemonicParsing="false" onAction="#handleImport" stylesheets="@buttonImport.css" text="Import" translateY="3.0" />
+              </buttons>
+            </ButtonBar>
+            <ImageView fitHeight="24.0" fitWidth="29.0" layoutX="24.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" scaleX="3.0" scaleY="3.0" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="18.0">
+               <image>
+                  <Image url="@promo.png" />
+               </image>
+            </ImageView>
+            <Button layoutX="521.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleLaunch" stylesheets="@new_from_result.css" text="Launch" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="12.0" />
+         </children>
+      </AnchorPane>
+   </top>
+   <center>
+      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" styleClass="background" stylesheets="@tab.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
