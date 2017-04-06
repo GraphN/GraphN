@@ -53,8 +53,8 @@ public class MainPageController {
 
         // Add Vertex
         Circle circle_Red = new Circle(50.0f, Color.RED);
-        circle_Red.setCenterX(pane.getLayoutX());
-        circle_Red.setCenterY(pane.getLayoutY());
+        circle_Red.setTranslateX(tabPane.getWidth()/2);
+        circle_Red.setTranslateY(tabPane.getHeight()/2);
         circle_Red.setOnMousePressed(circleOnMousePressedEventHandler);
         circle_Red.setOnMouseDragged(circleOnMouseDraggedEventHandler);
 
@@ -114,20 +114,28 @@ public class MainPageController {
 
                 @Override
                 public void handle(MouseEvent t) {
+                    Circle c = (Circle) t.getSource();
+
                     double offsetX = t.getSceneX() - orgSceneX;
                     double offsetY = t.getSceneY() - orgSceneY;
                     double newTranslateX = orgTranslateX + offsetX;
                     double newTranslateY = orgTranslateY + offsetY;
 
-                    System.out.println(tabPane.getWidth()-((Circle)(t.getSource())).getRadius());
-                    if(newTranslateX < 0)
-                        newTranslateX = 0;
+                    if(newTranslateX < c.getRadius())
+                        newTranslateX = c.getRadius();
 
-                    if(newTranslateX > tabPane.getWidth())
-                        newTranslateX = tabPane.getWidth();
+                    if(newTranslateX > tabPane.getWidth() - c.getRadius())
+                        newTranslateX = tabPane.getWidth() - c.getRadius();
 
-                    ((Circle)(t.getSource())).setTranslateX(newTranslateX);
-                    ((Circle)(t.getSource())).setTranslateY(newTranslateY);
+                    if(newTranslateY < c.getRadius())
+                        newTranslateY = c.getRadius();
+
+                    // tab height = 33
+                    if(newTranslateY > tabPane.getHeight() - c.getRadius() -33)
+                        newTranslateY = tabPane.getHeight() - c.getRadius() -33;
+
+                    c.setTranslateX(newTranslateX);
+                    c.setTranslateY(newTranslateY);
                 }
             };
 

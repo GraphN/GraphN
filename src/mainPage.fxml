@@ -36,9 +36,9 @@
                   <Button maxHeight="25.0" maxWidth="25.0" mnemonicParsing="false" onAction="#handleImport" stylesheets="@buttonImport.css" text="Import" translateY="3.0" />
               </buttons>
             </ButtonBar>
-            <ImageView fitHeight="24.0" fitWidth="29.0" layoutX="24.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" scaleX="3.0" scaleY="3.0" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="18.0">
+            <ImageView fitHeight="20.0" fitWidth="25.0" layoutX="24.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" scaleX="3.0" scaleY="3.0" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="25.0">
                <image>
-                  <Image url="@promo.png" />
+                  <Image url="@logo.png" />
                </image>
             </ImageView>
             <Button layoutX="521.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleLaunch" stylesheets="@new_from_result.css" text="Launch" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="12.0" />
