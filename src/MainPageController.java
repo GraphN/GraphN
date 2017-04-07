@@ -4,6 +4,7 @@
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -57,6 +58,8 @@ public class MainPageController {
         circle_Red.setTranslateY(tabPane.getHeight()/2);
         circle_Red.setOnMousePressed(circleOnMousePressedEventHandler);
         circle_Red.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+        circle_Red.setOnMouseEntered(circleOnMouseEnteredEventHandler);
+        circle_Red.setOnMouseReleased(circleOnMouseReleasedEventHandler);
 
         Group root = new Group();
         root.getChildren().add(circle_Red);
@@ -97,6 +100,15 @@ public class MainPageController {
     private void handleNote(){
     }
 
+    EventHandler<MouseEvent> circleOnMouseEnteredEventHandler =
+            new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent t) {
+                    ((Circle)t.getSource()).setCursor(Cursor.HAND);
+                }
+            };
+
     EventHandler<MouseEvent> circleOnMousePressedEventHandler =
             new EventHandler<MouseEvent>() {
 
@@ -106,6 +118,16 @@ public class MainPageController {
                     orgSceneY = t.getSceneY();
                     orgTranslateX = ((Circle)(t.getSource())).getTranslateX();
                     orgTranslateY = ((Circle)(t.getSource())).getTranslateY();
+
+                    ((Circle)t.getSource()).setCursor(Cursor.CLOSED_HAND);
+                }
+            };
+
+    EventHandler<MouseEvent> circleOnMouseReleasedEventHandler =
+            new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent t) {
+                    ((Circle) t.getSource()).setCursor(Cursor.HAND);
                 }
             };
 
