@@ -1,78 +1,119 @@
 .button{
 -fx-background-position: center;
- -fx-background-repeat: no-repeat;
-  -fx-background-size: cover;
+-fx-background-repeat: no-repeat;
+-fx-background-size: cover;
 }
 
-#buttonPlay:hover{
+#newFileButton:hover{
 -fx-background-color: #232323;
--fx-background-image: url("play-button-on.png");
+-fx-background-image: url("add-new-page-on.png");
 
 }
-#buttonPlay{
+#newFileButton{
 -fx-background-color: #232323;
--fx-background-image: url('play-button.png');
+-fx-background-image: url('add-new-page.png');
 }
 
-#buttonForwardPlay:hover{
+#saveButton:hover{
 -fx-background-color: #232323;
--fx-background-image: url("fast-forward-on.png");
+-fx-background-image: url("save-disk-on.png");
 
 }
-#buttonForwardPlay{
+#saveButton{
 -fx-background-color: #232323;
--fx-background-image: url('fast-forward.png');
+-fx-background-image: url('save-disk.png');
 }
 
-#buttonPlayTimer:hover{
+#openFileButton:hover{
 -fx-background-color: #232323;
--fx-background-image: url("play-timer-on.png");
+-fx-background-image: url("open-archive-on.png");
 
 }
-#buttonPlayTimer{
+#openFileButton{
 -fx-background-color: #232323;
--fx-background-image: url("play-timer.png");
+-fx-background-image: url('open-archive.png');
 }
 
-#buttonStop:hover{
+#importButton:hover{
 -fx-background-color: #232323;
--fx-background-image: url("stop-on.png");
+-fx-background-image: url("import-on.png");
 
 }
-#buttonStop{
+#importButton{
 -fx-background-color: #232323;
--fx-background-image: url("stop.png");
+-fx-background-image: url('import.png');
 }
 
-#buttonPause:hover{
+#vertex1Button:hover{
 -fx-background-color: #232323;
--fx-background-image: url("pause-on.png");
+-fx-background-image: url("vertex1-on.png");
 
 }
-#buttonPause{
+#vertex1Button{
 -fx-background-color: #232323;
--fx-background-image: url("pause.png");
+-fx-background-image: url('vertex1.png');
+}
+
+#vertex2Button:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("vertex2-on.png");
+
+}
+#vertex2Button{
+-fx-background-color: #232323;
+-fx-background-image: url('vertex2.png');
 }
 
 
-
-
-
-#bfs:hover, #dfs:hover, #dijkstra:hover, #dijkstra:hover, #kruskal:hover, #prim:hover{
--fx-background-color: #3F3F3F;
+#edgeButton:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("edge-on.png");
 
 }
-#bfs, #dfs, #dijkstra, #dijkstra, #kruskal, #prim {
-
--fx-background-color: #575757;
--fx-border-color: #000000;
--fx-background-insets: 0;
--fx-text-fill: #FFFFFF;
--fx-font-size: 11pt;
-
-
+#edgeButton{
+-fx-background-color: #232323;
+-fx-background-image: url('edge.png');
 }
 
+#diEdgeButton:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("diEdge-on.png");
+
+}
+#diEdgeButton{
+-fx-background-color: #232323;
+-fx-background-image: url('diEdge.png');
+}
+
+#diEdgeWeightedButton:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("diEdgeWeighted-on.png");
+
+}
+#diEdgeWeightedButton{
+-fx-background-color: #232323;
+-fx-background-image: url('diEdgeWeighted.png');
+}
+
+#textButton:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("text-on.png");
+
+}
+#textButton{
+-fx-background-color: #232323;
+-fx-background-image: url('text.png');
+}
+
+#commentButton:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("comment-on.png");
+
+}
+#commentButton{
+-fx-background-color: #232323;
+-fx-background-image: url('comment.png');
+}
 
 
 #slider .thumb{

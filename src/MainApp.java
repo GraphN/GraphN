@@ -1,5 +1,4 @@
 
-import java.awt.image.SampleModel;
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -52,7 +51,7 @@ public class MainApp extends Application {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("sample.fxml"));
+            loader.setLocation(MainApp.class.getResource("algorithmPage.fxml"));
             //loader.setLocation(MainApp.class.getResource("algoPage.fxml"));
             BorderPane page = (BorderPane) loader.load();
 
@@ -65,7 +64,7 @@ public class MainApp extends Application {
             algoStage.setScene(scene);
 
             //AlgoPageController controller = loader.getController();
-            sampleController controller = loader.getController();
+            AlgorithmPageController controller = loader.getController();
             controller.setMainApp(this);
 
             // Set the person into the controller.

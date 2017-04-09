@@ -53,7 +53,7 @@ public class MainPageController {
         tabPane.getTabs().add(tab);
 
         // Add Vertex
-        Circle circle_Red = new Circle(50.0f, Color.RED);
+        Circle circle_Red = new Circle(50.0f, Color.web("da5630"));
         circle_Red.setTranslateX(tabPane.getWidth()/2);
         circle_Red.setTranslateY(tabPane.getHeight()/2);
         circle_Red.setOnMousePressed(circleOnMousePressedEventHandler);

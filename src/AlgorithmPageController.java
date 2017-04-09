@@ -6,7 +6,7 @@ import javafx.scene.control.Slider;
 /**
  * Created by LBX on 03/04/2017.
  */
-public class sampleController
+public class AlgorithmPageController
 {
     private MainApp mainApp;
     public void setMainApp(MainApp mainApp) {

@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" stylesheets="@designMainPage.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sampleController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" stylesheets="@designAlgoPage.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgorithmPageController">
    <top>
-      <ToolBar prefHeight="47.0" prefWidth="688.0" style="-fx-background-color: #232323; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
-         <items>
-            <ImageView fitHeight="33.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" translateX="6.0">
+      <AnchorPane style="-fx-background-color: #232323;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="2.0">
                <image>
                   <Image url="@logo.jpg" />
                </image>
@@ -23,28 +23,22 @@
                   <Rectangle2D />
                </viewport>
             </ImageView>
-            <Button id="buttonPlay" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" translateX="30.0" />
-            <Button id="buttonForwardPlay" ellipsisString="" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="34.0" translateX="33.0" />
-            <Button id="buttonPlayTimer" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="39.0" translateX="34.0" />
-            <Button id="buttonStop" minHeight="22.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0" translateX="39.0" />
-            <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0" translateX="45.0" />
-            <Button alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="14.0" prefWidth="160.0" stylesheets="@new_from_result.css" text="New From Result" translateX="320.0" />
-         </items>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
-         </padding>
-      </ToolBar>
+            <Button id="buttonPlay" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="9.0" />
+            <Button id="buttonForwardPlay" ellipsisString="" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="34.0" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="9.0" />
+            <Button id="buttonPlayTimer" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="39.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="9.0" />
+            <Button id="buttonStop" minHeight="22.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="11.0" />
+            <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="11.0" />
+            <Button alignment="TOP_RIGHT" layoutX="518.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="28.0" prefWidth="159.0" stylesheets="@new_from_result.css" text="New From Result" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="5.0" />
+         </children>
+      </AnchorPane>
    </top>
    <left>
-      <ToolBar orientation="VERTICAL" prefHeight="375.0" prefWidth="99.0" style="-fx-background-color: #232323; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
+      <ToolBar minHeight="380.0" orientation="VERTICAL" prefHeight="380.0" prefWidth="99.0" style="-fx-background-color: #232323; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <padding>
-            <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
+            <Insets bottom="-1.0" left="-1.0" right="-1.0" />
          </padding>
          <items>
             <Button id="bfs" alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" scaleShape="false" text="BFS" />
@@ -58,7 +52,7 @@
             </Button>
          </items>
          <BorderPane.margin>
-            <Insets top="-1.0" />
+            <Insets />
          </BorderPane.margin>
       </ToolBar>
    </left>
