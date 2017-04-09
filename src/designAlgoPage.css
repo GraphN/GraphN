@@ -1,0 +1,86 @@
+.button{
+-fx-background-position: center;
+ -fx-background-repeat: no-repeat;
+  -fx-background-size: cover;
+}
+
+#buttonPlay:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("play-button-on.png");
+
+}
+#buttonPlay{
+-fx-background-color: #232323;
+-fx-background-image: url('play-button.png');
+}
+
+#buttonForwardPlay:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("fast-forward-on.png");
+
+}
+#buttonForwardPlay{
+-fx-background-color: #232323;
+-fx-background-image: url('fast-forward.png');
+}
+
+#buttonPlayTimer:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("play-timer-on.png");
+
+}
+#buttonPlayTimer{
+-fx-background-color: #232323;
+-fx-background-image: url("play-timer.png");
+}
+
+#buttonStop:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("stop-on.png");
+
+}
+#buttonStop{
+-fx-background-color: #232323;
+-fx-background-image: url("stop.png");
+}
+
+#buttonPause:hover{
+-fx-background-color: #232323;
+-fx-background-image: url("pause-on.png");
+
+}
+#buttonPause{
+-fx-background-color: #232323;
+-fx-background-image: url("pause.png");
+}
+
+
+
+
+
+#bfs:hover, #dfs:hover, #dijkstra:hover, #dijkstra:hover, #kruskal:hover, #prim:hover{
+-fx-background-color: #3F3F3F;
+
+}
+#bfs, #dfs, #dijkstra, #dijkstra, #kruskal, #prim {
+
+-fx-background-color: #575757;
+-fx-border-color: #000000;
+-fx-background-insets: 0;
+-fx-text-fill: #FFFFFF;
+-fx-font-size: 11pt;
+
+
+}
+
+
+
+#slider .thumb{
+    -fx-background-color: rgb(60,60,60);
+    -fx-border-radius: 10;
+    -fx-border-color: darkgray;
+ }
+#slider .track{
+    -fx-background-color: rgb(20,20,20);
+
+}

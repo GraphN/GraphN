@@ -5,10 +5,10 @@
  */
 .button {
     -fx-padding: 5 22 5 22;   
-    -fx-border-color: #FF0104;
+    -fx-border-color: #da5630;
     -fx-border-width: 2;
     -fx-background-radius: 0;
-    -fx-background-color: #FF0104;
+    -fx-background-color: #da5630;
     -fx-font-family: "Segoe UI", Helvetica, Arial, bold;
     -fx-font-size: 11pt;
     -fx-text-fill: #d8d8d8;
@@ -16,8 +16,8 @@
 }
 
 .button:hover {
-    -fx-background-color: #C60204;
-    -fx-border-color: #FF0104;
+    -fx-background-color: #bf4c28;
+    -fx-border-color: #bf4c28;
 }
 
 .button:pressed, .button:default:hover:pressed {
