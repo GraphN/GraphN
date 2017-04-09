@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
@@ -49,6 +50,11 @@ public class MainPageController {
         tab.setText("new tab"+ indiceTab++);
         // Ajouter tout ce qu'on veut dans la  tab
         AnchorPane pane = new AnchorPane();
+        // Slider of the current tab created
+        Slider slider = new Slider();
+        AnchorPane.setRightAnchor(slider, 2.0);
+        AnchorPane.setBottomAnchor(slider, 5.0);
+        pane.getChildren().add(slider);
         tab.setContent(pane);
         tabPane.getTabs().add(tab);
 
