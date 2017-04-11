@@ -18,7 +18,7 @@
          <left>
             <AnchorPane prefHeight="358.0" prefWidth="65.0" styleClass="toolBar" BorderPane.alignment="CENTER">
                <children>
-                  <Button id="vertex1Button" ellipsisString="" layoutX="19.0" layoutY="37.0" maxHeight="27.0" maxWidth="27.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleVectrice" prefHeight="27.0" prefWidth="27.0" />
+                  <Button fx:id="vertex1Button" ellipsisString="" layoutX="19.0" layoutY="37.0" maxHeight="27.0" maxWidth="27.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleVectrice" prefHeight="27.0" prefWidth="27.0" />
                   <Button id="vertex2Button" ellipsisString="" layoutX="19.0" layoutY="74.0" maxHeight="27.0" maxWidth="27.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleVectrice2" prefHeight="27.0" prefWidth="27.0" />
                   <Button id="edgeButton" ellipsisString="" layoutX="19.0" layoutY="124.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleEdge" prefHeight="31.0" prefWidth="25.0" />
                   <Button id="diEdgeButton" ellipsisString="" layoutX="19.0" layoutY="158.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleDiEdge" prefHeight="31.0" prefWidth="25.0" />
@@ -54,7 +54,7 @@
                <tabs>
                   <Tab text="new Tab">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" onMousePressed="#panePressed" prefHeight="180.0" prefWidth="200.0" style=": ;">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" onMouseClicked="#panePressed" prefHeight="180.0" prefWidth="200.0" style=": ;">
                          <children>
                             <Slider fx:id="slider" layoutX="445.0" layoutY="270.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="2.0" />
                          </children>

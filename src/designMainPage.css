@@ -4,7 +4,7 @@
 -fx-background-size: cover;
 }
 #newFileButton, #saveButton, #openFileButton,#importButton,
-#vertex1Button, #vertex2Button,#edgeButton, #diEdgeButton,
+#vertex1Button, #vertex1ButtonActivate, #vertex2Button,#edgeButton, #diEdgeButton,
 #diEdgeWeightedButton, #textButton, #commentButton
 {
 -fx-background-color: #232323;
@@ -47,6 +47,10 @@
 }
 #vertex1Button{
 -fx-background-image: url('vertex1.png');
+}
+
+#vertex1ButtonActivate{
+-fx-background-image: url("vertex1-on.png");
 }
 
 #vertex2Button:hover{
@@ -97,4 +101,5 @@
 #commentButton{
 -fx-background-image: url('comment.png');
 }
+
 
