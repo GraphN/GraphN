@@ -1,9 +1,11 @@
 
+import java.awt.*;
 import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
@@ -12,7 +14,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private Stage algoStage;
-    private BorderPane rootLayout;
+    private AnchorPane rootLayout;
     private MainPageController mainPageController;
 
     @Override
@@ -20,6 +22,7 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("GraphN");
 
+        primaryStage.setFullScreen(true);
         initRootLayout();
 
         //showPersonOverview();
@@ -33,10 +36,11 @@ public class MainApp extends Application {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("mainPage.fxml"));
-            rootLayout = (BorderPane) loader.load();
+            rootLayout = (AnchorPane) loader.load();
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
+
             primaryStage.setScene(scene);
             primaryStage.show();
 
@@ -72,9 +76,13 @@ public class MainApp extends Application {
             controller.setDialogStage(dialogStage);
             controller.setPerson(person);*/
 
+            //set the mainwindow grey
+            mainPageController.setGreyMain(true);
             // Show the dialog and wait until the user closes it
             algoStage.showAndWait();
 
+            //we change the grey color of parent stage
+             mainPageController.setGreyMain(false);
             //return controller.isOkClicked();
         } catch (IOException e) {
             e.printStackTrace();

@@ -19,6 +19,8 @@ public class MainPageController {
     @FXML
     private TabPane tabPane;
 
+    @FXML
+    private AnchorPane greyMain;
     private int indiceTab;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
@@ -40,6 +42,10 @@ public class MainPageController {
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
+    public void setGreyMain(Boolean b)
+    {
+        greyMain.setVisible(b);
+    }
     @FXML
     private void handleLaunch(){
         mainApp.showAlgoPage();
@@ -59,7 +65,7 @@ public class MainPageController {
         tabPane.getTabs().add(tab);
 
         // Add Vertex
-        Circle circle_Red = new Circle(50.0f, Color.web("da5630"));
+        Circle circle_Red = new Circle(30.0f, Color.web("da5630"));
         circle_Red.setTranslateX(tabPane.getWidth()/2);
         circle_Red.setTranslateY(tabPane.getHeight()/2);
         circle_Red.setOnMousePressed(circleOnMousePressedEventHandler);

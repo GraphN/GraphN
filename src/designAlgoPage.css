@@ -3,54 +3,47 @@
  -fx-background-repeat: no-repeat;
   -fx-background-size: cover;
 }
+#buttonPlay, #buttonForwardPlay, #buttonPause, #buttonPlayTimer, #buttonStop{
+-fx-background-color: #232323;
+}
 
 #buttonPlay:hover{
--fx-background-color: #232323;
 -fx-background-image: url("play-button-on.png");
 
 }
 #buttonPlay{
--fx-background-color: #232323;
 -fx-background-image: url('play-button.png');
 }
 
 #buttonForwardPlay:hover{
--fx-background-color: #232323;
 -fx-background-image: url("fast-forward-on.png");
 
 }
 #buttonForwardPlay{
--fx-background-color: #232323;
 -fx-background-image: url('fast-forward.png');
 }
 
 #buttonPlayTimer:hover{
--fx-background-color: #232323;
 -fx-background-image: url("play-timer-on.png");
 
 }
 #buttonPlayTimer{
--fx-background-color: #232323;
 -fx-background-image: url("play-timer.png");
 }
 
 #buttonStop:hover{
--fx-background-color: #232323;
 -fx-background-image: url("stop-on.png");
 
 }
 #buttonStop{
--fx-background-color: #232323;
 -fx-background-image: url("stop.png");
 }
 
 #buttonPause:hover{
--fx-background-color: #232323;
 -fx-background-image: url("pause-on.png");
 
 }
 #buttonPause{
--fx-background-color: #232323;
 -fx-background-image: url("pause.png");
 }
 
@@ -74,13 +67,20 @@
 }
 
 
+.split-pane *.split-pane-divider {
+    -fx-padding: 0 1 0 1;
+    -fx-background-color: #000000;
+}
+.split-pane *.split-pane-divider {
+    -fx-padding: 0 1 0 1;
+    -fx-background-color: #000000;
+}
 
-#slider .thumb{
-    -fx-background-color: rgb(60,60,60);
-    -fx-border-radius: 10;
-    -fx-border-color: darkgray;
- }
-#slider .track{
-    -fx-background-color: rgb(20,20,20);
+.split-pane {
+    -fx-border-color: #000000;
+    -fx-background-color: #000000;
+}
 
+#bottomSplit{
+  -fx-background-color: #4d4d4d;
 }

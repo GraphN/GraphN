@@ -1,10 +1,16 @@
-/* 
- * Metro style Push Button
- * Author: Pedro Duque Vieira
- * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
- */
-.button {
-    -fx-padding: 5 22 5 22;   
+.toolBar
+{
+-fx-background-color: #232323;
+-fx-border-color: #000000;
+}
+
+.centerPage
+{
+-fx-background-color: #999999;
+}
+
+.algoButton {
+    -fx-padding: 5 22 5 22;
     -fx-border-color: #da5630;
     -fx-border-width: 2;
     -fx-background-radius: 0;
@@ -15,17 +21,17 @@
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
-.button:hover {
+.algoButton:hover {
     -fx-background-color: #bf4c28;
     -fx-border-color: #bf4c28;
 }
 
-.button:pressed, .button:default:hover:pressed {
+.algoButton:pressed, .algoButton:default:hover:pressed {
   -fx-background-color: white;
   -fx-text-fill: #1d1d1d;
 }
 
-.button:focused {
+.algoButton:focused {
     -fx-border-color: white, white;
     -fx-border-width: 1, 1;
     -fx-border-style: solid, segments(1, 1);
@@ -33,17 +39,28 @@
     -fx-border-insets: 1 1 1 1, 0;
 }
 
-.button:disabled, .button:default:disabled {
+.algoButton:disabled, .algoButton:default:disabled {
     -fx-opacity: 0.4;
     -fx-background-color: #1d1d1d;
     -fx-text-fill: white;
 }
 
-.button:default {
+.algoButton:default {
     -fx-background-color: -fx-focus-color;
     -fx-text-fill: #ffffff;
 }
 
-.button:default:hover {
+.algoButton:default:hover {
     -fx-background-color: derive(-fx-focus-color,30%);
+}
+
+
+.slider .thumb{
+    -fx-background-color: rgb(60,60,60);
+    -fx-border-radius: 10;
+    -fx-border-color: darkgray;
+ }
+.slider .track{
+    -fx-background-color: rgb(20,20,20);
+
 }
