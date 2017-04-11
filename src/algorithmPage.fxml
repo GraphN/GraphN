@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
@@ -11,9 +12,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" stylesheets="@designAlgoPage.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgorithmPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgorithmPageController">
    <top>
-      <AnchorPane style="-fx-background-color: #232323;" BorderPane.alignment="CENTER">
+      <AnchorPane styleClass="toolBar" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="2.0">
                <image>
@@ -28,12 +29,12 @@
             <Button id="buttonPlayTimer" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="39.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="9.0" />
             <Button id="buttonStop" minHeight="22.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="11.0" />
             <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="11.0" />
-            <Button alignment="TOP_RIGHT" layoutX="518.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="28.0" prefWidth="159.0" stylesheets="@new_from_result.css" text="New From Result" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="5.0" />
+            <Button alignment="TOP_RIGHT" layoutX="518.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="28.0" prefWidth="159.0" styleClass="algoButton" text="New From Result" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
    </top>
    <left>
-      <ToolBar minHeight="380.0" orientation="VERTICAL" prefHeight="380.0" prefWidth="99.0" style="-fx-background-color: #232323; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
+      <ToolBar minHeight="380.0" orientation="VERTICAL" prefHeight="380.0" prefWidth="99.0" style=": ;" styleClass="toolBar" BorderPane.alignment="CENTER">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -57,16 +58,16 @@
       </ToolBar>
    </left>
    <center>
-      <SplitPane dividerPositions="0.7336683417085427" orientation="VERTICAL" prefHeight="376.0" prefWidth="589.0" stylesheets="@split-pane.css" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.7336683417085427" orientation="VERTICAL" prefHeight="376.0" prefWidth="589.0" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="background" stylesheets="@center.css">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="centerPage">
                <children>
                   <Slider fx:id="slider" layoutX="445.0" layoutY="270.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="2.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <SplitPane dividerPositions="0.5" layoutX="-1.0" layoutY="-1.0" prefHeight="105.0" prefWidth="587.0" styleClass="background" stylesheets="@bottom.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane id="bottomSplit" dividerPositions="0.5" layoutX="-1.0" layoutY="-1.0" prefHeight="105.0" prefWidth="587.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
@@ -77,4 +78,8 @@
         </items>
       </SplitPane>
    </center>
+   <stylesheets>
+      <URL value="@designAlgoPage.css" />
+      <URL value="@designPages.css" />
+   </stylesheets>
 </BorderPane>
