@@ -16,6 +16,7 @@ import javafx.scene.shape.Circle;
 
 public class MainPageController {
     private MainApp mainApp;
+    private boolean vertex1Active = false;
     @FXML
     private TabPane tabPane;
 
@@ -61,26 +62,43 @@ public class MainPageController {
         AnchorPane.setRightAnchor(slider, 2.0);
         AnchorPane.setBottomAnchor(slider, 5.0);
         pane.getChildren().add(slider);
+
         tab.setContent(pane);
         tabPane.getTabs().add(tab);
 
         // Add Vertex
-        Circle circle_Red = new Circle(30.0f, Color.web("da5630"));
-        circle_Red.setTranslateX(tabPane.getWidth()/2);
-        circle_Red.setTranslateY(tabPane.getHeight()/2);
-        circle_Red.setOnMousePressed(circleOnMousePressedEventHandler);
-        circle_Red.setOnMouseDragged(circleOnMouseDraggedEventHandler);
-        circle_Red.setOnMouseEntered(circleOnMouseEnteredEventHandler);
-        circle_Red.setOnMouseReleased(circleOnMouseReleasedEventHandler);
-
+       /* Circle circle_base = createVertex(100.0, 100.0);
         Group root = new Group();
-        root.getChildren().add(circle_Red);
-        pane.getChildren().add(root);
+        root.getChildren().add(circle_base);
+        pane.getChildren().add(root);*/
     }
 
+    public Circle createVertex(double x, double y)
+    {
+        Circle circle_base = new Circle(30.0f, Color.web("da5630"));
+        circle_base.setTranslateX(x);
+        circle_base.setTranslateY(y);
+        circle_base.setOnMousePressed(circleOnMousePressedEventHandler);
+        circle_base.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+        circle_base.setOnMouseEntered(circleOnMouseEnteredEventHandler);
+        circle_base.setOnMouseReleased(circleOnMouseReleasedEventHandler);
+        return circle_base;
+    }
     public void handleNewFromAlgoPage(){
         handleNew();
     }
+
+    @FXML
+    private void panePressed(MouseEvent mouseEvent){
+        if(vertex1Active) {
+            Circle circle = createVertex(mouseEvent.getX(), mouseEvent.getY());
+            AnchorPane currPage = (AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent();
+            currPage.getChildren().add(circle);
+        }
+
+    }
+
+
     @FXML
     private void handleSave(){
     }
@@ -91,7 +109,12 @@ public class MainPageController {
     private void handleImport(){
     }
     @FXML
-    private void handleVectrice(){
+    private void handleVectrice()
+    {
+        if(vertex1Active)
+            vertex1Active = false;
+        else
+            vertex1Active = true;
     }
     @FXML
     private void handleVectrice2(){
