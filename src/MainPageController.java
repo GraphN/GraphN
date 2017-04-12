@@ -6,19 +6,28 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import javax.swing.text.html.ImageView;
+import java.sql.Time;
+import java.util.concurrent.TimeUnit;
+
 public class MainPageController {
     private MainApp mainApp;
     private boolean vertex1Active = false;
+    private boolean vertex1ActiveOnce = false;
     @FXML
     private TabPane tabPane;
+    @FXML
+    private Button vertex1Button;
 
     @FXML
     private AnchorPane greyMain;
@@ -57,6 +66,13 @@ public class MainPageController {
         tab.setText("new tab"+ indiceTab++);
         // Ajouter tout ce qu'on veut dans la  tab
         AnchorPane pane = new AnchorPane();
+        //mouselistener to add vertex etc
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                panePressed(event);
+            }
+        });
         // Slider of the current tab created
         Slider slider = new Slider();
         AnchorPane.setRightAnchor(slider, 2.0);
@@ -90,10 +106,16 @@ public class MainPageController {
 
     @FXML
     private void panePressed(MouseEvent mouseEvent){
-        if(vertex1Active) {
+        if(vertex1Active || vertex1ActiveOnce)
+        {
             Circle circle = createVertex(mouseEvent.getX(), mouseEvent.getY());
             AnchorPane currPage = (AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent();
             currPage.getChildren().add(circle);
+
+            //if we have the click once. we desactivate it
+            vertex1ActiveOnce = false;
+            if(!vertex1Active)
+                vertex1Button.setId("vertex1Button");//let the butonn orange if he is used
         }
 
     }
@@ -109,12 +131,28 @@ public class MainPageController {
     private void handleImport(){
     }
     @FXML
-    private void handleVectrice()
-    {
-        if(vertex1Active)
-            vertex1Active = false;
-        else
+    private void handleVectrice(MouseEvent mouseEvent) {
+        int count = mouseEvent.getClickCount();
+        if(count == 2) // if we double click, we can put infinite vertex
+        {
             vertex1Active = true;
+            vertex1ActiveOnce = false;
+            vertex1Button.setId("vertex1ButtonActivate");//let the butonn orange if he is used
+        }
+        else if(count == 1 && (vertex1ActiveOnce||vertex1Active) )// if we click and if we are activate, we desactive
+        {
+            vertex1Active = false;
+            vertex1ActiveOnce = false;
+            vertex1Button.setId("vertex1Button");// desactivate button of orange
+
+        }
+        else if(count == 1 && (!vertex1ActiveOnce||!vertex1Active) )// if we clicked and we are desactivate, we active
+        {
+            vertex1ActiveOnce = true;
+            vertex1Active = false;
+            vertex1Button.setId("vertex1ButtonActivate");//let the butonn orange if he is used
+        }
+
     }
     @FXML
     private void handleVectrice2(){
