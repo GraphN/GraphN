@@ -2,6 +2,8 @@
  * Created by LBX on 31/03/2017.
  */
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -42,6 +44,7 @@ public class MainPageController {
     private void initialize() {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         DraggingTabPaneSupport support = new DraggingTabPaneSupport();
+        handleNew();
         support.addSupport(tabPane);
     }
     /**
@@ -65,9 +68,10 @@ public class MainPageController {
         Tab tab = new Tab();
         tab.setText("new tab"+ indiceTab++);
         // Ajouter tout ce qu'on veut dans la  tab
+        AnchorPane paneBack = new AnchorPane();
         AnchorPane pane = new AnchorPane();
         //mouselistener to add vertex etc
-        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        paneBack.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 panePressed(event);
@@ -75,11 +79,22 @@ public class MainPageController {
         });
         // Slider of the current tab created
         Slider slider = new Slider();
+        slider.setMin(1.);
+        slider.setMax(5.);
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                pane.setScaleX(slider.getValue());
+                pane.setScaleY(slider.getValue());
+            }
+        });
         AnchorPane.setRightAnchor(slider, 2.0);
         AnchorPane.setBottomAnchor(slider, 5.0);
-        pane.getChildren().add(slider);
+        paneBack.getChildren().add(pane);
+        paneBack.getChildren().add(slider);
 
-        tab.setContent(pane);
+        tab.setContent(paneBack);
         tabPane.getTabs().add(tab);
 
         // Add Vertex
@@ -91,7 +106,7 @@ public class MainPageController {
 
     public Circle createVertex(double x, double y)
     {
-        Circle circle_base = new Circle(30.0f, Color.web("da5630"));
+        Circle circle_base = new Circle(10.0f, Color.web("da5630"));
         circle_base.setTranslateX(x);
         circle_base.setTranslateY(y);
         circle_base.setOnMousePressed(circleOnMousePressedEventHandler);
@@ -110,7 +125,8 @@ public class MainPageController {
         {
             Circle circle = createVertex(mouseEvent.getX(), mouseEvent.getY());
             AnchorPane currPage = (AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent();
-            currPage.getChildren().add(circle);
+            AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
+            currP.getChildren().add(circle);
 
             //if we have the click once. we desactivate it
             vertex1ActiveOnce = false;
@@ -119,8 +135,10 @@ public class MainPageController {
         }
 
     }
-
-
+    @FXML
+    private void sliderMove(){
+        System.out.println("slider");
+    }
     @FXML
     private void handleSave(){
     }
