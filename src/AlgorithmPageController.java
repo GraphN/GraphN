@@ -75,7 +75,7 @@ public class AlgorithmPageController
     {
         AnchorPane pane = new AnchorPane();
 
-        //adding all vertex from
+        //adding all vertex from xml
         for(int i = 0; i < graph.getNbVertex(); i++)
         {
             int x = graph.getPosXOfVertex(i);
@@ -83,6 +83,11 @@ public class AlgorithmPageController
             String name = graph.getVertexName(i);
             //adding vertex created to pane
             pane.getChildren().add(createVertex(x, y, name));
+        }
+        //adding all edges from xml
+        for(int j = 0; j < graph.getNbEdge(); j++)
+        {
+
         }
 
 

@@ -25,6 +25,7 @@ public class GraphDom {
     final Element racine;
     private String graphName;
     private int nbVertex = 0;
+    private int nbEdge;
 
 
 
@@ -59,6 +60,16 @@ public class GraphDom {
         vertex.setAttribute("posY", String.valueOf(posY));
         racine.appendChild(vertex);
     }
+
+    public void addEdge(String vertexStart, String vertexEnd)
+    {
+        nbEdge++;
+        Element edge = document.createElement("edge");
+        edge.setAttribute("name", "edge_"+nbEdge);
+        edge.setAttribute("start", vertexStart);
+        edge.setAttribute("end", vertexEnd);
+        racine.appendChild(edge);
+    }
     public String getName()
     {
         return graphName;
@@ -66,6 +77,10 @@ public class GraphDom {
     public int getNbVertex()
     {
         return nbVertex;
+    }
+    public int getNbEdge()
+    {
+        return nbEdge;
     }
     public void setPosOfVertex(String vertex, int posX, int posY)
     {
@@ -87,6 +102,7 @@ public class GraphDom {
     }
     public int getPosXOfVertex(int index)
     {
+
        Element vertex = (Element) racine.getChildNodes().item(index);
        return Integer.valueOf(vertex.getAttribute("posX"));
     }

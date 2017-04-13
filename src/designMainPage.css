@@ -5,7 +5,7 @@
 }
 #newFileButton, #saveButton, #openFileButton,#importButton,
 #vertex1Button, #vertex1ButtonActivate, #vertex2Button,#edgeButton, #diEdgeButton,
-#diEdgeWeightedButton, #textButton, #commentButton
+#diEdgeWeightedButton, #textButton, #commentButton, #edgeButtonActivate
 {
 -fx-background-color: #232323;
 }
@@ -62,7 +62,7 @@
 }
 
 
-#edgeButton:hover{
+#edgeButton:hover, #edgeButtonActivate{
 -fx-background-image: url("edge-on.png");
 
 }
@@ -101,5 +101,6 @@
 #commentButton{
 -fx-background-image: url('comment.png');
 }
+
 
 

@@ -1,6 +1,7 @@
 /**
  * Created by LBX on 31/03/2017.
  */
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -16,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -24,12 +26,23 @@ import java.util.ArrayList;
 public class MainPageController {
     private MainApp mainApp;
     private ArrayList<GraphDom> listGraphXml; //list of xml files, from different tabs
+
+    //////////////////////buttons active or not/////////////////////////////////////////////////////////////////////////
     private boolean vertex1Active = false;
     private boolean vertex1ActiveOnce = false;
+    private boolean edge1Active = false;
+    private boolean edge1ActiveOnce = false;
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private boolean firstVerForEdge = true;
+    private double edgeStartX, edgeStartY;
+    private String nameVertexStart;
     @FXML
     private TabPane tabPane;
     @FXML
     private Button vertex1Button;
+    @FXML
+    private Button edgeButton;
     @FXML
     private AnchorPane greyMain;
     private int indiceTab;
@@ -223,22 +236,23 @@ public class MainPageController {
     private void handleImport(){
     }
     @FXML
-    private void handleVectrice(MouseEvent mouseEvent) {
+    private void handleVectrice(MouseEvent mouseEvent)
+    {
         int count = mouseEvent.getClickCount();
-        if(count == 2) // if we double click, we can put infinite vertex
+        if (count == 2 && !isOtherButtonActivate("vertex1")) // if we double click, we can put infinite vertex
         {
+            System.out.println("2");
             vertex1Active = true;
             vertex1ActiveOnce = false;
             vertex1Button.setId("vertex1ButtonActivate");//let the button orange if he is used
-        }
-        else if(count == 1 && (vertex1ActiveOnce||vertex1Active) )// if we click and if we are activate, we desactive
+        } else if (count == 1 && (vertex1ActiveOnce || vertex1Active))// if we click and if we are activate, we desactive
         {
             vertex1Active = false;
             vertex1ActiveOnce = false;
             vertex1Button.setId("vertex1Button");// desactivate button of orange
-        }
-        else if(count == 1 && (!vertex1ActiveOnce||!vertex1Active) )// if we clicked and we are desactivate, we active
+        } else if (count == 1 && (!vertex1ActiveOnce || !vertex1Active)  && !isOtherButtonActivate("vertex1"))// if we clicked and we are desactivate, we active
         {
+            System.out.println("1");
             vertex1ActiveOnce = true;
             vertex1Active = false;
             vertex1Button.setId("vertex1ButtonActivate");//let the butonn orange if he is used
@@ -248,7 +262,25 @@ public class MainPageController {
     private void handleVectrice2(){
     }
     @FXML
-    private void handleEdge(){
+    private void handleEdge(MouseEvent mouseEvent)
+    {
+        int count = mouseEvent.getClickCount();
+        if (count == 2 && !isOtherButtonActivate("edge1")) // if we double click, we can put infinite edges
+        {
+            edge1Active = true;
+            edge1ActiveOnce = false;
+            edgeButton.setId("edgeButtonActivate");//let the button orange if he is used
+        } else if (count == 1 && (edge1ActiveOnce || edge1Active))// if we click and if we are activate, we desactive
+        {
+            edge1Active = false;
+            edge1ActiveOnce = false;
+            edgeButton.setId("edgeButton");// desactivate button of orange
+        } else if (count == 1 && (!edge1ActiveOnce || !edge1Active) && !isOtherButtonActivate("edge1"))// if we clicked and we are desactivate, we active
+        {
+            edge1ActiveOnce = true;
+            edge1Active = false;
+            edgeButton.setId("edgeButtonActivate");//let the butonn orange if he is used
+        }
     }
     @FXML
     private void handleDiEdge(){
@@ -293,6 +325,44 @@ public class MainPageController {
                 {
                     Circle circle = (Circle) t.getSource();
                     circle.setCursor(Cursor.HAND);
+
+                    //Do when the edge button is activate to draw a edge.
+                    if(edge1Active||edge1ActiveOnce)
+                    {
+                        if (firstVerForEdge)
+                        {
+                            edgeStartX = circle.getTranslateX();
+                            edgeStartY = circle.getTranslateY();
+                            nameVertexStart = circle.getId();
+                            firstVerForEdge = false;
+                        } else
+                        {
+                            Line currentLine = new Line();
+                            currentLine.setStartX(edgeStartX);
+                            currentLine.setStartY(edgeStartY);
+                            currentLine.setEndX(circle.getTranslateX());
+                            currentLine.setEndY(circle.getTranslateY());
+                            currentLine.setStrokeWidth(2);
+                            currentLine.setSmooth(true);
+                            currentLine.setStroke(Color.web("da5630"));
+
+                            Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+                            AnchorPane currPage = (AnchorPane) currentTab.getContent();
+                            AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
+                            currP.getChildren().add(currentLine);
+
+                            //adding the edge in the xml
+                            GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+                            graphXml.addEdge(nameVertexStart, circle.getId());
+                            firstVerForEdge = true;
+                            if(edge1ActiveOnce)
+                            {
+                                edge1ActiveOnce = false;
+                                edgeButton.setId("edgeButton");
+
+                            }
+                        }
+                    }
                 }
             };
     EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
@@ -338,5 +408,15 @@ public class MainPageController {
                         return listGraphXml.get(i);
                 }
                 return null;
+            }
+
+            private boolean isOtherButtonActivate(String name)
+            {
+                if(name == "vertex1")
+                    return (edge1Active || edge1ActiveOnce);
+                else if(name == "edge1")
+                    return (vertex1Active || vertex1ActiveOnce);
+                else
+                    return false;
             }
 }

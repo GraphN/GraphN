@@ -18,7 +18,7 @@
                <children>
                   <Button fx:id="vertex1Button" ellipsisString="" layoutX="19.0" layoutY="37.0" maxHeight="27.0" maxWidth="27.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleVectrice" prefHeight="27.0" prefWidth="27.0" />
                   <Button id="vertex2Button" ellipsisString="" layoutX="19.0" layoutY="74.0" maxHeight="27.0" maxWidth="27.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleVectrice2" prefHeight="27.0" prefWidth="27.0" />
-                  <Button id="edgeButton" ellipsisString="" layoutX="19.0" layoutY="124.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleEdge" prefHeight="31.0" prefWidth="25.0" />
+                  <Button fx:id="edgeButton" ellipsisString="" layoutX="19.0" layoutY="124.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleEdge" prefHeight="31.0" prefWidth="25.0" />
                   <Button id="diEdgeButton" ellipsisString="" layoutX="19.0" layoutY="158.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleDiEdge" prefHeight="31.0" prefWidth="25.0" />
                   <Button id="diEdgeWeightedButton" ellipsisString="" layoutX="19.0" layoutY="193.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleDiEdgeWeighted" prefHeight="31.0" prefWidth="25.0" />
                   <Button id="textButton" layoutX="19.0" layoutY="241.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleText" prefHeight="31.0" prefWidth="25.0" text="Text" />
