@@ -1,28 +1,30 @@
 /**
  * Created by LBX on 31/03/2017.
  */
+import graph.GraphDom;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.input.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import javax.swing.*;
-import javax.swing.text.html.ImageView;
-import java.sql.Time;
-import java.util.concurrent.TimeUnit;
-
-import static java.awt.event.KeyEvent.VK_KP_DOWN;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.util.ArrayList;
 
 public class MainPageController {
     private MainApp mainApp;
+    private ArrayList<GraphDom> listGraphXml; //list of xml files, from different tabs
     private boolean vertex1Active = false;
     private boolean vertex1ActiveOnce = false;
     @FXML
@@ -32,6 +34,7 @@ public class MainPageController {
     @FXML
     private AnchorPane greyMain;
     private int indiceTab;
+    private int indiceVertex;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
     public MainPageController(){
@@ -39,6 +42,7 @@ public class MainPageController {
     }
     @FXML
     private void initialize() {
+        listGraphXml = new ArrayList<>();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         DraggingTabPaneSupport support = new DraggingTabPaneSupport();
         handleNew();
@@ -63,14 +67,25 @@ public class MainPageController {
     @FXML
     private void handleNew(){
         Tab tab = new Tab();
-        tab.setText("new tab"+ indiceTab++);
+        String tabName = "new tab"+ indiceTab++;
+        tab.setText(tabName);
+        tab.setId(tabName);
+
+        //creation of the xml file of this tab
+        try {
+            GraphDom currentGraphDom = new GraphDom(tabName);
+            //adding this xml to the list
+            listGraphXml.add(currentGraphDom);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         // Ajouter tout ce qu'on veut dans la  tab
-        //AnchorPane paneBack = new AnchorPane();
         AnchorPane paneBack = new AnchorPane();
         AnchorPane pane = new AnchorPane();
 
         pane.setPrefSize(paneBack.getWidth(), paneBack.getHeight());
+
         //mouselistener to add vertex etc
         paneBack.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -139,11 +154,7 @@ public class MainPageController {
 
         tab.setContent(paneBack);
         tabPane.getTabs().add(tab);
-        // Add Vertex
-       /* Circle circle_base = createVertex(100.0, 100.0);
-        Group root = new Group();
-        root.getChildren().add(circle_base);
-        pane.getChildren().add(root);*/
+
     }
     public Circle createVertex(double x, double y)
     {
@@ -163,8 +174,17 @@ public class MainPageController {
     private void panePressed(MouseEvent mouseEvent){
         if(vertex1Active || vertex1ActiveOnce)
         {
+            Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+
+            //creation of a vertex (circle) in good positions
             Circle circle = createVertex(mouseEvent.getX(), mouseEvent.getY());
-            AnchorPane currPage = (AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent();
+
+            //adding this vertex to the xml file
+            GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+            graphXml.addVertex(mouseEvent.getX(), mouseEvent.getY());
+
+
+            AnchorPane currPage = (AnchorPane) currentTab.getContent();
             AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
             currP.getChildren().add(circle);
             //if we have the click once. we desactivate it
@@ -179,7 +199,16 @@ public class MainPageController {
         System.out.println("slider");
     }
     @FXML
-    private void handleSave(){
+    private void handleSave()
+    {
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+        try {
+            graphXml.saveGraphXML("new graph");
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+
     }
     @FXML
     private void handleOpen(){
@@ -285,4 +314,14 @@ public class MainPageController {
                     c.setTranslateY(newTranslateY);
                 }
             };
+
+            private GraphDom getXmlOfThisTab(String name)
+            {
+                for(int i = 0; i < listGraphXml.size(); i++)
+                {
+                    if(listGraphXml.get(i).getName() == name)
+                        return listGraphXml.get(i);
+                }
+                return null;
+            }
 }
