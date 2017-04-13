@@ -156,9 +156,10 @@ public class MainPageController {
         tabPane.getTabs().add(tab);
 
     }
-    public Circle createVertex(double x, double y)
+    public Circle createVertex(double x, double y, String id)
     {
         Circle circle_base = new Circle(10.0f, Color.web("da5630"));
+        circle_base.setId(id);
         circle_base.setTranslateX(x);
         circle_base.setTranslateY(y);
         circle_base.setOnMousePressed(circleOnMousePressedEventHandler);
@@ -176,13 +177,14 @@ public class MainPageController {
         {
             Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
 
-            //creation of a vertex (circle) in good positions
-            Circle circle = createVertex(mouseEvent.getX(), mouseEvent.getY());
-
             //adding this vertex to the xml file
             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
             graphXml.addVertex(mouseEvent.getX(), mouseEvent.getY());
 
+
+            String nameOfVertex = "ver_"+graphXml.getNbVertex();
+            //creation of a vertex (circle) in good positions
+            Circle circle = createVertex(mouseEvent.getX(), mouseEvent.getY(), nameOfVertex);
 
             AnchorPane currPage = (AnchorPane) currentTab.getContent();
             AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
@@ -283,8 +285,10 @@ public class MainPageController {
     EventHandler<MouseEvent> circleOnMouseReleasedEventHandler =
             new EventHandler<MouseEvent>() {
                 @Override
-                public void handle(MouseEvent t) {
-                    ((Circle) t.getSource()).setCursor(Cursor.HAND);
+                public void handle(MouseEvent t)
+                {
+                    Circle circle = (Circle) t.getSource();
+                    circle.setCursor(Cursor.HAND);
                 }
             };
     EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
@@ -312,6 +316,13 @@ public class MainPageController {
                         newTranslateY = tabPane.getHeight() - c.getRadius() -33;
                     c.setTranslateX(newTranslateX);
                     c.setTranslateY(newTranslateY);
+
+                    //the vertex has been moved so we need to change it position in the xml
+                    Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+                    GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+                    graphXml.setPosOfVertex(c.getId(), newTranslateX, newTranslateY);
+
+
                 }
             };
 

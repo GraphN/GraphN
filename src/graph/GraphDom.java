@@ -2,6 +2,7 @@ package graph;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -67,5 +68,25 @@ public class GraphDom {
     public int getNbVertex()
     {
         return nbVertex;
+    }
+    public void setPosOfVertex(String vertex, double posX, double posY)
+    {
+        NodeList nodes = racine.getChildNodes();
+
+        for(int i = 0; i < nodes.getLength(); i++)
+        {
+            Element currentNode = (Element) nodes.item(i);
+
+            if(currentNode.getNodeName().equals("vertex"))
+            {
+
+                if(currentNode.getAttribute("name").equals(vertex))
+                {
+                    currentNode.setAttribute("posX",String.valueOf(posX) );
+                    currentNode.setAttribute("posY",String.valueOf(posY) );
+                }
+            }
+
+        }
     }
 }
