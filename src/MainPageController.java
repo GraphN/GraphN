@@ -9,7 +9,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -241,8 +240,14 @@ public class MainPageController {
                 public void handle(MouseEvent t) {
                     orgSceneX = t.getSceneX();
                     orgSceneY = t.getSceneY();
-                    orgTranslateX = ((Circle)(t.getSource())).getTranslateX();
-                    orgTranslateY = ((Circle)(t.getSource())).getTranslateY();
+
+                    //get currentPane to know the slider position
+                    AnchorPane anch = (AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent();
+                    Slider slider = (Slider) anch.getChildren().get(1);
+                    double sliderValue = slider.getValue();
+
+                    orgTranslateX = ((Circle)(t.getSource())).getTranslateX()*sliderValue;
+                    orgTranslateY = ((Circle)(t.getSource())).getTranslateY()*sliderValue;
                     ((Circle)t.getSource()).setCursor(Cursor.CLOSED_HAND);
                 }
             };
@@ -257,11 +262,16 @@ public class MainPageController {
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent t) {
+                    //get currentPane to know the slider position
+                    AnchorPane anch = (AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent();
+                    Slider slider = (Slider) anch.getChildren().get(1);
+                    double sliderValue = slider.getValue();
+
                     Circle c = (Circle) t.getSource();
                     double offsetX = t.getSceneX() - orgSceneX;
                     double offsetY = t.getSceneY() - orgSceneY;
-                    double newTranslateX = orgTranslateX + offsetX;
-                    double newTranslateY = orgTranslateY + offsetY;
+                    double newTranslateX = (orgTranslateX + offsetX)/sliderValue;
+                    double newTranslateY = (orgTranslateY + offsetY)/sliderValue;
                     if(newTranslateX < c.getRadius())
                         newTranslateX = c.getRadius();
                     if(newTranslateX > tabPane.getWidth() - c.getRadius())
