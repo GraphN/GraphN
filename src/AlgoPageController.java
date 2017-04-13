@@ -2,6 +2,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * Created by LBX on 03/04/2017.
@@ -9,13 +10,25 @@ import javafx.scene.control.Slider;
 public class AlgoPageController
 {
     private MainApp mainApp;
+    private AnchorPane graph;
+    @FXML
+    private AnchorPane centerAlgoPage;
+    public void setGraph(AnchorPane g)
+    {
+        graph = g;
+    }
+
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
     @FXML
-    private void initialize(){
-        initZoom();    }
+    private void initialize()
+    {
+        initZoom();
+        Slider slider = new Slider();
+        centerAlgoPage.getChildren().add(slider);
+    }
     @FXML
     private Slider slider;
 

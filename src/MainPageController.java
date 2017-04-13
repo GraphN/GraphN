@@ -1,7 +1,6 @@
 /**
  * Created by LBX on 31/03/2017.
  */
-import graph.GraphDom;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -61,8 +60,13 @@ public class MainPageController {
         greyMain.setVisible(b);
     }
     @FXML
-    private void handleLaunch(){
-        mainApp.showAlgoPage();
+    private void handleLaunch()
+    {
+        //get the xml of the current graph to send it to showAlgoPage()
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+
+        mainApp.showAlgoPage(graphXml);
     }
     @FXML
     private void handleNew(){
@@ -179,7 +183,7 @@ public class MainPageController {
 
             //adding this vertex to the xml file
             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-            graphXml.addVertex(mouseEvent.getX(), mouseEvent.getY());
+            graphXml.addVertex((int)mouseEvent.getX(), (int)mouseEvent.getY());
 
 
             String nameOfVertex = "ver_"+graphXml.getNbVertex();
@@ -320,7 +324,7 @@ public class MainPageController {
                     //the vertex has been moved so we need to change it position in the xml
                     Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
                     GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-                    graphXml.setPosOfVertex(c.getId(), newTranslateX, newTranslateY);
+                    graphXml.setPosOfVertex(c.getId(),(int) newTranslateX, (int) newTranslateY);
 
 
                 }

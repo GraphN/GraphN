@@ -1,5 +1,3 @@
-package graph;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -52,7 +50,7 @@ public class GraphDom {
         transformer.transform(source, sortie);
     }
 
-    public void addVertex(double posX, double posY)
+    public void addVertex(int posX, int posY)
     {
         nbVertex++;
         Element vertex = document.createElement("vertex");
@@ -69,7 +67,7 @@ public class GraphDom {
     {
         return nbVertex;
     }
-    public void setPosOfVertex(String vertex, double posX, double posY)
+    public void setPosOfVertex(String vertex, int posX, int posY)
     {
         NodeList nodes = racine.getChildNodes();
 
@@ -79,14 +77,27 @@ public class GraphDom {
 
             if(currentNode.getNodeName().equals("vertex"))
             {
-
                 if(currentNode.getAttribute("name").equals(vertex))
                 {
                     currentNode.setAttribute("posX",String.valueOf(posX) );
                     currentNode.setAttribute("posY",String.valueOf(posY) );
                 }
             }
-
         }
+    }
+    public int getPosXOfVertex(int index)
+    {
+       Element vertex = (Element) racine.getChildNodes().item(index);
+       return Integer.valueOf(vertex.getAttribute("posX"));
+    }
+    public int getPosYOfVertex(int index)
+    {
+        Element vertex = (Element) racine.getChildNodes().item(index);
+        return Integer.valueOf(vertex.getAttribute("posY"));
+    }
+    public String getVertexName(int index)
+    {
+        Element vertex = (Element) racine.getChildNodes().item(index);
+        return vertex.getAttribute("name");
     }
 }
