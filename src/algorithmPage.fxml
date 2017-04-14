@@ -60,7 +60,7 @@
    <center>
       <SplitPane dividerPositions="0.7336683417085427" orientation="VERTICAL" prefHeight="376.0" prefWidth="589.0" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="centerPage">
+          <AnchorPane fx:id="centerAlgoPage" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="centerPage">
                <children>
                   <Slider fx:id="slider" layoutX="445.0" layoutY="270.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="2.0" />
                </children>

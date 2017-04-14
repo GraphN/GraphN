@@ -1,14 +1,13 @@
 
-import java.awt.*;
-import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainApp extends Application {
 
@@ -51,8 +50,9 @@ public class MainApp extends Application {
         }
     }
     // dans le futur, passer un graphe en paramètre
-    public void showAlgoPage() {
+    public void showAlgoPage(GraphDom graph) {
         try {
+            System.out.println(graph.getName());
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("algorithmPage.fxml"));
@@ -70,6 +70,9 @@ public class MainApp extends Application {
             //AlgoPageController controller = loader.getController();
             AlgorithmPageController controller = loader.getController();
             controller.setMainApp(this);
+
+            //setting the graph pane to the algo page
+            controller.setGraph(graph);
 
             // Set the person into the controller.
             /*PersonEditDialogController controller = loader.getController();
