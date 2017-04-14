@@ -1,10 +1,13 @@
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+
 
 /**
  * Created by LBX on 03/04/2017.
@@ -12,7 +15,6 @@ import javafx.scene.shape.Circle;
 public class AlgorithmPageController
 {
     private MainApp mainApp;
-    private GraphDom graph;
 
     @FXML
     private AnchorPane centerAlgoPage;
@@ -71,25 +73,37 @@ public class AlgorithmPageController
         });
     }
 
-    private AnchorPane recreateAnchorWithXML(GraphDom graph)
-    {
+    private AnchorPane recreateAnchorWithXML(GraphDom graph) {
         AnchorPane pane = new AnchorPane();
 
         //adding all vertex from xml
-        for(int i = 0; i < graph.getNbVertex(); i++)
+        int i = 0;
+        while (i < graph.getNbVertex())
         {
-            int x = graph.getPosXOfVertex(i);
-            int y = graph.getPosYOfVertex(i);
-            String name = graph.getVertexName(i);
-            //adding vertex created to pane
-            pane.getChildren().add(createVertex(x, y, name));
+                Point2D point = graph.getPosOfVertex(i);
+                int x = (int) point.getX();
+                int y = (int) point.getY();
+                String name = graph.getName(i);
+
+                //adding vertex created to pane
+                pane.getChildren().add(createVertex(x, y, name));
+
+                i++;
         }
-        //adding all edges from xml
-        for(int j = 0; j < graph.getNbEdge(); j++)
+        i = 0;
+        while (i < graph.getNbEdge())
         {
+            //adding all edges from xml
+            Line edge  = graph.getEdge(i);
+            edge.setStrokeWidth(2);
+            edge.setSmooth(true);
+            edge.setStroke(Color.web("da5630"));
 
+            //adding edge created to pane
+            pane.getChildren().add(edge);
+
+            i++;
         }
-
 
        return pane;
     }

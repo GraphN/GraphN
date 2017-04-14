@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Graphe name="new tab0">
-<vertex name="ver_1" posX="127" posY="90"/>
-<vertex name="ver_2" posX="360" posY="172"/>
-<vertex name="ver_3" posX="115" posY="226"/>
-<vertex name="ver_4" posX="199" posY="299"/>
-<edge end="ver_3" name="edge_1" start="ver_1"/>
-<edge end="ver_2" name="edge_2" start="ver_4"/>
-<edge end="ver_3" name="edge_3" start="ver_1"/>
+<vertex name="ver_1" posX="83" posY="95"/>
+<vertex name="ver_2" posX="150" posY="191"/>
+<edge end="ver_2" name="edge_1" start="ver_1"/>
 </Graphe>
