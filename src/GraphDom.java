@@ -1,3 +1,5 @@
+import javafx.geometry.Point2D;
+import javafx.scene.shape.Line;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -12,6 +14,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by kevin moreira on 13.04.2017.
@@ -26,11 +29,17 @@ public class GraphDom {
     private String graphName;
     private int nbVertex = 0;
     private int nbEdge;
+    private ArrayList<Element> vertexes;
+    private ArrayList<Element> edges;
 
 
 
 
-    public GraphDom(String name) throws ParserConfigurationException {
+    public GraphDom(String name) throws ParserConfigurationException
+    {
+        vertexes = new ArrayList<>();
+        edges = new ArrayList<>();
+
         graphName = name;
         factory = DocumentBuilderFactory.newInstance();
         builder = factory.newDocumentBuilder();
@@ -59,6 +68,7 @@ public class GraphDom {
         vertex.setAttribute("posX", String.valueOf(posX));
         vertex.setAttribute("posY", String.valueOf(posY));
         racine.appendChild(vertex);
+        vertexes.add(vertex);
     }
 
     public void addEdge(String vertexStart, String vertexEnd)
@@ -69,6 +79,7 @@ public class GraphDom {
         edge.setAttribute("start", vertexStart);
         edge.setAttribute("end", vertexEnd);
         racine.appendChild(edge);
+        edges.add(edge);
     }
     public String getName()
     {
@@ -100,7 +111,7 @@ public class GraphDom {
             }
         }
     }
-    public int getPosXOfVertex(int index)
+    /*public int getPosXOfVertex(int index)
     {
 
        Element vertex = (Element) racine.getChildNodes().item(index);
@@ -110,10 +121,68 @@ public class GraphDom {
     {
         Element vertex = (Element) racine.getChildNodes().item(index);
         return Integer.valueOf(vertex.getAttribute("posY"));
-    }
-    public String getVertexName(int index)
+    }*/
+
+    /**
+     * get the position of vertex by his number
+     * @param index
+     * @return
+     */
+    public Point2D getPosOfVertex(int index)
     {
-        Element vertex = (Element) racine.getChildNodes().item(index);
-        return vertex.getAttribute("name");
+
+        Element node = vertexes.get(index);
+
+        return new Point2D(Integer.valueOf(node.getAttribute("posX")),
+                           Integer.valueOf(node.getAttribute("posY")));
     }
+
+    /**
+     * get the position of vertex by his name
+     * @param name
+     * @return
+     */
+    public Point2D getPosOfVertex(String name)
+    {
+        int i = 0;
+        while(i < nbVertex)
+        {
+            Element node = vertexes.get(i);
+            if(node.getAttribute("name").equals(name))
+            {
+                return new Point2D(Integer.valueOf(node.getAttribute("posX")),
+                                   Integer.valueOf(node.getAttribute("posY")));
+            }
+            i++;
+        }
+
+        return null;
+    }
+    public String getName(int index)
+    {
+        Element node = (Element) racine.getChildNodes().item(index);
+        return node.getAttribute("name");
+    }
+    public String getNodeType(int index)
+    {
+        NodeList nodes = racine.getChildNodes();
+        Element currentNode = (Element) nodes.item(index);
+        return currentNode.getNodeName();
+    }
+    public Line getEdge(int index)
+    {
+        Element edge = (Element) edges.get(index);
+        String vertex1 = edge.getAttribute("start");
+        String vertex2 = edge.getAttribute("end");
+
+        Point2D ver1 =  getPosOfVertex(vertex1);
+        Point2D ver2 =  getPosOfVertex(vertex2);
+
+        int startX = (int)ver1.getX();
+        int startY = (int)ver1.getY();
+        int endX = (int)ver2.getX();
+        int endY = (int)ver2.getY();
+        return new Line(startX, startY, endX, endY);
+    }
+
 }
