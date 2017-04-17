@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
@@ -276,6 +277,11 @@ public class MainPageController {
                 edge.setSmooth(true);
                 edge.setStroke(Color.web("da5630"));
 
+                //getting vertexes start and end of this line, to add listeneners
+                Circle cirleStart = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
+                Circle cirleEnd = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
+                //creating listener for moving edge when moving vertexes
+                moveVertexMoveEdgeListener(cirleStart, cirleEnd, edge);
                 //adding edge created to pane (at index 0 to have vertexes on front of edges)
                 pane.getChildren().add(0,edge);
 
@@ -398,8 +404,10 @@ public class MainPageController {
                             currentLine.setSmooth(true);
                             currentLine.setStroke(Color.web("da5630"));
 
+                            Circle circleEnd = (Circle) t.getSource();
+                            moveVertexMoveEdgeListener(circleStart, circleEnd, currentLine);
                             ////////////////////////////////////////////////moving vertex move edges////////////////////
-                            ((Circle) t.getSource()).translateXProperty().addListener(new ChangeListener<Number>()
+                            /*((Circle) t.getSource()).translateXProperty().addListener(new ChangeListener<Number>()
                             {
                                 @Override
                                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
@@ -433,7 +441,7 @@ public class MainPageController {
                                 {
                                     currentLine.setStartY((double)newValue);
                                 }
-                            });
+                            });*/
                             ////////////////////////////////////////////////////////////////////////////////////////////
 
                             Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
@@ -577,5 +585,63 @@ public class MainPageController {
 
                 tab.setContent(paneBack);
                 return tab;
+            }
+
+            private void moveVertexMoveEdgeListener(Circle circleStart, Circle circleEnd, Line currentLine)
+            {
+                //////////////////////////////////moving vertex move edges////////////////////
+                circleEnd.translateXProperty().addListener(new ChangeListener<Number>()
+                {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+                    {
+                        currentLine.setEndX((double)newValue);
+
+                    }
+                });
+                circleEnd.translateYProperty().addListener(new ChangeListener<Number>()
+                {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+                    {
+                        currentLine.setEndY((double)newValue);
+
+                    }
+                });
+                circleStart.translateXProperty().addListener(new ChangeListener<Number>()
+                {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+                    {
+                        currentLine.setStartX((double)newValue);
+                    }
+                });
+
+                circleStart.translateYProperty().addListener(new ChangeListener<Number>()
+                {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+                    {
+                        currentLine.setStartY((double)newValue);
+                    }
+                });
+                ////////////////////////////////////////////////////////////////////////////////////////////
+
+            }
+
+            private Node getChildrenVertexById(AnchorPane pane, String id)
+            {
+                for(int i = 0; i < pane.getChildren().size(); i++)
+                {
+                    Node node = pane.getChildren().get(i);
+                    System.out.println(node.getClass());
+                    if(node.getClass().equals(Circle.class))
+                    {
+                        Circle circle = (Circle) node;
+                        if(circle.getId().equals(id))
+                            return node;
+                    }
+                }
+                return null;
             }
 }

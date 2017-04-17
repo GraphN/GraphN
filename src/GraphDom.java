@@ -190,5 +190,16 @@ public class GraphDom {
         int endY = (int)ver2.getY();
         return new Line(startX, startY, endX, endY);
     }
+    public String getEdgeStartName(int index)
+    {
+        Element edge = (Element) edges.get(index);
+        return edge.getAttribute("start");
+    }
+
+    public String getEdgeEndName(int index)
+    {
+        Element edge = (Element) edges.get(index);
+        return edge.getAttribute("end");
+    }
 
 }
