@@ -36,6 +36,7 @@ public class MainPageController {
 
     private boolean firstVerForEdge = true;
     private double edgeStartX, edgeStartY;
+    private Circle circleStart;
     private String nameVertexStart;
     @FXML
     private TabPane tabPane;
@@ -140,8 +141,6 @@ public class MainPageController {
                 }
                 else if(event.getCode() == KeyCode.RIGHT && pane.getTranslateX()*(-1) < paneBack.getWidth()*(slider.getValue() -1))
                 {
-
-                    System.out.println(pane.getTranslateX() +"  "+paneBack.getWidth()*(slider.getValue() -1));
                     pane.setTranslateX(pane.getTranslateX() - 20);
                 }
                 else if(event.getCode() == KeyCode.UP && pane.getTranslateY()*(-1) > 0)
@@ -198,14 +197,52 @@ public class MainPageController {
             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
             graphXml.addVertex((int)mouseEvent.getX(), (int)mouseEvent.getY());
 
-
             String nameOfVertex = "ver_"+graphXml.getNbVertex();
+
             //creation of a vertex (circle) in good positions
             Circle circle = createVertex(mouseEvent.getX(), mouseEvent.getY(), nameOfVertex);
 
             AnchorPane currPage = (AnchorPane) currentTab.getContent();
             AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
             currP.getChildren().add(circle);
+
+
+            //listener for the circle changing position
+            /*
+            ChangeListener changeListener = new ChangeListener()
+            {
+                @Override
+                public void changed(ObservableValue observable, Object oldValue, Object newValue)
+                {
+                    //get all the edges connected to this vertex
+                    for(int i = 0; i < currP.getChildren().size(); i++)
+                    {
+                        System.out.println(i);
+                        if(currP.getChildren().get(i).getClass().equals(Line.class))
+                        {
+                            Line line = (Line) currP.getChildren().get(i);
+                            String idLine = line.getId();
+                            String[] parts = idLine.split("-");
+                            String idStart = parts[0];
+                            String idEnd = parts[1];
+
+                            if(idStart == circle.getId())
+                            {
+                                line.setStartX(circle.getTranslateX());
+                                line.setStartY(circle.getTranslateY());
+                            }
+                            else if(idEnd == circle.getId())
+                            {
+
+                            }
+                        }
+                    }
+                }
+            };
+            circle.translateXProperty().addListener(changeListener);
+            circle.translateYProperty().addListener(changeListener);
+            */
+
             //if we have the click once. we desactivate it
             vertex1ActiveOnce = false;
             if(!vertex1Active)
@@ -241,7 +278,6 @@ public class MainPageController {
         int count = mouseEvent.getClickCount();
         if (count == 2 && !isOtherButtonActivate("vertex1")) // if we double click, we can put infinite vertex
         {
-            System.out.println("2");
             vertex1Active = true;
             vertex1ActiveOnce = false;
             vertex1Button.setId("vertex1ButtonActivate");//let the button orange if he is used
@@ -252,7 +288,6 @@ public class MainPageController {
             vertex1Button.setId("vertex1Button");// desactivate button of orange
         } else if (count == 1 && (!vertex1ActiveOnce || !vertex1Active)  && !isOtherButtonActivate("vertex1"))// if we clicked and we are desactivate, we active
         {
-            System.out.println("1");
             vertex1ActiveOnce = true;
             vertex1Active = false;
             vertex1Button.setId("vertex1ButtonActivate");//let the butonn orange if he is used
@@ -331,21 +366,57 @@ public class MainPageController {
                     {
                         if (firstVerForEdge)
                         {
-                            edgeStartX = circle.getTranslateX();
-                            edgeStartY = circle.getTranslateY();
+                            System.out.println(" aa ");
+                            circleStart = circle;
                             nameVertexStart = circle.getId();
                             firstVerForEdge = false;
                         } else
                         {
                             Line currentLine = new Line();
-                            currentLine.setStartX(edgeStartX);
-                            currentLine.setStartY(edgeStartY);
+                            currentLine.setId(nameVertexStart+"-"+circle.getId());
+                            currentLine.setStartX(circleStart.getTranslateX());
+                            currentLine.setStartY(circleStart.getTranslateY());
                             currentLine.setEndX(circle.getTranslateX());
                             currentLine.setEndY(circle.getTranslateY());
                             currentLine.setStrokeWidth(2);
                             currentLine.setSmooth(true);
                             currentLine.setStroke(Color.web("da5630"));
 
+                            ((Circle) t.getSource()).translateXProperty().addListener(new ChangeListener<Number>()
+                            {
+                                @Override
+                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+                                {
+                                    currentLine.setEndX((double)newValue);
+
+                                }
+                            });
+                            ((Circle) t.getSource()).translateYProperty().addListener(new ChangeListener<Number>()
+                            {
+                                @Override
+                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+                                {
+                                    currentLine.setEndY((double)newValue);
+
+                                }
+                            });
+                            circleStart.translateXProperty().addListener(new ChangeListener<Number>()
+                            {
+                                @Override
+                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+                                {
+                                    currentLine.setStartX((double)newValue);
+                                }
+                            });
+
+                            circleStart.translateYProperty().addListener(new ChangeListener<Number>()
+                            {
+                                @Override
+                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+                                {
+                                    currentLine.setStartY((double)newValue);
+                                }
+                            });
                             Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
                             AnchorPane currPage = (AnchorPane) currentTab.getContent();
                             AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
@@ -359,7 +430,6 @@ public class MainPageController {
                             {
                                 edge1ActiveOnce = false;
                                 edgeButton.setId("edgeButton");
-
                             }
                         }
                     }
@@ -395,8 +465,6 @@ public class MainPageController {
                     Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
                     GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                     graphXml.setPosOfVertex(c.getId(),(int) newTranslateX, (int) newTranslateY);
-
-
                 }
             };
 
