@@ -1,12 +1,21 @@
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.File;
 import java.io.IOException;
 
 public class MainApp extends Application {
@@ -67,7 +76,6 @@ public class MainApp extends Application {
             Scene scene = new Scene(page);
             algoStage.setScene(scene);
 
-            //AlgoPageController controller = loader.getController();
             AlgorithmPageController controller = loader.getController();
             controller.setMainApp(this);
 
@@ -92,11 +100,102 @@ public class MainApp extends Application {
             //return false;
         }
     }
+
+
+    public void showSavePage(GraphDom graph)
+    {
+        MenuItem cmItem2 = new MenuItem("Save Graph");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Graph");
+
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File file = fileChooser.showSaveDialog(primaryStage);
+        if (file != null) {
+               try {
+                   graph.saveGraphXML(file);
+               } catch (TransformerException e) {
+                   e.printStackTrace();
+               }
+           }
+    }
+
+    public GraphDom showOpenPage() throws ParserConfigurationException {
+        GraphDom graphDom;
+
+        MenuItem cmItem2 = new MenuItem("Open Graph");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Graph");
+
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File file = fileChooser.showSaveDialog(primaryStage);
+        //set the name of the graphdom
+        String fileName = file.getName();
+        String [] fileN = fileName.split("\\.");
+        graphDom = new GraphDom(fileN[0]);
+
+        if (file != null)
+        {
+            //read the xml in this file, and create GraphDom
+            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+            try
+            {
+                final DocumentBuilder builder = factory.newDocumentBuilder();
+                final Document document = builder.parse(file);
+                final Element racine = document.getDocumentElement();
+                final NodeList nodes = racine.getChildNodes();
+
+                int vertexAdded = 0;
+                //for each node in racine add it to the graphdom if it is vertex or edge
+                for(int i = 0; i < nodes.getLength(); i++)
+                {
+                    //this if is very important. when a node is equal to #text its just that it is a jump the line,
+                    // so we have to test if the current node is not a jump the line
+                    if(!nodes.item(i).getNodeName().equals("#text"))
+                    {
+                        Element currentNode = (Element) nodes.item(i);
+                        if (currentNode.getNodeName().equals("vertex"))
+                        {
+                            graphDom.addVertex(Integer.valueOf(currentNode.getAttribute("posX")),
+                                    Integer.valueOf(currentNode.getAttribute("posY")));
+
+                            // change the name of the vertex to have good one (corresponding of the xml file)
+                            graphDom.setNameOfVertex(currentNode.getAttribute("name"), vertexAdded);
+
+                            vertexAdded++;
+                        }
+                        else if (currentNode.getNodeName().equals("edge"))
+                        {
+                            graphDom.addEdge(currentNode.getAttribute("start"),
+                                    currentNode.getAttribute("end"));
+                        }
+                    }
+                }
+            }
+            catch (final ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (final IOException e) {
+                e.printStackTrace();
+            } catch (org.xml.sax.SAXException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return graphDom;
+    }
+
+
+
     public void newTab(){
         mainPageController.handleNewFromAlgoPage();
         algoStage.close();
     }
-
 
     /**
      * Shows the person overview inside the root layout.
@@ -126,4 +225,5 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }

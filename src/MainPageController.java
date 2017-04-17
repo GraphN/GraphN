@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -20,7 +21,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.util.ArrayList;
 
 public class MainPageController {
@@ -35,7 +35,6 @@ public class MainPageController {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private boolean firstVerForEdge = true;
-    private double edgeStartX, edgeStartY;
     private Circle circleStart;
     private String nameVertexStart;
     @FXML
@@ -47,7 +46,6 @@ public class MainPageController {
     @FXML
     private AnchorPane greyMain;
     private int indiceTab;
-    private int indiceVertex;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
     public MainPageController(){
@@ -83,8 +81,21 @@ public class MainPageController {
         mainApp.showAlgoPage(graphXml);
     }
     @FXML
-    private void handleNew(){
-        Tab tab = new Tab();
+    private void handleNew()
+    {
+        //create new tab whitout name to get one name like new tab 3, 4 ..
+        Tab tab = createNewTab("");
+        tabPane.getTabs().add(tab);
+
+        //creation of the xml file of this tab
+        try {
+            GraphDom currentGraphDom = new GraphDom(tab.getId());
+            //adding this xml to the list
+            listGraphXml.add(currentGraphDom);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        /*Tab tab = new Tab();
         String tabName = "new tab"+ indiceTab++;
         tab.setText(tabName);
         tab.setId(tabName);
@@ -170,9 +181,9 @@ public class MainPageController {
 
         tab.setContent(paneBack);
         tabPane.getTabs().add(tab);
-
+*/
     }
-    public Circle createVertex(double x, double y, String id)
+    private Circle createVertex(double x, double y, String id)
     {
         Circle circle_base = new Circle(10.0f, Color.web("da5630"));
         circle_base.setId(id);
@@ -206,43 +217,6 @@ public class MainPageController {
             AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
             currP.getChildren().add(circle);
 
-
-            //listener for the circle changing position
-            /*
-            ChangeListener changeListener = new ChangeListener()
-            {
-                @Override
-                public void changed(ObservableValue observable, Object oldValue, Object newValue)
-                {
-                    //get all the edges connected to this vertex
-                    for(int i = 0; i < currP.getChildren().size(); i++)
-                    {
-                        System.out.println(i);
-                        if(currP.getChildren().get(i).getClass().equals(Line.class))
-                        {
-                            Line line = (Line) currP.getChildren().get(i);
-                            String idLine = line.getId();
-                            String[] parts = idLine.split("-");
-                            String idStart = parts[0];
-                            String idEnd = parts[1];
-
-                            if(idStart == circle.getId())
-                            {
-                                line.setStartX(circle.getTranslateX());
-                                line.setStartY(circle.getTranslateY());
-                            }
-                            else if(idEnd == circle.getId())
-                            {
-
-                            }
-                        }
-                    }
-                }
-            };
-            circle.translateXProperty().addListener(changeListener);
-            circle.translateYProperty().addListener(changeListener);
-            */
-
             //if we have the click once. we desactivate it
             vertex1ActiveOnce = false;
             if(!vertex1Active)
@@ -259,15 +233,59 @@ public class MainPageController {
     {
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-        try {
-            graphXml.saveGraphXML("new graph");
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
-
+        mainApp.showSavePage(graphXml);
     }
     @FXML
-    private void handleOpen(){
+    private void handleOpen()
+    {
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////Probleme code a factoriser. redondance avec fonction createAnchorPaneWithXml de la classe AlgoPageContr//
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        try {
+            GraphDom graphOpen = mainApp.showOpenPage();
+
+            //adding this xml to the list
+            listGraphXml.add(graphOpen);
+            Tab tab = createNewTab(graphOpen.getName());
+
+            //get the Anchorpane who we need to fill
+            AnchorPane paneBack = (AnchorPane) tab.getContent();
+            AnchorPane pane = (AnchorPane) paneBack.getChildren().get(0);
+
+            //adding all vertex from xml
+            int i = 0;
+            while (i < graphOpen.getNbVertex())
+            {
+                Point2D point = graphOpen.getPosOfVertex(i);
+                int x = (int) point.getX();
+                int y = (int) point.getY();
+                String name = graphOpen.getName(i);
+
+                //adding vertex created to pane
+                pane.getChildren().add(createVertex(x, y, name));
+
+                i++;
+            }
+            i = 0;
+            while (i < graphOpen.getNbEdge())
+            {
+                //adding all edges from xml
+                Line edge  = graphOpen.getEdge(i);
+                edge.setStrokeWidth(4);
+                edge.setSmooth(true);
+                edge.setStroke(Color.web("da5630"));
+
+                //adding edge created to pane (at index 0 to have vertexes on front of edges)
+                pane.getChildren().add(0,edge);
+
+                i++;
+            }
+            tabPane.getTabs().add(tab);
+
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
     }
     @FXML
     private void handleImport(){
@@ -286,7 +304,7 @@ public class MainPageController {
             vertex1Active = false;
             vertex1ActiveOnce = false;
             vertex1Button.setId("vertex1Button");// desactivate button of orange
-        } else if (count == 1 && (!vertex1ActiveOnce || !vertex1Active)  && !isOtherButtonActivate("vertex1"))// if we clicked and we are desactivate, we active
+        } else if (count == 1 && !isOtherButtonActivate("vertex1"))// if we clicked and we are desactivate, we active
         {
             vertex1ActiveOnce = true;
             vertex1Active = false;
@@ -310,7 +328,7 @@ public class MainPageController {
             edge1Active = false;
             edge1ActiveOnce = false;
             edgeButton.setId("edgeButton");// desactivate button of orange
-        } else if (count == 1 && (!edge1ActiveOnce || !edge1Active) && !isOtherButtonActivate("edge1"))// if we clicked and we are desactivate, we active
+        } else if (count == 1 /*&& (!edge1ActiveOnce || !edge1Active)*/ && !isOtherButtonActivate("edge1"))// if we clicked and we are desactivate, we active
         {
             edge1ActiveOnce = true;
             edge1Active = false;
@@ -366,22 +384,21 @@ public class MainPageController {
                     {
                         if (firstVerForEdge)
                         {
-                            System.out.println(" aa ");
                             circleStart = circle;
                             nameVertexStart = circle.getId();
                             firstVerForEdge = false;
                         } else
                         {
                             Line currentLine = new Line();
-                            currentLine.setId(nameVertexStart+"-"+circle.getId());
                             currentLine.setStartX(circleStart.getTranslateX());
                             currentLine.setStartY(circleStart.getTranslateY());
                             currentLine.setEndX(circle.getTranslateX());
                             currentLine.setEndY(circle.getTranslateY());
-                            currentLine.setStrokeWidth(2);
+                            currentLine.setStrokeWidth(4);
                             currentLine.setSmooth(true);
                             currentLine.setStroke(Color.web("da5630"));
 
+                            ////////////////////////////////////////////////moving vertex move edges////////////////////
                             ((Circle) t.getSource()).translateXProperty().addListener(new ChangeListener<Number>()
                             {
                                 @Override
@@ -417,10 +434,12 @@ public class MainPageController {
                                     currentLine.setStartY((double)newValue);
                                 }
                             });
+                            ////////////////////////////////////////////////////////////////////////////////////////////
+
                             Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
                             AnchorPane currPage = (AnchorPane) currentTab.getContent();
                             AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
-                            currP.getChildren().add(currentLine);
+                            currP.getChildren().add(0,currentLine); // add at index 0, to have the line behind vertexes
 
                             //adding the edge in the xml
                             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
@@ -472,7 +491,7 @@ public class MainPageController {
             {
                 for(int i = 0; i < listGraphXml.size(); i++)
                 {
-                    if(listGraphXml.get(i).getName() == name)
+                    if(listGraphXml.get(i).getName().equals(name))
                         return listGraphXml.get(i);
                 }
                 return null;
@@ -480,11 +499,83 @@ public class MainPageController {
 
             private boolean isOtherButtonActivate(String name)
             {
-                if(name == "vertex1")
+                if(name.equals("vertex1"))
                     return (edge1Active || edge1ActiveOnce);
-                else if(name == "edge1")
+                else if(name.equals("edge1"))
                     return (vertex1Active || vertex1ActiveOnce);
                 else
                     return false;
+            }
+
+            private Tab createNewTab(String tabName)
+            {
+                Tab tab = new Tab();
+                if(tabName.equals(""))
+                    tabName = "new tab"+ indiceTab++;
+                tab.setText(tabName);
+                tab.setId(tabName);
+
+                // adding Panes in the tab
+                AnchorPane paneBack = new AnchorPane();
+                AnchorPane pane = new AnchorPane();
+
+                pane.setPrefSize(paneBack.getWidth(), paneBack.getHeight());
+
+                //mouselistener to add vertex etc
+                paneBack.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        panePressed(event);
+                    }
+                });
+
+
+                // Slider of the current tab created
+                Slider slider = new Slider();
+                slider.setMin(1.);
+                slider.setMax(5.);
+                slider.setValue(1.);
+                slider.valueProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> ov,
+                                        Number old_val, Number new_val) {
+                        pane.setScaleX(slider.getValue());
+                        pane.setScaleY(slider.getValue());
+
+                        //to have the zoom at the center
+                        pane.setTranslateX(-((paneBack.getWidth()*(slider.getValue()-1)) / 2));
+                        pane.setTranslateY(-((paneBack.getHeight()*(slider.getValue()-1)) / 2));
+                    }
+                });
+
+                //change the view, if you press the right arrow, the main page move right etc
+                tabPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+                    public void handle(KeyEvent event) {
+                        if(event.getCode() == KeyCode.LEFT && pane.getTranslateX()*(-1) > 0)
+                        {
+                            pane.setTranslateX(pane.getTranslateX()+20);
+                        }
+                        else if(event.getCode() == KeyCode.RIGHT && pane.getTranslateX()*(-1) < paneBack.getWidth()*(slider.getValue() -1))
+                        {
+                            pane.setTranslateX(pane.getTranslateX() - 20);
+                        }
+                        else if(event.getCode() == KeyCode.UP && pane.getTranslateY()*(-1) > 0)
+                        {
+                            pane.setTranslateY(pane.getTranslateY() + 20);
+                        }
+                        else if(event.getCode() == KeyCode.DOWN && pane.getTranslateY()*(-1) < paneBack.getHeight()*(slider.getValue() -1))
+                        {
+                            pane.setTranslateY(pane.getTranslateY() - 20);
+                        }
+                    }
+                });
+                AnchorPane.setRightAnchor(slider, 2.0);
+                AnchorPane.setBottomAnchor(slider, 5.0);
+                paneBack.getChildren().add(pane);
+                paneBack.getChildren().add(slider);
+
+                tab.setContent(paneBack);
+                return tab;
             }
 }
