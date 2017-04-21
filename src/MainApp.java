@@ -30,7 +30,7 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("GraphN");
 
-        primaryStage.setFullScreen(true);
+        //primaryStage.setFullScreen(true);
         initRootLayout();
 
         //showPersonOverview();
