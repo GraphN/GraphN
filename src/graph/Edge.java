@@ -22,10 +22,6 @@ public class Edge implements Comparable<Edge>{
         this(v1, v2, 0);
     }
 
-    public int Weigth(){
-        return weigth;
-    }
-
     public Vertex getFrom(){ return v1;}
 
     public Vertex getTo(){ return v2;}
@@ -43,5 +39,7 @@ public class Edge implements Comparable<Edge>{
     public int compareTo(Edge e){
         return this.weigth - e.weigth;
     }
+
+    public int getWeigth(){return weigth;}
 
 }

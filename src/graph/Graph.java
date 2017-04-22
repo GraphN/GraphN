@@ -23,6 +23,7 @@ public class Graph extends GraphCommon{
         Edge e = new Edge(v, w, weigth);
         adjacencyEdgeLists[v.getId()].push(e);
         adjacencyEdgeLists[w.getId()].push(e);
+        edgesList.add(e);
     }
 
     public LinkedList<Edge> adjacentEdges(Vertex v) {

@@ -3,7 +3,6 @@ package Algorithms;
 import graph.GraphCommon;
 import graph.Vertex;
 
-import java.util.LinkedList;
 import java.util.Vector;
 
 /**
@@ -17,22 +16,22 @@ public class DFS {
         this.g = g;
     }
 
-    public void visit(Vertex v, VisitFunction f) {
-        visit(v,f, new VisitFunction() {
+    public void visit(Vertex v, VertexVisit f) {
+        visit(v,f, new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {}
         });
     }
 
     // DFS en mode recursif
-    void visit(Vertex v, VisitFunction fpre, VisitFunction fpost) {
+    void visit(Vertex v, VertexVisit fpre, VertexVisit fpost) {
         marked = new Vector<>(g.V());
         for(int i  = 0; i < g.V(); i++)
             marked.add(false);
         recursion(v, fpre, fpost);
     }
 
-    private void recursion(Vertex v, VisitFunction fpre, VisitFunction fpost) {
+    private void recursion(Vertex v, VertexVisit fpre, VertexVisit fpost) {
         fpre.applyFunction(v);
         marked.set(v.getId(), true);
 

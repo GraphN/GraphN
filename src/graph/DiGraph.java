@@ -23,6 +23,7 @@ public class DiGraph extends GraphCommon{
     public void addEdge(Vertex v, Vertex w, int weigth) {
         Edge e = new Edge(v, w, weigth);
         adjacencyEdgeLists[v.getId()].push(e);
+        edgesList.add(e);
     }
 
     public LinkedList<Edge> adjacentEdges(Vertex v) {

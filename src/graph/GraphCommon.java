@@ -12,6 +12,7 @@ import java.util.Scanner;
 public abstract class GraphCommon {
     protected LinkedList<Edge>[] adjacencyEdgeLists;
     protected Vertex[] vertexList;
+    protected LinkedList<Edge> edgesList = new LinkedList<>();
 
     //Constructeur par defaut
     public GraphCommon(String filename){
@@ -30,7 +31,7 @@ public abstract class GraphCommon {
                 weightedGraph = scanner.nextInt();
             }
 
-            System.out.println("nbNode = " + nbNode + "\nnbEdges = " + nbEdges);
+            System.out.println("nbNode = " + nbNode + "\nnbEdges = " + nbEdges + ", weigthed : " + weightedGraph);
 
             initList(nbNode);
 
@@ -41,10 +42,11 @@ public abstract class GraphCommon {
                 Vertex node2 = vertexList[scanner.nextInt()];
 
                 int weigth = 0;
-                if(weightedGraph != 0)
+                if(weightedGraph != 0) {
                     weigth = scanner.nextInt();
+                }
 
-                System.out.println("addEdge = v1: " + node1 + ", v2: " + node2 + ", w: " + weigth);
+               // System.out.println("addEdge = v1: " + node1 + ", v2: " + node2 + ", w: " + weigth);
                 addEdge(node1, node2, weigth);
             }
 
@@ -72,7 +74,7 @@ public abstract class GraphCommon {
         for(int i = 0; i < adjacencyEdgeLists.length; i++){
             System.out.print("Sommet " + i + " : ");
             for(Edge e : adjacencyEdgeLists[i])
-                System.out.print("Edge(v1: " + e.getFrom().getId() + ", v2: " + e.getTo().getId() + "); ");
+                System.out.print("Edge(v1: " + e.getFrom().getId() + ", v2: " + e.getTo().getId() + ", Weigth : " + e.getWeigth()+"); ");
             System.out.println();
         }
     }
@@ -87,4 +89,6 @@ public abstract class GraphCommon {
         return vertexList[id];
     }
     public abstract int V();
+
+    public LinkedList<Edge> getEdgesList(){return edgesList;}
 }

@@ -17,7 +17,7 @@ public class BFS {
     }
 
 
-    public void visit(Vertex v, VisitFunction f) {
+    public void visit(Vertex v, VertexVisit f) {
         parent = new Vector<>(g.V());
         for(int i  = 0; i < g.V(); i++)
             parent.add(-1);
@@ -28,7 +28,7 @@ public class BFS {
         return parent.get(v.getId());
     }
 
-    private void bfs(Vertex v, VisitFunction f) {
+    private void bfs(Vertex v, VertexVisit f) {
         LinkedList<Integer> pile = new LinkedList<>();
         parent.set(v.getId(), v.getId());
         pile.add(v.getId());
