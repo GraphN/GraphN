@@ -95,12 +95,12 @@ public class AlgorithmPageController
         {
             //adding all edges from xml
             Line edge  = graph.getEdge(i);
-            edge.setStrokeWidth(2);
+            edge.setStrokeWidth(4);
             edge.setSmooth(true);
             edge.setStroke(Color.web("da5630"));
 
-            //adding edge created to pane
-            pane.getChildren().add(edge);
+            //adding edge created to pane (at index 0 to have vertexes on front of edges)
+            pane.getChildren().add(0,edge);
 
             i++;
         }

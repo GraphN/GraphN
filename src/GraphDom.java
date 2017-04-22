@@ -44,17 +44,18 @@ public class GraphDom {
         factory = DocumentBuilderFactory.newInstance();
         builder = factory.newDocumentBuilder();
         document= builder.newDocument();
-        racine = document.createElement("Graphe");
+        racine = document.createElement("Graph");
         racine.setAttribute("name", name);
         document.appendChild(racine);
     }
 
-    public void saveGraphXML(String name) throws TransformerException
+    public void saveGraphXML(File file) throws TransformerException
     {
         final TransformerFactory transformerFactory = TransformerFactory.newInstance();
         final Transformer transformer = transformerFactory.newTransformer();
         final DOMSource source = new DOMSource(document);
-        final StreamResult sortie = new StreamResult(new File("./src/savedGraphsXML/"+name+".xml"));
+        //final StreamResult sortie = new StreamResult(new File("./src/savedGraphsXML/"+name+".xml"));
+        final StreamResult sortie = new StreamResult(file);
         //use to indent xml file
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.transform(source, sortie);
@@ -71,6 +72,10 @@ public class GraphDom {
         vertexes.add(vertex);
     }
 
+    public  void setNameOfVertex(String name, int index)
+    {
+        vertexes.get(index).setAttribute("name", name);
+    }
     public void addEdge(String vertexStart, String vertexEnd)
     {
         nbEdge++;
@@ -93,6 +98,7 @@ public class GraphDom {
     {
         return nbEdge;
     }
+
     public void setPosOfVertex(String vertex, int posX, int posY)
     {
         NodeList nodes = racine.getChildNodes();
@@ -183,6 +189,17 @@ public class GraphDom {
         int endX = (int)ver2.getX();
         int endY = (int)ver2.getY();
         return new Line(startX, startY, endX, endY);
+    }
+    public String getEdgeStartName(int index)
+    {
+        Element edge = (Element) edges.get(index);
+        return edge.getAttribute("start");
+    }
+
+    public String getEdgeEndName(int index)
+    {
+        Element edge = (Element) edges.get(index);
+        return edge.getAttribute("end");
     }
 
 }
