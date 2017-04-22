@@ -21,16 +21,24 @@ public class Graph extends GraphCommon{
 
     public void addEdge(Vertex v, Vertex w, int weigth) {
         Edge e = new Edge(v, w, weigth);
-        adjacencyLists[v.getId()].push(e);
-        adjacencyLists[w.getId()].push(e);
+        adjacencyEdgeLists[v.getId()].push(e);
+        adjacencyEdgeLists[w.getId()].push(e);
     }
 
     public LinkedList<Edge> adjacentEdges(Vertex v) {
-        return adjacencyLists[v.getId()];
+        return adjacencyEdgeLists[v.getId()];
     }
 
     public int V() {
-        return adjacencyLists.length;
+        return adjacencyEdgeLists.length;
+    }
+
+    public LinkedList<Vertex> adjacentVertex(Vertex v){
+        LinkedList<Vertex> ret = new LinkedList<>();
+        for(Edge e : adjacencyEdgeLists[v.getId()]){
+            ret.add(e.getOther(v));
+        }
+        return ret;
     }
 }
 

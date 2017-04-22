@@ -1,18 +1,16 @@
 package Algorithms;
 
-import graph.Edge;
 import graph.GraphCommon;
 import graph.Vertex;
 
 import java.util.LinkedList;
-import java.util.Stack;
 import java.util.Vector;
 /**
  * Created by francoisquellec on 24.03.17.
  */
 public class BFS {
     private GraphCommon g;
-    Vector<Vertex> parent;
+    private Vector<Integer> parent;
 
     public BFS(GraphCommon g){
         this.g = g;
@@ -20,32 +18,33 @@ public class BFS {
 
 
     public void visit(Vertex v, VisitFunction f) {
-        parent.ensureCapacity(g.V());
-        for(Vertex i : parent)
-            i.setId(-1);
+        parent = new Vector<>(g.V());
+        for(int i  = 0; i < g.V(); i++)
+            parent.add(-1);
+        System.out.println(parent);
         bfs(v, f);
     }
 
-    public Vertex parentOf(Vertex v) {
-        return parent.get(v);
+    public int parentOf(Vertex v) {
+        return parent.get(v.getId());
     }
 
-    public void bfs(Vertex v, VisitFunction f) {
-        Stack<Integer> pile = new Stack<>();
-        parent.insertElementAt(v, v);
-        pile.push(v);
+    private void bfs(Vertex v, VisitFunction f) {
+        LinkedList<Integer> pile = new LinkedList<>();
+        parent.set(v.getId(), v.getId());
+        pile.add(v.getId());
 
-        while (!pile.empty()) {
-            v = pile.firstElement();
-            pile.pop();
+        while (!pile.isEmpty()) {
+            int current = pile.removeFirst();
 
-            for (Edge w : g.adjacentEdges(v))
-                if (parent.get(w.) == -1) {
-                    parent[w] = v;
-                    pile.push(w);
+            for (Vertex w : g.adjacentVertex(g.getVertex(current))) {
+                if (parent.get(w.getId()) == -1) {
+                    parent.set(w.getId(), current);
+                    pile.add(w.getId());
                 }
+            }
 
-            f.applyFunction(v);
+            f.applyFunction(g.getVertex(current));
         }
     }
 
