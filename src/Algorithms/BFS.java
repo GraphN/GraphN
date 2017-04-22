@@ -21,7 +21,6 @@ public class BFS {
         parent = new Vector<>(g.V());
         for(int i  = 0; i < g.V(); i++)
             parent.add(-1);
-        System.out.println(parent);
         bfs(v, f);
     }
 

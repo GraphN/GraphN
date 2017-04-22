@@ -1,6 +1,7 @@
 package graph;
 
 import Algorithms.BFS;
+import Algorithms.DFS;
 import Algorithms.VisitFunction;
 
 /**
@@ -29,6 +30,25 @@ public class testGraphs {
         System.out.println("Apres affichage");
         BFS bfs = new BFS(gNO);
         bfs.visit(gNO.getVertex(0), new VisitFunction() {
+            @Override
+            public void applyFunction(Vertex v) {
+                System.out.println(v.getId());
+            }
+        });
+
+
+        System.out.println("Application DFS");
+        System.out.println("Avant application");
+        gNO.print();
+        System.out.println("Apres affichage");
+        DFS dfs = new DFS(gNO);
+        dfs.visit(gNO.getVertex(0), new VisitFunction() {
+            @Override
+            public void applyFunction(Vertex v) {
+                System.out.println(v.getId());
+            }
+        });
+        dfs.iterativeVisit(gNO.getVertex(0), new VisitFunction() {
             @Override
             public void applyFunction(Vertex v) {
                 System.out.println(v.getId());
