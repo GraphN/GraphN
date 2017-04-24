@@ -10,7 +10,9 @@ import java.util.Scanner;
  * Created by francoisquellec on 22.03.17.
  */
 public abstract class GraphCommon {
-    protected LinkedList<Edge>[] adjacencyLists;
+    protected LinkedList<Edge>[] adjacencyEdgeLists;
+    protected Vertex[] vertexList;
+    protected LinkedList<Edge> edgesList = new LinkedList<>();
 
     //Constructeur par defaut
     public GraphCommon(String filename){
@@ -29,21 +31,22 @@ public abstract class GraphCommon {
                 weightedGraph = scanner.nextInt();
             }
 
-            System.out.println("nbNode = " + nbNode + "\nnbEdges = " + nbEdges);
+            System.out.println("nbNode = " + nbNode + "\nnbEdges = " + nbEdges + ", weigthed : " + weightedGraph);
 
             initList(nbNode);
 
             //  On lit les lignes suivante pour stocker le graphe
 
             for(int i = 0; i < nbEdges; i++) {
-                Vertex node1 = new Vertex(scanner.nextInt());
-                Vertex node2 = new Vertex(scanner.nextInt());
+                Vertex node1 = vertexList[scanner.nextInt()];
+                Vertex node2 = vertexList[scanner.nextInt()];
 
                 int weigth = 0;
-                if(weightedGraph != 0)
+                if(weightedGraph != 0) {
                     weigth = scanner.nextInt();
+                }
 
-                System.out.println("addEdge = v1: " + node1 + ", v2: " + node2 + ", w: " + weigth);
+               // System.out.println("addEdge = v1: " + node1 + ", v2: " + node2 + ", w: " + weigth);
                 addEdge(node1, node2, weigth);
             }
 
@@ -52,29 +55,40 @@ public abstract class GraphCommon {
         }
     }
 
-    //On constructeur d'initialisation
+    // Constructeur d'initialisation
     public GraphCommon(int V){
         initList(V);
     }
 
     protected void initList(int V){
-        adjacencyLists = new LinkedList[V];
-        for (int i = 0; i < V; i++)
-            adjacencyLists[i] = new LinkedList<Edge>();
+        adjacencyEdgeLists = new LinkedList[V];
+        vertexList = new Vertex[V];
+        for (int i = 0; i < V; i++) {
+            adjacencyEdgeLists[i] = new LinkedList<Edge>();
+            vertexList[i] = new Vertex(i);
+        }
     }
 
     // Debug Function
     public void print(){
-        for(int i = 0; i < adjacencyLists.length; i++){
+        for(int i = 0; i < adjacencyEdgeLists.length; i++){
             System.out.print("Sommet " + i + " : ");
-            for(Edge e : adjacencyLists[i])
-                System.out.print("Edge(v1: " + e.getV1().getId() + ", v2: " + e.getV2().getId() + "); ");
+            for(Edge e : adjacencyEdgeLists[i])
+                System.out.print("Edge(v1: " + e.getFrom().getId() + ", v2: " + e.getTo().getId() + ", Weigth : " + e.getWeigth()+"); ");
             System.out.println();
         }
     }
 
     public abstract void addEdge(Vertex v, Vertex w);
     public abstract void addEdge(Vertex v, Vertex w, int weigth);
-    public abstract LinkedList<Edge> adjacent(Vertex v);
+    public LinkedList<Edge> adjacentEdges(Vertex v){
+        return adjacencyEdgeLists[v.getId()];
+    }
+    public abstract LinkedList<Vertex> adjacentVertex(Vertex v);
+    public Vertex getVertex(int id){
+        return vertexList[id];
+    }
     public abstract int V();
+
+    public LinkedList<Edge> getEdgesList(){return edgesList;}
 }

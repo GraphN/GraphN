@@ -22,17 +22,24 @@ public class Edge implements Comparable<Edge>{
         this(v1, v2, 0);
     }
 
-    public int Weigth(){
-        return weigth;
-    }
+    public Vertex getFrom(){ return v1;}
 
-    public Vertex getV1(){ return v1;}
-    public Vertex getV2(){ return v2;}
+    public Vertex getTo(){ return v2;}
+
+    public Vertex getOther(Vertex v){
+        if(v1 == v)
+            return v2;
+        else if(v2 == v)
+            return v1;
+        else return null;
+    }
 
     // Compares this object with the specified object for order. Returns a negative integer,
     // zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
     public int compareTo(Edge e){
         return this.weigth - e.weigth;
     }
+
+    public int getWeigth(){return weigth;}
 
 }
