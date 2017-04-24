@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Graph name="new tab0">
+<vertex name="ver_1" posX="282" posY="95"/>
+<vertex name="ver_2" posX="153" posY="291"/>
+<vertex name="ver_3" posX="216" posY="203"/>
+<vertex name="ver_4" posX="480" posY="188"/>
+<vertex name="ver_5" posX="108" posY="122"/>
+<edge end="ver_5" name="edge_1" start="ver_1"/>
+<edge end="ver_2" name="edge_2" start="ver_3"/>
+<edge end="ver_4" name="edge_3" start="ver_1"/>
+<edge end="ver_2" name="edge_4" start="ver_4"/>
+</Graph>

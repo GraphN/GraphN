@@ -246,49 +246,51 @@ public class MainPageController {
         try {
             GraphDom graphOpen = mainApp.showOpenPage();
 
-            //adding this xml to the list
-            listGraphXml.add(graphOpen);
-            Tab tab = createNewTab(graphOpen.getName());
-
-            //get the Anchorpane who we need to fill
-            AnchorPane paneBack = (AnchorPane) tab.getContent();
-            AnchorPane pane = (AnchorPane) paneBack.getChildren().get(0);
-
-            //adding all vertex from xml
-            int i = 0;
-            while (i < graphOpen.getNbVertex())
+            //if the graph is null, its because there was a problem or when it was asked to choose a xml file,
+            // the user canceled this acction, so we cant create a new tab
+            if(graphOpen!=null)
             {
-                Point2D point = graphOpen.getPosOfVertex(i);
-                int x = (int) point.getX();
-                int y = (int) point.getY();
-                String name = graphOpen.getName(i);
+                //adding this xml to the list
+                listGraphXml.add(graphOpen);
+                Tab tab = createNewTab(graphOpen.getName());
 
-                //adding vertex created to pane
-                pane.getChildren().add(createVertex(x, y, name));
+                //get the Anchorpane who we need to fill
+                AnchorPane paneBack = (AnchorPane) tab.getContent();
+                AnchorPane pane = (AnchorPane) paneBack.getChildren().get(0);
 
-                i++;
+                //adding all vertex from xml
+                int i = 0;
+                while (i < graphOpen.getNbVertex()) {
+                    Point2D point = graphOpen.getPosOfVertex(i);
+                    int x = (int) point.getX();
+                    int y = (int) point.getY();
+                    String name = graphOpen.getName(i);
+
+                    //adding vertex created to pane
+                    pane.getChildren().add(createVertex(x, y, name));
+
+                    i++;
+                }
+                i = 0;
+                while (i < graphOpen.getNbEdge()) {
+                    //adding all edges from xml
+                    Line edge = graphOpen.getEdge(i);
+                    edge.setStrokeWidth(4);
+                    edge.setSmooth(true);
+                    edge.setStroke(Color.web("da5630"));
+
+                    //getting vertexes start and end of this line, to add listeneners
+                    Circle cirleStart = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
+                    Circle cirleEnd = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
+                    //creating listener for moving edge when moving vertexes
+                    moveVertexMoveEdgeListener(cirleStart, cirleEnd, edge);
+                    //adding edge created to pane (at index 0 to have vertexes on front of edges)
+                    pane.getChildren().add(0, edge);
+
+                    i++;
+                }
+                tabPane.getTabs().add(tab);
             }
-            i = 0;
-            while (i < graphOpen.getNbEdge())
-            {
-                //adding all edges from xml
-                Line edge  = graphOpen.getEdge(i);
-                edge.setStrokeWidth(4);
-                edge.setSmooth(true);
-                edge.setStroke(Color.web("da5630"));
-
-                //getting vertexes start and end of this line, to add listeneners
-                Circle cirleStart = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
-                Circle cirleEnd = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
-                //creating listener for moving edge when moving vertexes
-                moveVertexMoveEdgeListener(cirleStart, cirleEnd, edge);
-                //adding edge created to pane (at index 0 to have vertexes on front of edges)
-                pane.getChildren().add(0,edge);
-
-                i++;
-            }
-            tabPane.getTabs().add(tab);
-
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
@@ -634,7 +636,6 @@ public class MainPageController {
                 for(int i = 0; i < pane.getChildren().size(); i++)
                 {
                     Node node = pane.getChildren().get(i);
-                    System.out.println(node.getClass());
                     if(node.getClass().equals(Circle.class))
                     {
                         Circle circle = (Circle) node;

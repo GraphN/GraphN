@@ -1,7 +1,6 @@
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
@@ -104,13 +103,16 @@ public class MainApp extends Application {
 
     public void showSavePage(GraphDom graph)
     {
-        MenuItem cmItem2 = new MenuItem("Save Graph");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Graph");
 
         //Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
+
+        //set initial directory
+        File directory = new File("./src/savedGraphsXML");
+        fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showSaveDialog(primaryStage);
         if (file != null) {
@@ -125,7 +127,6 @@ public class MainApp extends Application {
     public GraphDom showOpenPage() throws ParserConfigurationException {
         GraphDom graphDom;
 
-        MenuItem cmItem2 = new MenuItem("Open Graph");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Graph");
 
@@ -133,14 +134,19 @@ public class MainApp extends Application {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        File file = fileChooser.showSaveDialog(primaryStage);
-        //set the name of the graphdom
-        String fileName = file.getName();
-        String [] fileN = fileName.split("\\.");
-        graphDom = new GraphDom(fileN[0]);
+        //set initial directory
+        File directory = new File("./src/savedGraphsXML");
+        fileChooser.setInitialDirectory(directory);
+
+        File file = fileChooser.showOpenDialog(primaryStage);
 
         if (file != null)
         {
+            //set the name of the graphdom
+            String fileName = file.getName();
+            String [] fileN = fileName.split("\\.");
+            graphDom = new GraphDom(fileN[0]);
+
             //read the xml in this file, and create GraphDom
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -185,9 +191,9 @@ public class MainApp extends Application {
             } catch (org.xml.sax.SAXException e) {
                 e.printStackTrace();
             }
-
-        }
         return graphDom;
+        }
+        return null;
     }
 
 

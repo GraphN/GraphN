@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Graph name="graphtestChange">
+<vertex name="ver_1" posX="94" posY="82"/>
+<vertex name="ver_2" posX="178" posY="127"/>
+<vertex name="ver_3" posX="123" posY="189"/>
+<vertex name="ver_4" posX="409" posY="199"/>
+<vertex name="ver_5" posX="356" posY="85"/>
+<vertex name="ver_6" posX="357" posY="264"/>
+<vertex name="ver_7" posX="157" posY="243"/>
+<edge end="ver_4" name="edge_1" start="ver_1"/>
+<edge end="ver_3" name="edge_2" start="ver_2"/>
+<edge end="ver_4" name="edge_3" start="ver_7"/>
+<edge end="ver_4" name="edge_4" start="ver_5"/>
+</Graph>
