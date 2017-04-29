@@ -22,6 +22,9 @@ public class Edge implements Comparable<Edge>{
         this(v1, v2, 0);
     }
 
+    public boolean contains(Vertex v){
+        return v == v1 || v == v2;
+    }
     public Vertex getFrom(){ return v1;}
 
     public Vertex getTo(){ return v2;}
@@ -41,5 +44,9 @@ public class Edge implements Comparable<Edge>{
     }
 
     public int getWeigth(){return weigth;}
+
+    public String toString(){
+        return "(From: " + v1 + "; To: " + v2 + ")";
+    }
 
 }

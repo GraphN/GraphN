@@ -1,18 +1,26 @@
 package Algorithms;
 
-import graph.GraphCommon;
+import graph.Edge;
+import graph.Graph;
 import graph.Vertex;
 
+import java.util.LinkedList;
 import java.util.Vector;
 
 /**
  * Created by francoisquellec on 24.03.17.
  */
-public class DFS {
-    private GraphCommon g;
+public class DFS implements Algorithm{
+    private Graph g;
     private Vector<Boolean> marked;
+    private LinkedList<Edge> edgesPath = new LinkedList<>();
+    private Vertex lastVisitedVertex = null;
 
-    public DFS(GraphCommon g){
+    public LinkedList<Edge> getPath(){
+        return edgesPath;
+    }
+
+    public DFS(Graph g){
         this.g = g;
     }
 
@@ -33,6 +41,11 @@ public class DFS {
 
     private void recursion(Vertex v, VertexVisit fpre, VertexVisit fpost) {
         fpre.applyFunction(v);
+
+        if(lastVisitedVertex != null)
+            edgesPath.add(g.getEdge(lastVisitedVertex, v));
+        lastVisitedVertex = v;
+
         marked.set(v.getId(), true);
 
         for (Vertex w : g.adjacentVertex(v))

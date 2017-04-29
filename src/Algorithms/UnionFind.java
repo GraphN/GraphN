@@ -1,6 +1,6 @@
 package Algorithms;
 
-public class UnionFind {
+public class UnionFind{
 
     private int[] parent;  // parent[i] = parent of i
     private byte[] rank;   // rank[i] = rank of subtree rooted at i (never more than 31)
