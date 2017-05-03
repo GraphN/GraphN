@@ -1,6 +1,7 @@
 package graph;
 
 import Algorithms.*;
+import graph.Stockage.AdjacencyStockage;
 
 /**
  * Created by francoisquellec on 24.03.17.
@@ -10,13 +11,13 @@ public class testGraphs {
         final String graphPath = "DataTest/col_exemple.txt";
         final String resultGraphPath = "DataTest/col_exemple_Result.txt";
         System.out.println("Construction du graph non orienté");
-        GraphCommon gNO = new Graph(graphPath);
+        Graph gNO = new UDiGraph(graphPath, new AdjacencyStockage());
         System.out.println("---- Affichage ----");
         gNO.print();
         System.out.println("-------------------");
 
         System.out.println("Construction du graph orienté");
-        GraphCommon gO = new DiGraph(graphPath);
+        Graph gO = new DiGraph(graphPath, new AdjacencyStockage());
         System.out.println("---- Affichage ----");
         gO.print();
         System.out.println("-------------------");
@@ -27,12 +28,12 @@ public class testGraphs {
         gNO.print();
         System.out.println("Apres application");
         BFS bfs = new BFS(gNO);
-        bfs.visit(gNO.getVertex(0), new VertexVisit() {
+        System.out.println(bfs.visit(gNO.getVertex(0), new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {
                 System.out.println(v.getId());
             }
-        });
+        }));
 
 
         System.out.println("Application DFS");
@@ -46,12 +47,13 @@ public class testGraphs {
                 System.out.println(v.getId());
             }
         });
+        System.out.println(dfs.getPath());
 
 
         final String graphPathW = "DataTest/col_exempleW.txt";
         final String resultGraphPathW = "DataTest/col_exemple_ResultW.txt";
         System.out.println("Construction du graph non orienté Pondére");
-        Graph gWNO = new Graph(graphPathW);
+        UDiGraph gWNO = new UDiGraph(graphPathW, new AdjacencyStockage());
         System.out.println("---- Affichage ----");
         gWNO.print();
         System.out.println("-------------------");
@@ -69,6 +71,7 @@ public class testGraphs {
             }
         });
         System.out.println("Poids Total : " + kru.getWeight());
+        System.out.println(kru.getPath());
 
     }
 }

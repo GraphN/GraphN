@@ -1,7 +1,7 @@
 package Algorithms;
 
 import graph.Edge;
-import graph.Graph;
+import graph.UDiGraph;
 
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -9,18 +9,22 @@ import java.util.PriorityQueue;
 /**
  * Created by francoisquellec on 24.03.17.
  */
-public class Kruskall {
-    private Graph g; // Kruskall ne prend en parametre que des graphes non orientes
+public class Kruskall implements Algorithm{
+    private UDiGraph g; // Kruskall ne prend en parametre que des graphes non orientes
+
+    public LinkedList<Edge> getPath(){
+        return mst;
+    }
 
     private double weight;                        // weight of MST
     private LinkedList<Edge> mst = new LinkedList<>();
 
-    public Kruskall(Graph g) {
+    public Kruskall(UDiGraph g) {
         this.g = g;
     }
 
     public void visit(EdgeVisit func) {
-        PriorityQueue<Edge> pq = new PriorityQueue<Edge>();
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
         for (Edge e : g.getEdgesList()) {
             pq.add(e);
         }
@@ -41,6 +45,4 @@ public class Kruskall {
     }
 
     public double getWeight(){return weight;}
-    public LinkedList<Edge> getMST(){return mst;}
-
 }
