@@ -241,8 +241,6 @@ public class MainPageController {
         return node;
     }
 
-
-
     public void handleNewFromAlgoPage(){
         handleNew();
     }
@@ -357,10 +355,7 @@ public class MainPageController {
     private void handleVectrice(MouseEvent mouseEvent)
     {
         // Desactivate edge if active
-        edge1Active = false;
-        edge1ActiveOnce = false;
-        edgeButton.setId("edgeButton");// desactivate button of orange
-
+        desactivateEdge();
 
         int count = mouseEvent.getClickCount();
         if (count == 2 && !isOtherButtonActivate("vertex1")) // if we double click, we can put infinite vertex
@@ -380,6 +375,11 @@ public class MainPageController {
             vertex1Button.setId("vertex1ButtonActivate");//let the butonn orange if he is used
         }
     }
+    private void desactivateVertex(){
+        vertex1Active = false;
+        vertex1ActiveOnce = false;
+        vertex1Button.setId("vertex1Button");// desactivate button of orange
+    }
     @FXML
     private void handleVectrice2(){
     }
@@ -387,9 +387,7 @@ public class MainPageController {
     private void handleEdge(MouseEvent mouseEvent)
     {
         //desactivate vertex if active
-        vertex1Active = false;
-        vertex1ActiveOnce = false;
-        vertex1Button.setId("vertex1Button");// desactivate button of orange
+        desactivateVertex();
 
         // Reset to the first edge
         firstVerForEdge = true;
@@ -412,6 +410,13 @@ public class MainPageController {
             edgeButton.setId("edgeButtonActivate");//let the butonn orange if he is used
         }
     }
+
+    private void desactivateEdge(){
+        edge1Active = false;
+        edge1ActiveOnce = false;
+        edgeButton.setId("edgeButton");// desactivate button of orange
+    }
+
     @FXML
     private void handleDiEdge(){
     }
@@ -722,13 +727,9 @@ public class MainPageController {
                         }
                         else if(event.getCode() == KeyCode.ESCAPE){
                             // Desactivate edge if active
-                            edge1Active = false;
-                            edge1ActiveOnce = false;
-                            edgeButton.setId("edgeButton");// desactivate button of orange
+                            desactivateEdge();
                             //desactivate vertex if active
-                            vertex1Active = false;
-                            vertex1ActiveOnce = false;
-                            vertex1Button.setId("vertex1Button");// desactivate button of orange
+                            desactivateVertex();
                         }
                     }
                 });
@@ -737,13 +738,9 @@ public class MainPageController {
                     public void handle(KeyEvent event) {
                         if(event.getCode() == KeyCode.ESCAPE){
                             // Desactivate edge if active
-                            edge1Active = false;
-                            edge1ActiveOnce = false;
-                            edgeButton.setId("edgeButton");// desactivate button of orange
+                            desactivateEdge();
                             //desactivate vertex if active
-                            vertex1Active = false;
-                            vertex1ActiveOnce = false;
-                            vertex1Button.setId("vertex1Button");// desactivate button of orange
+                            desactivateVertex();
                         }
                     }
                 });
