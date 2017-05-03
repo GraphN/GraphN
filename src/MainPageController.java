@@ -32,6 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Math.abs;
+
 public class MainPageController {
     private MainApp mainApp;
     private ArrayList<GraphDom> listGraphXml; //list of xml files, from different tabs
@@ -237,6 +239,7 @@ public class MainPageController {
         node.add(createVertexShape(x,y,id));
         node.add(createVertexNumber(x,y,id));
         mapNode.put(id.toString(),node);
+        System.out.println("x: "+x+ " y: " + y);
 
         return node;
     }
@@ -430,6 +433,21 @@ public class MainPageController {
     private void handleNote(){
     }
 
+    private Text edgeWeightText(Line line, int weight){
+
+        Text text = new Text();
+
+        text.setTranslateX((line.getEndX()+line.getStartX())/2);
+        text.setTranslateY((line.getEndY()+line.getStartY())/2);
+        // Faudrait un calcul pour centrer en fonction de l'angle
+        //System.out.println((line.getEndX()+line.getStartX())/2);
+        //System.out.println((line.getEndY()+line.getStartY())/2);
+
+        text.setText(""+weight);
+
+        return text;
+    }
+
     EventHandler<MouseEvent> nodeOnMouseEnteredEventHandler =
             new EventHandler<MouseEvent>() {
                 @Override
@@ -563,8 +581,10 @@ public class MainPageController {
                             Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
                             AnchorPane currPage = (AnchorPane) currentTab.getContent();
                             AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
-                            currP.getChildren().add(0,currentLine); // add at index 0, to have the line behind vertexes
 
+                            currP.getChildren().add(0,currentLine); // add at index 0, to have the line behind vertexes
+                            // à mettre si il y a un poid à l'edge
+                            //currP.getChildren().add(1, edgeWeightText(currentLine,1));
                             //adding the edge in the xml
                             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                             graphXml.addEdge(nameVertexStart, circle.getId());

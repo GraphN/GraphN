@@ -6,8 +6,8 @@ package graph;
  */
 public class UDiGraph extends Graph {
 
-    public UDiGraph(int V) {
-        super(V);
+    public UDiGraph(int V, StockageType s) {
+        super(V,s);
     }
 
     public UDiGraph(String filename, StockageType stockage) {

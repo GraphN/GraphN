@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgorithmPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgorithmPageController">
    <top>
       <AnchorPane styleClass="toolBar" BorderPane.alignment="CENTER">
          <children>
@@ -25,10 +25,10 @@
                </viewport>
             </ImageView>
             <Button id="buttonPlay" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="9.0" />
-            <Button id="buttonForwardPlay" ellipsisString="" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="34.0" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="9.0" />
+            <Button id="buttonForwardPlay" ellipsisString="" focusTraversable="false" mnemonicParsing="false" onAction="#handleFastForward" prefHeight="24.0" prefWidth="34.0" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="9.0" />
             <Button id="buttonPlayTimer" focusTraversable="false" mnemonicParsing="false" prefHeight="24.0" prefWidth="39.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="9.0" />
             <Button id="buttonStop" minHeight="22.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="11.0" />
-            <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="11.0" />
+            <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" onAction="#handlePause" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="11.0" />
             <Button alignment="TOP_RIGHT" layoutX="518.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="28.0" prefWidth="159.0" styleClass="algoButton" text="New From Result" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
@@ -42,7 +42,7 @@
             <Insets bottom="-1.0" left="-1.0" right="-1.0" />
          </padding>
          <items>
-            <Button id="bfs" alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" scaleShape="false" text="BFS" />
+            <Button id="bfs" alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleBFS" prefHeight="33.0" prefWidth="99.0" scaleShape="false" text="BFS" />
             <Button id="dfs" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" text="DFS" translateY="-5.0" />
             <Button id="dijkstra" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" text="Dijsktra" translateY="-10.0" />
             <Button id="kruskal" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" text="Kruskal" translateY="-15.0" />

@@ -190,6 +190,33 @@ public class GraphDom {
         int endY = (int)ver2.getY();
         return new Line(startX, startY, endX, endY);
     }
+    public Line getEdge(int from, int to)
+    {
+        //Element edge = (Element) edges.get(index);
+        for(Element edge:edges){
+            if( Integer.parseInt(edge.getAttribute("from").replaceAll("[\\D]", "")) == from &&
+                    Integer.parseInt(edge.getAttribute("to").replaceAll("[\\D]", "")) == to){
+                String vertex1 = edge.getAttribute("start");
+                String vertex2 = edge.getAttribute("end");
+
+                Point2D ver1 =  getPosOfVertex(vertex1);
+                Point2D ver2 =  getPosOfVertex(vertex2);
+
+                int startX = (int)ver1.getX();
+                int startY = (int)ver1.getY();
+                int endX = (int)ver2.getX();
+                int endY = (int)ver2.getY();
+                return new Line(startX, startY, endX, endY);
+            }
+        }
+        return null;
+    }
+    public int getFrom(int index){
+        return Integer.parseInt(edges.get(index).getAttribute("start").replaceAll("[\\D]", ""));
+    }
+    public int getTo(int index){
+        return Integer.parseInt(edges.get(index).getAttribute("end").replaceAll("[\\D]", ""));
+    }
     public String getEdgeStartName(int index)
     {
         Element edge = (Element) edges.get(index);

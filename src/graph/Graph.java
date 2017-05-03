@@ -60,12 +60,13 @@ public abstract class Graph {
     }
 
     // Constructeur d'initialisation
-    public Graph(int V){
+    public Graph(int V, StockageType stockage){
         initList(V);
+        this.stockage = stockage;
     }
 
     protected void initList(int V) {
-        for (int i = 0; i < V; i++) {
+        for (int i = 1; i <= V; i++) {
             System.out.print(i);
             vertexList.add(new Vertex(i));
         }

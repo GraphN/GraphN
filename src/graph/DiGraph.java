@@ -8,8 +8,8 @@ import graph.Stockage.StockageType;
  */
 public class DiGraph extends Graph {
 
-    public DiGraph(int V) {
-        super(V);
+    public DiGraph(int V, StockageType s) {
+        super(V,s);
     }
 
     public DiGraph(String filename, StockageType stockage) {
