@@ -1,5 +1,6 @@
 import Algorithms.Algorithm;
 import Algorithms.BFS;
+import Algorithms.VertexVisit;
 import graph.Edge;
 import graph.Stockage.EdgeListStockage;
 import graph.UDiGraph;
@@ -84,8 +85,8 @@ public class AlgorithmPageController
 
         Edge e = this.path.get(indexPath);
         Line test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
-        for(Line edge: edgeList){
-            if(edge.equals(test)){
+        for(Line line: edgeList){
+            if(line.equals(test)){
                 changeEdgeColor(Color.BLUE, 1);
                 break;
             }
@@ -101,7 +102,12 @@ public class AlgorithmPageController
     @FXML
     private void handleBFS(){
         this.algo = new BFS(graphTest);
-        this.path = this.algo.getPath();
+        this.path = ((BFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
+            @Override
+            public void applyFunction(Vertex v) {
+
+            }
+        });
     }
     private void initZoom(){
         slider.valueProperty().addListener(new ChangeListener<Number>() {
