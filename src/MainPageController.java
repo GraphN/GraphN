@@ -298,7 +298,8 @@ public class MainPageController {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         try {
             GraphDom graphOpen = mainApp.showOpenPage();
-
+            // Si l'on a pas selectionné de fichier, ne fait rien
+            if(graphOpen == null) return;
             //if the graph is null, its because there was a problem or when it was asked to choose a xml file,
             // the user canceled this acction, so we cant create a new tab
             //if(graphOpen!=null)
@@ -353,6 +354,7 @@ public class MainPageController {
     }
     @FXML
     private void handleImport(){
+        mainApp.showImportPage();
     }
     @FXML
     private void handleVectrice(MouseEvent mouseEvent)

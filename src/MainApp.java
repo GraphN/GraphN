@@ -124,6 +124,38 @@ public class MainApp extends Application {
            }
     }
 
+    public void showImportPage()
+    {
+        try {
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("Import.fxml"));
+            //loader.setLocation(MainApp.class.getResource("algoPage.fxml"));
+            BorderPane page = (BorderPane) loader.load();
+
+            // Create the dialog Stage.
+            algoStage = new Stage();
+            algoStage.setTitle("Import");
+            algoStage.initModality(Modality.WINDOW_MODAL);
+            algoStage.initOwner(primaryStage);
+            algoStage.setResizable(false);
+            Scene scene = new Scene(page);
+            algoStage.setScene(scene);
+
+
+            ImportController controller = loader.getController();
+            controller.setMainApp(this);
+
+            // Show the dialog and wait until the user closes it
+            algoStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            //return false;
+        }
+
+    }
+
     public GraphDom showOpenPage() throws ParserConfigurationException {
         GraphDom graphDom;
 
@@ -149,7 +181,6 @@ public class MainApp extends Application {
 
             //read the xml in this file, and create GraphDom
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
             try
             {
                 final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -159,6 +190,7 @@ public class MainApp extends Application {
 
                 int vertexAdded = 0;
                 //for each node in racine add it to the graphdom if it is vertex or edge
+
                 for(int i = 0; i < nodes.getLength(); i++)
                 {
                     //this if is very important. when a node is equal to #text its just that it is a jump the line,

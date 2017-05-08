@@ -1,0 +1,31 @@
+.background{
+    -fx-background-color: #1d1d1d;
+}
+
+.button{
+-fx-background-position: center;
+-fx-background-size: 30 40;
+-fx-background-color: #333333;
+}
+.button:hover{
+-fx-background-color: #222222;
+}
+.button:pressed{
+-fx-background-color: #1d1d1d;
+}
+
+.choice-box{
+
+-fx-background-color: #333333;
+}
+
+.choice-box .label{
+	-fx-text-fill: white;
+}
+.choice-box .context-menu {
+	-fx-background-color: #333333;
+	
+}
+.choice-box .menu-item:focused {
+	-fx-background-color: transparent;
+}

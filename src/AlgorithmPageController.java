@@ -170,7 +170,7 @@ public class AlgorithmPageController
             pane.getChildren().add(0, edge);
             edgeList.add(edge);
 
-            graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)-1), graphTest.getVertex(graph.getTo(i)-1));
+            graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
             System.out.println(graph.getFrom(i));
             System.out.println(graph.getTo(i));
         }

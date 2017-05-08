@@ -32,9 +32,6 @@ public class GraphDom {
     private ArrayList<Element> vertexes;
     private ArrayList<Element> edges;
 
-
-
-
     public GraphDom(String name) throws ParserConfigurationException
     {
         vertexes = new ArrayList<>();
@@ -63,13 +60,14 @@ public class GraphDom {
 
     public void addVertex(int posX, int posY)
     {
-        nbVertex++;
+
         Element vertex = document.createElement("vertex");
         vertex.setAttribute("name", "ver_"+nbVertex);
         vertex.setAttribute("posX", String.valueOf(posX));
         vertex.setAttribute("posY", String.valueOf(posY));
         racine.appendChild(vertex);
         vertexes.add(vertex);
+        nbVertex++;
     }
 
     public  void setNameOfVertex(String name, int index)
