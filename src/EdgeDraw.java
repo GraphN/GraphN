@@ -3,7 +3,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
-
 /**
  * Created by LBX on 10/05/2017.
  */
@@ -13,14 +12,18 @@ public class EdgeDraw extends Group {
     private static final double arrowWidth = 7;
 
     public EdgeDraw(double startX, double startY, double endX, double endY){
-        line = new Line(startX,startY,endX,endY);
-        setStroke(Color.web("da5630"));
+        this(new Line(startX,startY,endX,endY));
     }
     public EdgeDraw(double startX, double startY, double endX, double endY, boolean directed){
         this(new Line(startX,startY,endX,endY), new Line(), new Line());
     }
     public EdgeDraw(double startX, double startY, double endX, double endY, boolean directed, double weight){
         this(new Line(startX,startY,endX,endY), new Line(), new Line(), new Text("" + weight));
+    }
+    private EdgeDraw(Line line){
+        super(line);
+        this.line = line;
+        setStroke(Color.web("da5630"));
     }
     private EdgeDraw(Line line, Line arrow1, Line arrow2, Text text){
         super(line,arrow1,arrow2,text);
@@ -76,6 +79,4 @@ public class EdgeDraw extends Group {
     public void setEndY(double endY){
         line.setEndY(endY);
     };
-
-
 }

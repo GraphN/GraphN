@@ -202,7 +202,7 @@ public class AlgorithmPageController
         pane.getChildren().remove(edge);
         edge.setStroke(color);
         pane.getChildren().add(0, edge);
-        System.out.println(edge.getId());
+        //System.out.println(edge.getId());
     }
 
     private Circle createVertexShape(double x, double y, String id)
