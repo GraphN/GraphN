@@ -10,7 +10,10 @@ import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -28,8 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.lang.Math.abs;
 
 public class MainPageController {
     private MainApp mainApp;
@@ -61,6 +62,7 @@ public class MainPageController {
     private int indiceTab;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
+    private Line liveEdge;
     public MainPageController(){
         indiceTab = 0;
     }
@@ -72,6 +74,11 @@ public class MainPageController {
         DraggingTabPaneSupport support = new DraggingTabPaneSupport();
         handleNew();
         support.addSupport(tabPane);
+
+        liveEdge = new Line();
+        liveEdge.setStrokeWidth(4);
+        liveEdge.setSmooth(true);
+        liveEdge.setStroke(Color.web("da5630"));
     }
     /**
      * Is called by the main application to give a reference back to itself.
@@ -420,6 +427,10 @@ public class MainPageController {
         edge1Active = false;
         edge1ActiveOnce = false;
         edgeButton.setId("edgeButton");// desactivate button of orange
+
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+        AnchorPane currPage = (AnchorPane) currentTab.getContent();
+        AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
     }
 
     @FXML
@@ -524,13 +535,28 @@ public class MainPageController {
                     //Do when the edge button is activate to draw a edge.
                     if(edge1Active||edge1ActiveOnce)
                     {
+                        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+                        AnchorPane currPage = (AnchorPane) currentTab.getContent();
+                        AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
+
                         if (firstVerForEdge)
                         {
                             circleStart = circle;
                             nameVertexStart = circle.getId();
                             firstVerForEdge = false;
+
+                            liveEdge.setStartX(circleStart.getTranslateX());
+                            liveEdge.setStartY(circleStart.getTranslateY());
+                            liveEdge.setEndX(circleStart.getTranslateX());
+                            liveEdge.setEndY(circleStart.getTranslateY());
+
+                            currPage.setOnMouseMoved(followMouseHandler);
+                            currP.getChildren().add(0,liveEdge);
+
                         } else
                         {
+                            currPage.setOnMouseMoved(null);
+                            currP.getChildren().remove(0);
                             //EdgeDraw currentLine = new EdgeDraw(circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY(),true);
                             Line currentLine = new Line();
                             currentLine.setStartX(circleStart.getTranslateX());
@@ -581,11 +607,11 @@ public class MainPageController {
                             });*/
                             ////////////////////////////////////////////////////////////////////////////////////////////
 
-                            Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+                            /*Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
                             AnchorPane currPage = (AnchorPane) currentTab.getContent();
-                            AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
+                            AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);*/
 
-                            currP.getChildren().add(0,currentLine); // add at index 0, to have the line behind vertexes
+                            currP.getChildren().add(1,currentLine); // add at index 1, to have the line behind vertexes
                             // à mettre si il y a un poid à l'edge
                             //currP.getChildren().add(1, edgeWeightText(currentLine,1));
                             //adding the edge in the xml
@@ -650,6 +676,24 @@ public class MainPageController {
                     Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
                     GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                     graphXml.setPosOfVertex(circle.getId(),(int) newTranslateX, (int) newTranslateY);
+                }
+            };
+
+    EventHandler<MouseEvent> followMouseHandler =
+            new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent t) {
+                    if(!edge1Active && !edge1ActiveOnce) {
+                        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+                        AnchorPane currPage = (AnchorPane) currentTab.getContent();
+                        AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
+
+                        currPage.setOnMouseMoved(null);
+                        currP.getChildren().remove(0);
+                    }
+
+                    liveEdge.setEndX(t.getX());
+                    liveEdge.setEndY(t.getY());
                 }
             };
 
