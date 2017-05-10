@@ -210,6 +210,7 @@ public class MainPageController {
         circle_base.setOnMouseDragged(nodeOnMouseDraggedEventHandler);
         circle_base.setOnMouseEntered(nodeOnMouseEnteredEventHandler);
         circle_base.setOnMouseReleased(nodeOnMouseReleasedEventHandler);
+
         return circle_base;
     }
     private Text createVertexNumber(double x, double y, String id){
@@ -314,7 +315,7 @@ public class MainPageController {
 
             //adding all vertex from xml
             int i = 0;
-            while (i < graphOpen.getNbVertex())
+            while (i <= graphOpen.getNbVertex())
             {
                 Point2D point = graphOpen.getPosOfVertex(i);
                 int x = (int) point.getX();

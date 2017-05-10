@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Graph name="new tab0">
-<vertex name="ver_0" posX="60" posY="54"/>
-<vertex name="ver_1" posX="101" posY="103"/>
-<vertex name="ver_2" posX="70" posY="159"/>
-<vertex name="ver_3" posX="171" posY="98"/>
-<vertex name="ver_4" posX="119" posY="58"/>
-<edge end="ver_1" name="edge_1" start="ver_0"/>
-<edge end="ver_2" name="edge_2" start="ver_1"/>
-<edge end="ver_4" name="edge_3" start="ver_1"/>
-<edge end="ver_3" name="edge_4" start="ver_3"/>
-<edge end="ver_3" name="edge_5" start="ver_4"/>
+<vertex name="ver_0" posX="193" posY="125"/>
+<vertex name="ver_1" posX="252" posY="208"/>
+<vertex name="ver_2" posX="164" posY="263"/>
+<vertex name="ver_3" posX="144" posY="167"/>
+<edge end="ver_2" name="edge_1" start="ver_3"/>
+<edge end="ver_1" name="edge_2" start="ver_2"/>
+<edge end="ver_3" name="edge_3" start="ver_0"/>
+<edge end="ver_1" name="edge_4" start="ver_0"/>
 </Graph>

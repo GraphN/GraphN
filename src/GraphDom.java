@@ -27,8 +27,8 @@ public class GraphDom {
     final Document document;
     final Element racine;
     private String graphName;
-    private int nbVertex = 0;
-    private int nbEdge;
+    private int nbVertex = -1;
+    private int nbEdge = 0;
     private ArrayList<Element> vertexes;
     private ArrayList<Element> edges;
 
@@ -60,14 +60,13 @@ public class GraphDom {
 
     public void addVertex(int posX, int posY)
     {
-
+        nbVertex++;
         Element vertex = document.createElement("vertex");
         vertex.setAttribute("name", "ver_"+nbVertex);
         vertex.setAttribute("posX", String.valueOf(posX));
         vertex.setAttribute("posY", String.valueOf(posY));
         racine.appendChild(vertex);
         vertexes.add(vertex);
-        nbVertex++;
     }
 
     public  void setNameOfVertex(String name, int index)
@@ -149,7 +148,7 @@ public class GraphDom {
     public Point2D getPosOfVertex(String name)
     {
         int i = 0;
-        while(i < nbVertex)
+        while(i <= nbVertex)
         {
             Element node = vertexes.get(i);
             if(node.getAttribute("name").equals(name))
@@ -179,8 +178,14 @@ public class GraphDom {
         String vertex1 = edge.getAttribute("start");
         String vertex2 = edge.getAttribute("end");
 
+//        System.out.println("vertex 1: " + vertex1);
+//        System.out.println("vertex 2: " + vertex2);
+
         Point2D ver1 =  getPosOfVertex(vertex1);
         Point2D ver2 =  getPosOfVertex(vertex2);
+
+//        System.out.println(ver1);
+//        System.out.println(ver2);
 
         int startX = (int)ver1.getX();
         int startY = (int)ver1.getY();

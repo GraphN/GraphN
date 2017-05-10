@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Graph name="new tab0">
+<vertex name="ver_0" posX="24" posY="26"/>
+<vertex name="ver_1" posX="90" posY="92"/>
+<edge end="ver_1" name="edge_1" start="ver_0"/>
+</Graph>

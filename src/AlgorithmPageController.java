@@ -124,12 +124,12 @@ public class AlgorithmPageController
     AnchorPane pane = new AnchorPane();
     private AnchorPane recreateAnchorWithXML(GraphDom graph) {
         //AnchorPane pane = new AnchorPane();
-        graphTest = new UDiGraph(graph.getNbVertex(), new EdgeListStockage());
+        graphTest = new UDiGraph(graph.getNbVertex()+1, new EdgeListStockage());
 
         graphDom = graph;
 
         //adding all vertex from xml
-        for(int i = 0; i < graph.getNbVertex(); i++)
+        for(int i = 0; i <= graph.getNbVertex(); i++)
         {
             // Le -10 c'est pour le décalage du stackpane, à vérifier sur d'autres écrans
             Point2D point = graph.getPosOfVertex(i);
@@ -171,8 +171,8 @@ public class AlgorithmPageController
             edgeList.add(edge);
 
             graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
-            System.out.println(graph.getFrom(i));
-            System.out.println(graph.getTo(i));
+//            System.out.println(graph.getFrom(i));
+//            System.out.println(graph.getTo(i));
         }
        return pane;
     }
