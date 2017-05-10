@@ -86,8 +86,8 @@ public class AlgorithmPageController
         Edge e = this.path.get(indexPath);
         Line test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
         for(Line line: edgeList){
-            if(line.equals(test)){
-                changeEdgeColor(Color.BLUE, 1);
+            if( line.getEndY() == test.getEndY() && line.getStartY() == test.getStartY()){
+                changeEdgeColor(Color.BLUE, Integer.parseInt(line.getId().replaceAll("[\\D]", "")));
                 break;
             }
         }
@@ -182,7 +182,7 @@ public class AlgorithmPageController
         pane.getChildren().remove(edge);
         edge.setStroke(color);
         pane.getChildren().add(0, edge);
-        System.out.println(edge.getId());
+        //System.out.println(edge.getId());
     }
 
     private Circle createVertexShape(double x, double y, String id)

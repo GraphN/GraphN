@@ -197,8 +197,8 @@ public class GraphDom {
     {
         //Element edge = (Element) edges.get(index);
         for(Element edge:edges){
-            if( Integer.parseInt(edge.getAttribute("from").replaceAll("[\\D]", "")) == from &&
-                    Integer.parseInt(edge.getAttribute("to").replaceAll("[\\D]", "")) == to){
+            if( Integer.parseInt(edge.getAttribute("start").replaceAll("[\\D]", "")) == from &&
+                    Integer.parseInt(edge.getAttribute("end").replaceAll("[\\D]", "")) == to){
                 String vertex1 = edge.getAttribute("start");
                 String vertex2 = edge.getAttribute("end");
 
