@@ -23,7 +23,7 @@ public class Kruskall implements Algorithm{
         this.g = g;
     }
 
-    public void visit(EdgeVisit func) {
+    public LinkedList<Edge> visit(EdgeVisit func) {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         for (Edge e : g.getEdgesList()) {
             pq.add(e);
@@ -42,6 +42,8 @@ public class Kruskall implements Algorithm{
                 func.applyFunction(e);
             }
         }
+
+        return mst;
     }
 
     public double getWeight(){return weight;}

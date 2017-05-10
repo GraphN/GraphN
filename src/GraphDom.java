@@ -197,19 +197,24 @@ public class GraphDom {
     {
         //Element edge = (Element) edges.get(index);
         for(Element edge:edges){
-            if( Integer.parseInt(edge.getAttribute("from").replaceAll("[\\D]", "")) == from &&
-                    Integer.parseInt(edge.getAttribute("to").replaceAll("[\\D]", "")) == to){
-                String vertex1 = edge.getAttribute("start");
-                String vertex2 = edge.getAttribute("end");
+            System.out.println("From: " + edge.getAttribute("start") + "end" + edge.getAttribute("end"));
+            if(!edge.getAttribute("start").isEmpty() && !edge.getAttribute("end").isEmpty()) {
+                if (Integer.parseInt(edge.getAttribute("start").replaceAll("[\\D]", "")) == from &&
+                        Integer.parseInt(edge.getAttribute("end").replaceAll("[\\D]", "")) == to) {
+                    String vertex1 = edge.getAttribute("start");
+                    String vertex2 = edge.getAttribute("end");
 
-                Point2D ver1 =  getPosOfVertex(vertex1);
-                Point2D ver2 =  getPosOfVertex(vertex2);
+                    Point2D ver1 = getPosOfVertex(vertex1);
+                    Point2D ver2 = getPosOfVertex(vertex2);
 
-                int startX = (int)ver1.getX();
-                int startY = (int)ver1.getY();
-                int endX = (int)ver2.getX();
-                int endY = (int)ver2.getY();
-                return new Line(startX, startY, endX, endY);
+                    int startX = (int) ver1.getX();
+                    int startY = (int) ver1.getY();
+                    int endX = (int) ver2.getX();
+                    int endY = (int) ver2.getY();
+                    return new Line(startX, startY, endX, endY);
+                }
+            }else {
+                System.out.println("NUll");
             }
         }
         return null;
