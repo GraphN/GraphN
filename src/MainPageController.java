@@ -271,6 +271,8 @@ public class MainPageController {
             // Creation of a vertex
             List<Shape> node = createVertex(mouseEvent.getX(), mouseEvent.getY(), nameOfVertex);
             currP.getChildren().addAll(node.get(0), node.get(1));
+            // Test de le flèche
+            //currP.getChildren().add(new EdgeDraw(20,20,150,150,true, 1));
 
             //if we have the click once. we desactivate it
             vertex1ActiveOnce = false;
@@ -532,6 +534,7 @@ public class MainPageController {
                             firstVerForEdge = false;
                         } else
                         {
+                            //EdgeDraw currentLine = new EdgeDraw(circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY(),true);
                             Line currentLine = new Line();
                             currentLine.setStartX(circleStart.getTranslateX());
                             currentLine.setStartY(circleStart.getTranslateY());
@@ -542,7 +545,7 @@ public class MainPageController {
                             currentLine.setStroke(Color.web("da5630"));
 
                             Circle circleEnd = circle;
-                            moveVertexMoveEdgeListener(circleStart, circleEnd, currentLine);
+                            //moveVertexMoveEdgeListener(circleStart, circleEnd, currentLine);
                             ////////////////////////////////////////////////moving vertex move edges////////////////////
                             /*((Circle) t.getSource()).translateXProperty().addListener(new ChangeListener<Number>()
                             {
