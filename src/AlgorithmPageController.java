@@ -1,6 +1,4 @@
-import Algorithms.Algorithm;
-import Algorithms.BFS;
-import Algorithms.VertexVisit;
+import Algorithms.*;
 import graph.Edge;
 import graph.Stockage.EdgeListStockage;
 import graph.UDiGraph;
@@ -83,21 +81,43 @@ public class AlgorithmPageController
     @FXML
     private void handleFastForward(){
 
-        Edge e = this.path.get(indexPath);
-        Line test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
-        for(Line line: edgeList){
-            if( line.getEndY() == test.getEndY() && line.getStartY() == test.getStartY()){
-                changeEdgeColor(Color.BLUE, Integer.parseInt(line.getId().replaceAll("[\\D]", "")));
-                break;
+        if(indexPath < path.size()) {
+            Edge e = this.path.get(indexPath);
+            Line test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
+            for(int i = 0; i < edgeList.size() ; i++) {
+                if (edgeList.get(i).getStartX() == test.getStartX()
+                        && edgeList.get(i).getStartY() == test.getStartY()
+                        && edgeList.get(i).getEndX() == test.getEndX()
+                        && edgeList.get(i).getEndY() == test.getEndY())
+                    changeEdgeColor(Color.BLUE, i);
             }
         }
         indexPath++;
+
     }
     @FXML
     private void handlePausePlay(){
     }
+
+    @FXML
+    private void handleKruskall(){
+        this.algo = new Kruskall(graphTest);
+        this.path = ((Kruskall) algo).visit(new EdgeVisit() {
+            @Override
+            public void applyFunction(Edge e) {
+
+            }
+        });
+    }
     @FXML
     private void handleDFS(){
+        this.algo = new DFS(graphTest);
+        this.path = ((DFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
+            @Override
+            public void applyFunction(Vertex v) {
+
+            }
+        });
     }
     @FXML
     private void handleBFS(){

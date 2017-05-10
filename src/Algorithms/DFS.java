@@ -24,19 +24,22 @@ public class DFS implements Algorithm{
         this.g = g;
     }
 
-    public void visit(Vertex v, VertexVisit f) {
+    public LinkedList<Edge> visit(Vertex v, VertexVisit f) {
         visit(v,f, new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {}
         });
+        return getPath();
     }
 
     // DFS en mode recursif
-    void visit(Vertex v, VertexVisit fpre, VertexVisit fpost) {
+    LinkedList<Edge> visit(Vertex v, VertexVisit fpre, VertexVisit fpost) {
         marked = new Vector<>(g.V());
         for(int i  = 0; i < g.V(); i++)
             marked.add(false);
         recursion(v, fpre, fpost);
+
+        return getPath();
     }
 
     private void recursion(Vertex v, VertexVisit fpre, VertexVisit fpost) {
