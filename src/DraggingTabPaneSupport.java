@@ -1,5 +1,3 @@
-// classe trouvée ici: http://stackoverflow.com/questions/41473987/how-to-drag-and-drop-tabs-of-the-same-tabpane
-
 import java.util.concurrent.atomic.AtomicLong;
 
 import javafx.collections.ListChangeListener.Change;
@@ -17,7 +15,7 @@ public class DraggingTabPaneSupport {
 
     private static final AtomicLong idGenerator = new AtomicLong();
 
-    private final String draggingID = "DraggingTabPaneSupport-"+idGenerator.incrementAndGet() ;
+    private final String draggingID = "view.DraggingTabPaneSupport-"+idGenerator.incrementAndGet() ;
 
     public void addSupport(TabPane tabPane) {
         tabPane.getTabs().forEach(this::addDragHandlers);

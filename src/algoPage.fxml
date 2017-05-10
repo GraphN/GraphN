@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgoPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AlgoPageController">
    <left>
       <AnchorPane prefHeight="337.0" prefWidth="108.0" styleClass="background" stylesheets="@algorithm.css" BorderPane.alignment="CENTER">
          <children>
@@ -61,7 +61,7 @@
             </ButtonBar>
             <ImageView fitHeight="24.0" fitWidth="29.0" layoutX="24.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="18.0">
                <image>
-                  <Image url="@fast-forward.png" />
+                  <Image url="@../fast-forward.png" />
                </image>
             </ImageView>
             <Button layoutX="521.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleNewFromResult" stylesheets="@new_from_result.css" text="New From Result" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="12.0" />

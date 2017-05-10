@@ -41,7 +41,7 @@ public class GraphDom {
         factory = DocumentBuilderFactory.newInstance();
         builder = factory.newDocumentBuilder();
         document= builder.newDocument();
-        racine = document.createElement("Graph");
+        racine = document.createElement("UDiGraph");
         racine.setAttribute("name", name);
         document.appendChild(racine);
     }

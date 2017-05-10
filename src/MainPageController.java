@@ -2,11 +2,11 @@
  * Created by LBX on 31/03/2017.
  */
 
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -16,15 +16,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import sun.security.provider.SHA;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
@@ -119,7 +116,7 @@ public class MainPageController {
 
         //creation of the xml file of this tab
         try {
-            GraphDom currentGraphDom = new GraphDom(tabName);
+            view.GraphDom currentGraphDom = new view.GraphDom(tabName);
             //adding this xml to the list
             listGraphXml.add(currentGraphDom);
         } catch (ParserConfigurationException e) {
