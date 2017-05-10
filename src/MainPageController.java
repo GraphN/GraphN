@@ -545,7 +545,7 @@ public class MainPageController {
                             currentLine.setStroke(Color.web("da5630"));
 
                             Circle circleEnd = circle;
-                            //moveVertexMoveEdgeListener(circleStart, circleEnd, currentLine);
+                            moveVertexMoveEdgeListener(circleStart, circleEnd, currentLine);
                             ////////////////////////////////////////////////moving vertex move edges////////////////////
                             /*((Circle) t.getSource()).translateXProperty().addListener(new ChangeListener<Number>()
                             {
