@@ -208,8 +208,17 @@ public class MainPageController {
     {
         Circle circle_base = new Circle(10.0f, Color.web("da5630"));
         circle_base.setId(id);
-        circle_base.setTranslateX(x);
-        circle_base.setTranslateY(y);
+
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+
+        AnchorPane currentPage = (AnchorPane) currentTab.getContent();
+        AnchorPane currentPane = (AnchorPane) currentPage.getChildren().get(0);
+
+        Slider currentSlider = (Slider) currentPage.getChildren().get(1);
+        System.out.println( currentPane.getTranslateX()+ "   " + currentPane.getTranslateY());
+
+        circle_base.setTranslateX( (x - currentPane.getTranslateX() )/currentSlider.getValue());
+        circle_base.setTranslateY( (y - currentPane.getTranslateY() )/currentSlider.getValue());
         circle_base.setOnMousePressed(nodeOnMousePressedEventHandler);
         circle_base.setOnMouseDragged(nodeOnMouseDraggedEventHandler);
         circle_base.setOnMouseEntered(nodeOnMouseEnteredEventHandler);
@@ -218,6 +227,14 @@ public class MainPageController {
         return circle_base;
     }
     private Text createVertexNumber(double x, double y, String id){
+
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+
+        AnchorPane currentPage = (AnchorPane) currentTab.getContent();
+        AnchorPane currentPane = (AnchorPane) currentPage.getChildren().get(0);
+
+        Slider currentSlider = (Slider) currentPage.getChildren().get(1);
+
         //number of the vertex
         int nbVertex = Integer.parseInt(id.replaceAll("[\\D]", ""));
         Text text = new Text(""+nbVertex);
@@ -226,11 +243,11 @@ public class MainPageController {
         text.setBoundsType(TextBoundsType.VISUAL);
         //centering the numbers
         if(nbVertex<10){
-            text.setTranslateX(x-4.5);
-            text.setTranslateY(y+6);
+            text.setTranslateX( (x - currentPane.getTranslateX() )/currentSlider.getValue() - 4.5);
+            text.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue() + 6);
         }else{
-            text.setTranslateX(x-8.5);
-            text.setTranslateY(y+6);
+            text.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue() - 8.5);
+            text.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue() + 6);
         }
         text.setOnMousePressed(nodeOnMousePressedEventHandler);
         text.setOnMouseDragged(nodeOnMouseDraggedEventHandler);
