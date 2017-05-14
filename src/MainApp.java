@@ -99,6 +99,32 @@ public class MainApp extends Application {
             //return false;
         }
     }
+    public int showWeightPage() {
+        try {
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("weight.fxml"));
+            BorderPane page = (BorderPane) loader.load();
+
+            // Create the dialog Stage.
+            Stage weightStage = new Stage();
+            weightStage.setTitle("Weight");
+            weightStage.initModality(Modality.WINDOW_MODAL);
+            weightStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            weightStage.setScene(scene);
+
+            WeightController controller = loader.getController();
+            controller.setStage(weightStage);
+
+            weightStage.showAndWait();
+
+            return controller.getWeight();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
 
     public void showSavePage(GraphDom graph)

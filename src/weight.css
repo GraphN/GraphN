@@ -1,0 +1,25 @@
+.background{
+       -fx-background-color: #1d1d1d;
+}
+.text-field {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 4 4 4 4;
+}
+#sendButton{
+-fx-background-position: center;
+-fx-background-repeat: no-repeat;
+-fx-background-size: 15 25;
+-fx-padding: 5 22 5 22;
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 4;
+-fx-background-image: url("send-button-white.png");
+-fx-background-color: #1d1d1d;
+}
+#sendButton:hover{
+-fx-background-color: #333333;
+}
+#sendButton:pressed{
+-fx-background-color: #1d1d1d;
+}
