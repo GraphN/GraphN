@@ -18,7 +18,11 @@ public class WeightController {
     private TextField weightField;
     @FXML
     public void handleSendButton(){
-        weight = Integer.parseInt(weightField.getText().replaceAll("[\\D]", ""));
+        try {
+            weight = Integer.parseInt(weightField.getText().replaceAll("[\\D]", ""));
+        }catch (NumberFormatException e){
+            System.out.println("C'eût été plus pertinant de mettre un chiffre ou un nombre");
+        }
         dialogStage.close();
     }
     @FXML

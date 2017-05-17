@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<UDiGraph name="new tab0">
+<vertex name="ver_0" posX="42" posY="53"/>
+<vertex name="ver_1" posX="162" posY="137"/>
+<edge end="ver_1" name="edge_1" start="ver_0"/>
+</UDiGraph>

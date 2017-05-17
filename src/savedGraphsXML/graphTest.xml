@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Graph name="new tab0">
-<vertex name="ver_0" posX="193" posY="125"/>
-<vertex name="ver_1" posX="252" posY="208"/>
-<vertex name="ver_2" posX="164" posY="263"/>
-<vertex name="ver_3" posX="144" posY="167"/>
-<edge end="ver_2" name="edge_1" start="ver_3"/>
-<edge end="ver_1" name="edge_2" start="ver_2"/>
-<edge end="ver_3" name="edge_3" start="ver_0"/>
-<edge end="ver_1" name="edge_4" start="ver_0"/>
-</Graph>
+<UDiGraph name="new tab0">
+<vertex name="ver_0" posX="86" posY="130"/>
+<vertex name="ver_1" posX="192" posY="218"/>
+<vertex name="ver_2" posX="303" posY="154"/>
+<edge end="ver_1" name="edge_1" start="ver_0"/>
+<edge end="ver_2" name="edge_2" start="ver_1"/>
+</UDiGraph>

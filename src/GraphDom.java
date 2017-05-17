@@ -1,9 +1,12 @@
 import javafx.geometry.Point2D;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.management.Attribute;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,6 +34,7 @@ public class GraphDom {
     private int nbEdge = 0;
     private ArrayList<Element> vertexes;
     private ArrayList<Element> edges;
+    private String graphType;
 
     public GraphDom(String name) throws ParserConfigurationException
     {
@@ -44,6 +48,7 @@ public class GraphDom {
         racine = document.createElement("UDiGraph");
         racine.setAttribute("name", name);
         document.appendChild(racine);
+        graphType = "nonDiGraph";
     }
 
     public void saveGraphXML(File file) throws TransformerException
@@ -80,6 +85,17 @@ public class GraphDom {
         edge.setAttribute("name", "edge_"+nbEdge);
         edge.setAttribute("start", vertexStart);
         edge.setAttribute("end", vertexEnd);
+        racine.appendChild(edge);
+        edges.add(edge);
+    }
+    public void addEdgeWeighted(String vertexStart, String vertexEnd, String weight)
+    {
+        nbEdge++;
+        Element edge = document.createElement("edge");
+        edge.setAttribute("name", "edge_"+nbEdge);
+        edge.setAttribute("start", vertexStart);
+        edge.setAttribute("end", vertexEnd);
+        edge.setAttribute("weight", weight);
         racine.appendChild(edge);
         edges.add(edge);
     }
@@ -193,6 +209,27 @@ public class GraphDom {
         int endY = (int)ver2.getY();
         return new Line(startX, startY, endX, endY);
     }
+    public DrawEdge getDrawEdge(int index){
+        Element edge = (Element) edges.get(index);
+        String vertex1 = edge.getAttribute("start");
+        String vertex2 = edge.getAttribute("end");
+
+        Point2D ver1 =  getPosOfVertex(vertex1);
+        Point2D ver2 =  getPosOfVertex(vertex2);
+
+        int startX = (int)ver1.getX();
+        int startY = (int)ver1.getY();
+        int endX = (int)ver2.getX();
+        int endY = (int)ver2.getY();
+
+        if(graphType == "nonDiGraph")
+            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY);
+        else if (graphType == "diGraph")
+            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, true);
+        else if (graphType == "weightedDiGraph")
+            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, new Text(edge.getAttribute("weight")));
+        return null;
+    }
     public Line getEdge(int from, int to)
     {
         //Element edge = (Element) edges.get(index);
@@ -237,4 +274,11 @@ public class GraphDom {
         return edge.getAttribute("end");
     }
 
+    public void setGraphType(String graphType) {
+        this.graphType = graphType;
+    }
+
+    public String getGraphType() {
+        return graphType;
+    }
 }

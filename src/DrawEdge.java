@@ -8,27 +8,29 @@ import javafx.scene.text.Text;
 /**
  * Created by LBX on 14/05/2017.
  */
+
+// todo: Mettre la pointe des flèches au bord du cercle
 public class DrawEdge {
     private CubicCurve curve1;
     Group root;
     Text text;
     boolean directed;
-    DrawEdge(Pane pane, double startX, double startY, double endX, double endY){
-        this(pane, startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, null, false);
+    DrawEdge(double startX, double startY, double endX, double endY){
+        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, null, false);
     }
-    DrawEdge(Pane pane, double startX, double startY, double endX, double endY, Text text){
-        this(pane, startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, text, true);
-    }
-
-    DrawEdge(Pane pane, double startX, double startY, double endX, double endY, boolean directed){
-        this(pane, startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, null, directed);
+    DrawEdge(double startX, double startY, double endX, double endY, Text text){
+        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, text, true);
     }
 
-    DrawEdge(Pane pane, double startX, double startY, double endX, double endY, boolean directed, Text text){
-        this(pane, startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, text, directed);
+    DrawEdge(double startX, double startY, double endX, double endY, boolean directed){
+        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, null, directed);
     }
 
-    DrawEdge(Pane pane, double startX, double startY, double controlX1,double controlY1,double controlX2,double controlY2, double endX, double endY, Text text, boolean directed){
+    DrawEdge(double startX, double startY, double endX, double endY, boolean directed, Text text){
+        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, text, directed);
+    }
+
+    DrawEdge(double startX, double startY, double controlX1,double controlY1,double controlX2,double controlY2, double endX, double endY, Text text, boolean directed){
         root = new Group();
         this.text = text;
         this.directed = directed;
@@ -73,7 +75,6 @@ public class DrawEdge {
         }
         else root.getChildren().add(curve1);
 
-        pane.getChildren().add(1,root);
     }
 
     /**
