@@ -14,7 +14,7 @@
 -fx-padding: 5 22 5 22;
     -fx-border-color: #1d1d1d;
     -fx-border-width: 4;
--fx-background-image: url("send-button-white.png");
+-fx-background-image: url("../img/send-button-white.png");
 -fx-background-color: #1d1d1d;
 }
 #sendButton:hover{

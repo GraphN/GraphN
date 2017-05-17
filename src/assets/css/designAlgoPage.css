@@ -8,43 +8,43 @@
 }
 
 #buttonPlay:hover{
--fx-background-image: url("play-button-on.png");
+-fx-background-image: url("../img/play-button-on.png");
 
 }
 #buttonPlay{
--fx-background-image: url('play-button.png');
+-fx-background-image: url('../img/play-button.png');
 }
 
 #buttonForwardPlay:hover{
--fx-background-image: url("fast-forward-on.png");
+-fx-background-image: url("../img/fast-forward-on.png");
 
 }
 #buttonForwardPlay{
--fx-background-image: url('fast-forward.png');
+-fx-background-image: url('../img/fast-forward.png');
 }
 
 #buttonPlayTimer:hover{
--fx-background-image: url("play-timer-on.png");
+-fx-background-image: url("../img/play-timer-on.png");
 
 }
 #buttonPlayTimer{
--fx-background-image: url("play-timer.png");
+-fx-background-image: url("../img/play-timer.png");
 }
 
 #buttonStop:hover{
--fx-background-image: url("stop-on.png");
+-fx-background-image: url("../img/stop-on.png");
 
 }
 #buttonStop{
--fx-background-image: url("stop.png");
+-fx-background-image: url("../img/stop.png");
 }
 
 #buttonPause:hover{
--fx-background-image: url("pause-on.png");
+-fx-background-image: url("../img/pause-on.png");
 
 }
 #buttonPause{
--fx-background-image: url("pause.png");
+-fx-background-image: url("../img/pause.png");
 }
 
 

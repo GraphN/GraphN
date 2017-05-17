@@ -1,0 +1,106 @@
+.button{
+-fx-background-position: center;
+-fx-background-repeat: no-repeat;
+-fx-background-size: cover;
+}
+#newFileButton, #saveButton, #openFileButton,#importButton,
+#vertex1Button, #vertex1ButtonActivate, #vertex2Button,#edgeButton, #diEdgeButton,
+#diEdgeWeightedButton, #textButton, #commentButton, #edgeButtonActivate
+{
+-fx-background-color: #232323;
+}
+#newFileButton:hover{
+-fx-background-image: url("../img/add-new-page-on.png");
+
+}
+#newFileButton{
+-fx-background-image: url('../img/add-new-page.png');
+}
+
+#saveButton:hover{
+-fx-background-image: url("../img/save-disk-on.png");
+
+}
+#saveButton{
+-fx-background-image: url('../img/save-disk.png');
+}
+
+#openFileButton:hover{
+-fx-background-image: url("../img/open-archive-on.png");
+
+}
+#openFileButton{
+-fx-background-image: url('../img/open-archive.png');
+}
+
+#importButton:hover{
+-fx-background-image: url("../img/import-on.png");
+
+}
+#importButton{
+-fx-background-image: url('../img/import.png');
+}
+
+#vertex1Button:hover{
+-fx-background-image: url("../img/vertex1-on.png");
+
+}
+#vertex1Button{
+-fx-background-image: url('../img/vertex1.png');
+}
+
+#vertex1ButtonActivate{
+-fx-background-image: url("../img/vertex1-on.png");
+}
+
+#vertex2Button:hover{
+-fx-background-image: url("../img/vertex2-on.png");
+
+}
+#vertex2Button{
+-fx-background-image: url('../img/vertex2.png');
+}
+
+
+#edgeButton:hover, #edgeButtonActivate{
+-fx-background-image: url("../img/edge-on.png");
+
+}
+#edgeButton{
+-fx-background-image: url('../img/edge.png');
+}
+
+#diEdgeButton:hover{
+-fx-background-image: url("../img/diEdge-on.png");
+
+}
+#diEdgeButton{
+-fx-background-image: url('../img/diEdge.png');
+}
+
+#diEdgeWeightedButton:hover{
+-fx-background-image: url("../img/diEdgeWeighted-on.png");
+
+}
+#diEdgeWeightedButton{
+-fx-background-image: url('../img/diEdgeWeighted.png');
+}
+
+#textButton:hover{
+-fx-background-image: url("../img/text-on.png");
+
+}
+#textButton{
+-fx-background-image: url('../img/text.png');
+}
+
+#commentButton:hover{
+-fx-background-image: url("../img/comment-on.png");
+
+}
+#commentButton{
+-fx-background-image: url('../img/comment.png');
+}
+
+
+

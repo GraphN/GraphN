@@ -39,6 +39,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.tan;
 import static java.lang.Thread.sleep;
 
+// todo: Ajouter un bouton pour pouvoir supprimmer des trucs?
 public class MainPageController {
     private MainApp mainApp;
     private ArrayList<GraphDom> listGraphXml; //list of xml files, from different tabs
@@ -48,10 +49,6 @@ public class MainPageController {
     private boolean vertex1ActiveOnce = false;
     private boolean edge1Active = false;
     private boolean edge1ActiveOnce = false;
-    private boolean edgeDiActive = false;
-    private boolean edgeDiActiveOnce = false;
-    private boolean edgeWeightedDiActive = false;
-    private boolean edgeWeightedDiActiveOnce = false;
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -374,25 +371,22 @@ public class MainPageController {
                 i++;
             }
 
-                i = 0;
-                while (i < graphOpen.getNbEdge()) {
-                    //adding all edges from xml
-                    Line edge = graphOpen.getEdge(i);
-                    edge.setStrokeWidth(4);
-                    edge.setSmooth(true);
-                    edge.setStroke(Color.web("da5630"));
+            String graphType = graphOpen.getGraphType();
+            System.out.println(graphType);
+            DrawEdge drawEdge = null;
 
-                    //getting vertexes start and end of this line, to add listeneners
-                    Circle cirleStart = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
-                    Circle cirleEnd = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
-                    //creating listener for moving edge when moving vertexes
-                    moveVertexMoveEdgeListener(cirleStart, cirleEnd, edge);
-                    //adding edge created to pane (at index 0 to have vertexes on front of edges)
-                    pane.getChildren().add(0, edge);
+            i = 0;
+            while (i < graphOpen.getNbEdge()) {
+                Circle cirleStart = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
+                Circle cirleEnd = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
+                drawEdge = graphOpen.getDrawEdge(i);
+                drawEdgesList.add(drawEdge);
+                moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, drawEdgesList.indexOf(drawEdge), pane);
+                pane.getChildren().add(1,drawEdge.getRoot());
+                i++;
+            }
 
-                    i++;
-                }
-                tabPane.getTabs().add(tab);
+            tabPane.getTabs().add(tab);
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -437,9 +431,21 @@ public class MainPageController {
     @FXML
     private void handleVectrice2(){
     }
+
     @FXML
     private void handleEdge(MouseEvent mouseEvent)
     {
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+        String graphType = tabMap.get(currentTab);
+        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+        if(graphType == null){
+            tabMap.put(currentTab, "nonDiGraph");
+            graphXml.setGraphType("nonDiGraph");
+        } // todo: le setGraphType ne marche pas quand on sauve et relance
+        else if(graphType != "nonDiGraph") {
+            mouseEvent.consume();
+            return;
+        }
         //desactivate vertex if active
         desactivateVertex();
 
@@ -461,14 +467,94 @@ public class MainPageController {
         {
             edge1ActiveOnce = true;
             edge1Active = false;
-            edgeButton.setId("edgeButtonActivate");//let the butonn orange if he is used
+            edgeButton.setId("edgeButtonActivate");//let the button orange if he is used
         }
     }
+    // todo: changer correctement les boutons
+    @FXML
+    private void handleDiEdge(MouseEvent mouseEvent)
+    {
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+        String graphType = tabMap.get(currentTab);
+        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+        if(graphType == null){
+            tabMap.put(currentTab, "diGraph");
+            graphXml.setGraphType("diGraph");
+        } // todo: le setGraphType ne marche pas quand on sauve et relance
+        else if(graphType != "diGraph") {
+            mouseEvent.consume();
+            return;
+        }
+        //desactivate vertex if active
+        desactivateVertex();
+
+        // Reset to the first edge
+        firstVerForEdge = true;
+
+        int count = mouseEvent.getClickCount();
+        if (count == 2 && (!edge1ActiveOnce || !edge1Active)) // if we double click, we can put infinite edges
+        {
+            edge1Active = true;
+            edge1ActiveOnce = false;
+            diEdgeButton.setId("diEdgeButtonActivate");//let the button orange if he is used
+        } else if (count == 1 && (edge1ActiveOnce || edge1Active))// if we click and if we are activate, we desactive
+        {
+            edge1Active = false;
+            edge1ActiveOnce = false;
+            diEdgeButton.setId("diEdgeButton");// desactivate button of orange
+        } else if (count == 1 && (!edge1ActiveOnce || !edge1Active))// if we clicked and we are desactivate, we active
+        {
+            edge1ActiveOnce = true;
+            edge1Active = false;
+            diEdgeButton.setId("diEdgeButtonActivate");//let the button orange if he is used
+        }
+    }
+    @FXML
+    private void handleWeightedDiEdge(MouseEvent mouseEvent)
+    {
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+        String graphType = tabMap.get(currentTab);
+        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+        if(graphType == null){
+            tabMap.put(currentTab, "weightedDiGraph");
+            graphXml.setGraphType("weightedDiGraph");
+        } // todo: le setGraphType ne marche pas quand on sauve et relance
+        else if(graphType != "weightedDiGraph") {
+            mouseEvent.consume();
+            return;
+        }
+        //desactivate vertex if active
+        desactivateVertex();
+
+        // Reset to the first edge
+        firstVerForEdge = true;
+
+        int count = mouseEvent.getClickCount();
+        if (count == 2 && (!edge1ActiveOnce || !edge1Active)) // if we double click, we can put infinite edges
+        {
+            edge1Active = true;
+            edge1ActiveOnce = false;
+            weightedDiEdgeButton.setId("weightedDiEdgeButtonActivate");//let the button orange if he is used
+        } else if (count == 1 && (edge1ActiveOnce || edge1Active))// if we click and if we are activate, we desactive
+        {
+            edge1Active = false;
+            edge1ActiveOnce = false;
+            weightedDiEdgeButton.setId("weightedDiEdgeButton");// desactivate button of orange
+        } else if (count == 1 && (!edge1ActiveOnce || !edge1Active))// if we clicked and we are desactivate, we active
+        {
+            edge1ActiveOnce = true;
+            edge1Active = false;
+            weightedDiEdgeButton.setId("weightedDiEdgeButtonActivate");//let the button orange if he is used
+        }
+    }
+
 
     private void desactivateEdge(){
         edge1Active = false;
         edge1ActiveOnce = false;
         edgeButton.setId("edgeButton");// desactivate button of orange
+        diEdgeButton.setId("diEdgeButton");
+        weightedDiEdgeButton.setId("weightedDiEdgeButton");
 
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         AnchorPane currPage = (AnchorPane) currentTab.getContent();
@@ -476,31 +562,10 @@ public class MainPageController {
     }
 
     @FXML
-    private void handleDiEdge(){
-    }
-    @FXML
-    private void handleDiEdgeWeighted(){
-    }
-    @FXML
     private void handleText(){
     }
     @FXML
     private void handleNote(){
-    }
-
-    private Text edgeWeightText(Line line, int weight){
-
-        Text text = new Text();
-
-        text.setTranslateX((line.getEndX()+line.getStartX())/2);
-        text.setTranslateY((line.getEndY()+line.getStartY())/2);
-        // Faudrait un calcul pour centrer en fonction de l'angle
-        //System.out.println((line.getEndX()+line.getStartX())/2);
-        //System.out.println((line.getEndY()+line.getStartY())/2);
-
-        text.setText(""+weight);
-
-        return text;
     }
 
     EventHandler<MouseEvent> nodeOnMouseEnteredEventHandler =
@@ -580,111 +645,16 @@ public class MainPageController {
                     AnchorPane currPage = (AnchorPane) currentTab.getContent();
                     AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
                     String graphType = tabMap.get(currentTab);
-                    if(graphType == null){
-                        if(edge1Active||edge1ActiveOnce)
-                            tabMap.put(currentTab, "nonDiGraph");
-                        else if(edgeDiActive || edgeDiActiveOnce)
-                            tabMap.put(currentTab, "diGraph");
-                        else if(edgeWeightedDiActive || edgeWeightedDiActiveOnce)
-                            tabMap.put(currentTab, "weightedDiGraph");
-                    }
-                    switch (tabMap.get(currentTab)){
-                        case "nonDiGraph":
-                            if(edge1Active||edge1ActiveOnce)
-                            {
-                                if (firstVerForEdge)
-                                {
-                                    circleStart = circle;
-                                    nameVertexStart = circle.getId();
-                                    firstVerForEdge = false;
-                                } else
-                                {
-                                    Circle circleEnd = circle;
 
-                                    DrawEdge drawEdge = new DrawEdge (currP,circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY());
-                                    drawEdgesList.add(drawEdge);
-                                    moveVertexMoveEdgeListenerDraw(circleStart, circleEnd, drawEdgesList.indexOf(drawEdge), currP);
-
-                                    GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-                                    graphXml.addEdge(nameVertexStart, circle.getId());
-                                    firstVerForEdge = true;
-                                    if(edge1ActiveOnce)
-                                    {
-                                        edge1ActiveOnce = false;
-                                        edgeButton.setId("edgeButton");
-                                    }
-                                }
-                            }
-                            break;
-                        case "diGraph":
-                            if(edgeDiActive || edgeDiActiveOnce){
-                                if (firstVerForEdge)
-                                {
-                                    circleStart = circle;
-                                    nameVertexStart = circle.getId();
-                                    firstVerForEdge = false;
-                                } else
-                                {
-                                    Circle circleEnd = circle;
-
-                                    DrawEdge drawEdge = new DrawEdge (currP,circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY(),true);
-                                    drawEdgesList.add(drawEdge);
-                                    moveVertexMoveEdgeListenerDraw(circleStart, circleEnd, drawEdgesList.indexOf(drawEdge), currP);
-
-                                    GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-                                    graphXml.addEdge(nameVertexStart, circle.getId());
-                                    firstVerForEdge = true;
-                                    if(edge1ActiveOnce)
-                                    {
-                                        edge1ActiveOnce = false;
-                                        edgeButton.setId("edgeButton");
-                                    }
-                                }
-                            }
-                            break;
-                        case "weightedDiGraph":
-                            if(edgeWeightedDiActive || edgeWeightedDiActiveOnce){
-                                if (firstVerForEdge)
-                                {
-                                    circleStart = circle;
-                                    nameVertexStart = circle.getId();
-                                    firstVerForEdge = false;
-                                } else
-                                {
-                                    Circle circleEnd = circle;
-                                    Text weight = new Text(""+mainApp.showWeightPage());
-                                    //Text weight = new Text("pouf");
-                                    DrawEdge drawEdge = new DrawEdge (currP,circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY(), weight);
-                                    drawEdgesList.add(drawEdge);
-                                    moveVertexMoveEdgeListenerDraw(circleStart, circleEnd, drawEdgesList.indexOf(drawEdge), currP);
-
-                                    GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-                                    graphXml.addEdge(nameVertexStart, circle.getId());
-                                    firstVerForEdge = true;
-                                    if(edge1ActiveOnce)
-                                    {
-                                        edge1ActiveOnce = false;
-                                        edgeButton.setId("edgeButton");
-                                    }
-                                }
-                            }
-                            break;
-                    }
-
-
-/*
                     if(edge1Active||edge1ActiveOnce)
                     {
-                        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
-                        AnchorPane currPage = (AnchorPane) currentTab.getContent();
-                        AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
-
                         if (firstVerForEdge)
                         {
                             circleStart = circle;
                             nameVertexStart = circle.getId();
                             firstVerForEdge = false;
 
+                            // Edge that follow the mouse
                             liveEdge.setStartX(circleStart.getTranslateX());
                             liveEdge.setStartY(circleStart.getTranslateY());
                             liveEdge.setEndX(circleStart.getTranslateX());
@@ -693,90 +663,59 @@ public class MainPageController {
                             currPage.setOnMouseMoved(followMouseHandler);
                             currP.getChildren().add(0,liveEdge);
 
-                        } else
+                        } else if(circleStart != circle)
                         {
-<<<<<<< HEAD
-                            if(tabMap.get(currentTab) == null ){
-                                tabMap.put(currentTab, "nonDiGraph");
+                            Circle circleEnd = circle;
+                            GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+                            DrawEdge drawEdge = null;
+                            switch (graphType) {
+                                case "nonDiGraph":
+                                    drawEdge = new DrawEdge(circleStart.getTranslateX(), circleStart.getTranslateY(), circleEnd.getTranslateX(), circleEnd.getTranslateY());
+
+                                    graphXml.addEdge(nameVertexStart, circleEnd.getId());
+                                    break;
+                                case "diGraph":
+                                    drawEdge = new DrawEdge(circleStart.getTranslateX(), circleStart.getTranslateY(), circle.getTranslateX(), circle.getTranslateY(), true);
+                                    graphXml.addEdge(nameVertexStart, circle.getId());
+                                    break;
+                                case "weightedDiGraph":
+                                    Text weight = new Text(""+mainApp.showWeightPage());
+                                    // pour que le text puisse être modifiable
+                                    weight.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        public void handle(MouseEvent event) {
+                                            weight.setText(""+mainApp.showWeightPage());
+                                            // todo: Il faudrait aussi modifier le graphXML
+                                        }
+                                    });
+                                    drawEdge = new DrawEdge (circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY(), weight);
+                                    graphXml.addEdgeWeighted(nameVertexStart, circle.getId(), ""+weight);
+                                    break;
                             }
-=======
-                            currPage.setOnMouseMoved(null);
-                            currP.getChildren().remove(0);
->>>>>>> ea5730403be27e3ef6efe5975cba2b876fa31b3a
-                            //EdgeDraw currentLine = new EdgeDraw(circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY(),true);
-                       /*     Line currentLine = new Line();
-                            currentLine.setStartX(circleStart.getTranslateX());
-                            currentLine.setStartY(circleStart.getTranslateY());
-                            currentLine.setEndX(circle.getTranslateX());
-                            currentLine.setEndY(circle.getTranslateY());
-                            currentLine.setStrokeWidth(4);
-                            currentLine.setSmooth(true);
-                            currentLine.setStroke(Color.web("da5630"));*/
-
-
-                       //     Circle circleEnd = circle;
-                            //moveVertexMoveEdgeListener(circleStart, circleEnd, currentLine);
-                            ////////////////////////////////////////////////moving vertex move edges////////////////////
-                            /*((Circle) t.getSource()).translateXProperty().addListener(new ChangeListener<Number>()
-                            {
-                                @Override
-                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-                                {
-                                    currentLine.setEndX((double)newValue);
-
-                                }
-                            });
-                            ((Circle) t.getSource()).translateYProperty().addListener(new ChangeListener<Number>()
-                            {
-                                @Override
-                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-                                {
-                                    currentLine.setEndY((double)newValue);
-
-                                }
-                            });
-                            circleStart.translateXProperty().addListener(new ChangeListener<Number>()
-                            {
-                                @Override
-                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-                                {
-                                    currentLine.setStartX((double)newValue);
-                                }
-                            });
-
-                            circleStart.translateYProperty().addListener(new ChangeListener<Number>()
-                            {
-                                @Override
-                                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-                                {
-                                    currentLine.setStartY((double)newValue);
-                                }
-                            });*/
-                            ////////////////////////////////////////////////////////////////////////////////////////////
-
-                        /*    DrawEdge drawEdge = new DrawEdge (currP,circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY());
                             drawEdgesList.add(drawEdge);
                             moveVertexMoveEdgeListenerDraw(circleStart, circleEnd, drawEdgesList.indexOf(drawEdge), currP);
+                            currP.getChildren().add(1,drawEdge.getRoot());
 
-                            //currP.getChildren().add(0,currentLine); // add at index 0, to have the line behind vertexes
-                            /*Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
-                            AnchorPane currPage = (AnchorPane) currentTab.getContent();
-                            AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);*/
+                            // Edge that follow the mouse
+                            currPage.setOnMouseMoved(null);
+                            currP.getChildren().remove(0);
 
-                         //   currP.getChildren().add(1,currentLine); // add at index 1, to have the line behind vertexes
-                            // à mettre si il y a un poid à l'edge
-                            //currP.getChildren().add(1, edgeWeightText(currentLine,1));
-                            //adding the edge in the xml
-                         /*   GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-                            graphXml.addEdge(nameVertexStart, circle.getId());
                             firstVerForEdge = true;
                             if(edge1ActiveOnce)
                             {
                                 edge1ActiveOnce = false;
-                                edgeButton.setId("edgeButton");
+                                switch (graphType) {
+                                    case "nonDiGraph":
+                                        edgeButton.setId("edgeButton");
+                                        break;
+                                    case "diGraph":
+                                        diEdgeButton.setId("diEdgeButton");
+                                        break;
+                                    case "weightedDiGraph":
+                                        weightedDiEdgeButton.setId("weightedDiEdgeButton");
+                                }
                             }
                         }
-                    }*/
+                    }
                 }
             };
 
@@ -1034,7 +973,8 @@ public class MainPageController {
                 boolean directed = drawEdge.isDirected();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(currP, startX, startY, (double)newValue, endY, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, (double)newValue, endY, directed, text));
+                currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
         circleEnd.translateYProperty().addListener(new ChangeListener<Number>()
@@ -1051,7 +991,8 @@ public class MainPageController {
                 boolean directed = drawEdge.isDirected();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(currP, startX, startY, endX , (double)newValue, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, endX , (double)newValue, directed, text));
+                currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
         circleStart.translateXProperty().addListener(new ChangeListener<Number>()
@@ -1068,7 +1009,8 @@ public class MainPageController {
                 boolean directed = drawEdge.isDirected();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(currP, (double)newValue, startY, endX , endY, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge((double)newValue, startY, endX , endY, directed, text));
+                currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
 
@@ -1086,7 +1028,8 @@ public class MainPageController {
                 boolean directed = drawEdge.isDirected();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(currP, startX, (double)newValue, endX , endY, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, (double)newValue, endX , endY, directed, text));
+                currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
         ////////////////////////////////////////////////////////////////////////////////////////////
