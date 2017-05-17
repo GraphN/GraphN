@@ -1,8 +1,10 @@
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.text.Text;
 
 /**
@@ -113,6 +115,10 @@ public class DrawEdge {
         return p;
     }
 
+    void updateColor(Color c) {
+        curve1.setStroke(c);
+    }
+
     void setStartX(double startX){
         curve1.setStartX(startX);
     }
@@ -137,6 +143,7 @@ public class DrawEdge {
     void setControlY2(double controlY2){
         curve1.setControlY2(controlY2);
     }
+
     double getEndX(){
         return curve1.getEndX();
     }

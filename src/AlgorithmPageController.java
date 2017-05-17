@@ -72,7 +72,7 @@ public class AlgorithmPageController
     @FXML
     private void handlePause(){
 
-        changeEdgeColor(Color.BLUE, 1);
+        //changeEdgeColor(Color.BLUE, 1);
     }
     @FXML
     private void handleStop(){
@@ -85,11 +85,14 @@ public class AlgorithmPageController
             DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
 
             for(int i = 0; i < edgeList.size() ; i++) {
-                if (edgeList.get(i).getStartX() == test.getStartX()
+                if ((edgeList.get(i).getStartX() == test.getStartX()
                         && edgeList.get(i).getStartY() == test.getStartY()
                         && edgeList.get(i).getEndX() == test.getEndX()
                         && edgeList.get(i).getEndY() == test.getEndY())
-                    changeEdgeColor(Color.BLUE, i);
+                        || ( edgeList.get(i).getEndY() == test.getStartY()
+                        && edgeList.get(i).getStartX() == test.getEndX()
+                        && edgeList.get(i).getStartY() == test.getEndY()))
+                    edgeList.get(i).updateColor(Color.web("42f45f"));
             }
         }
         indexPath++;
@@ -113,6 +116,7 @@ public class AlgorithmPageController
     }
     @FXML
     private void handleDFS(){
+        //pane.getChildren().remove(edgeList.get(0).getRoot());
         this.algo = new DFS(graphTest);
         this.path = ((DFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
             @Override
@@ -199,13 +203,13 @@ public class AlgorithmPageController
        return pane;
     }
 
-    private void changeEdgeColor(Color color, int edgeNb){
+    /*private void changeEdgeColor(Color color, int edgeNb){
         DrawEdge edge = edgeList.get(edgeNb);
         pane.getChildren().remove(edge.getRoot());
         //TODO: methode dans drawedge edge.setStroke(color);
         pane.getChildren().add(0, edge.getRoot());
         //System.out.println(edge.getId());
-    }
+    }*/
 
     private Circle createVertexShape(double x, double y, String id)
     {
