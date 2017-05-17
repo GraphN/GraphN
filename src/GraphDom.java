@@ -1,12 +1,10 @@
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import javax.management.Attribute;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,6 +38,7 @@ public class GraphDom {
     {
         vertexes = new ArrayList<>();
         edges = new ArrayList<>();
+        graphType = new String();
 
         graphName = name;
         factory = DocumentBuilderFactory.newInstance();
@@ -48,7 +47,6 @@ public class GraphDom {
         racine = document.createElement("UDiGraph");
         racine.setAttribute("name", name);
         document.appendChild(racine);
-        graphType = "nonDiGraph";
     }
 
     public void saveGraphXML(File file) throws TransformerException
@@ -81,13 +79,35 @@ public class GraphDom {
     public void addEdge(String vertexStart, String vertexEnd)
     {
         nbEdge++;
+        Element edge1 = document.createElement("edge");
+        edge1.setAttribute("name", "edge_"+nbEdge);
+        edge1.setAttribute("start", vertexStart);
+        edge1.setAttribute("end", vertexEnd);
+        racine.setAttribute("graphType", "nonDiGraph");
+        racine.appendChild(edge1);
+        Element edge2 = document.createElement("edge");
+        edge2.setAttribute("name", "edge_"+nbEdge);
+        edge2.setAttribute("start", vertexEnd);
+        edge2.setAttribute("end", vertexStart);
+        racine.setAttribute("graphType", "nonDiGraph");
+        racine.appendChild(edge1);
+        racine.appendChild(edge2);
+        edges.add(edge1);
+        //edges.add(edge2);
+    }
+
+    public void addDiEdge(String vertexStart, String vertexEnd)
+    {
+        nbEdge++;
         Element edge = document.createElement("edge");
         edge.setAttribute("name", "edge_"+nbEdge);
         edge.setAttribute("start", vertexStart);
         edge.setAttribute("end", vertexEnd);
+        racine.setAttribute("graphType", "diGraph");
         racine.appendChild(edge);
         edges.add(edge);
     }
+
     public void addEdgeWeighted(String vertexStart, String vertexEnd, String weight)
     {
         nbEdge++;
@@ -97,6 +117,7 @@ public class GraphDom {
         edge.setAttribute("end", vertexEnd);
         edge.setAttribute("weight", weight);
         racine.appendChild(edge);
+        racine.setAttribute("graphType", "weightedDiGraph");
         edges.add(edge);
     }
     public String getName()
@@ -221,12 +242,12 @@ public class GraphDom {
         int startY = (int)ver1.getY();
         int endX = (int)ver2.getX();
         int endY = (int)ver2.getY();
-
-        if(graphType == "nonDiGraph")
+        System.out.println(graphType);
+        if(graphType.equals("nonDiGraph"))
             return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY);
-        else if (graphType == "diGraph")
+        else if (graphType.equals("diGraph"))
             return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, true);
-        else if (graphType == "weightedDiGraph")
+        else if (graphType.equals("weightedDiGraph"))
             return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, new Text(edge.getAttribute("weight")));
         return null;
     }

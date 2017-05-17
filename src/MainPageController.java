@@ -9,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -32,12 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
-import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.tan;
-import static java.lang.Thread.sleep;
 
 // todo: Ajouter un bouton pour pouvoir supprimmer des trucs?
 public class MainPageController {
@@ -282,6 +275,7 @@ public class MainPageController {
         node.add(createVertexNumber(x,y,id));
         mapNode.put(id.toString(),node);
         System.out.println("x: "+x+ " y: " + y);
+        //todo: Faire un Group
 
         return node;
     }
@@ -371,8 +365,8 @@ public class MainPageController {
                 i++;
             }
 
-            String graphType = graphOpen.getGraphType();
-            System.out.println(graphType);
+            tabMap.put(tab,graphOpen.getGraphType());
+
             DrawEdge drawEdge = null;
 
             i = 0;
@@ -442,7 +436,7 @@ public class MainPageController {
             tabMap.put(currentTab, "nonDiGraph");
             graphXml.setGraphType("nonDiGraph");
         } // todo: le setGraphType ne marche pas quand on sauve et relance
-        else if(graphType != "nonDiGraph") {
+        else if(!graphType.equals("nonDiGraph")) {
             mouseEvent.consume();
             return;
         }
@@ -481,7 +475,7 @@ public class MainPageController {
             tabMap.put(currentTab, "diGraph");
             graphXml.setGraphType("diGraph");
         } // todo: le setGraphType ne marche pas quand on sauve et relance
-        else if(graphType != "diGraph") {
+        else if(!graphType.equals("diGraph")) {
             mouseEvent.consume();
             return;
         }
@@ -519,7 +513,7 @@ public class MainPageController {
             tabMap.put(currentTab, "weightedDiGraph");
             graphXml.setGraphType("weightedDiGraph");
         } // todo: le setGraphType ne marche pas quand on sauve et relance
-        else if(graphType != "weightedDiGraph") {
+        else if(!graphType.equals("weightedDiGraph")) {
             mouseEvent.consume();
             return;
         }
@@ -676,7 +670,7 @@ public class MainPageController {
                                     break;
                                 case "diGraph":
                                     drawEdge = new DrawEdge(circleStart.getTranslateX(), circleStart.getTranslateY(), circle.getTranslateX(), circle.getTranslateY(), true);
-                                    graphXml.addEdge(nameVertexStart, circle.getId());
+                                    graphXml.addDiEdge(nameVertexStart, circle.getId());
                                     break;
                                 case "weightedDiGraph":
                                     Text weight = new Text(""+mainApp.showWeightPage());
@@ -688,7 +682,7 @@ public class MainPageController {
                                         }
                                     });
                                     drawEdge = new DrawEdge (circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY(), weight);
-                                    graphXml.addEdgeWeighted(nameVertexStart, circle.getId(), ""+weight);
+                                    graphXml.addEdgeWeighted(nameVertexStart, circle.getId(),weight.getText());
                                     break;
                             }
                             drawEdgesList.add(drawEdge);

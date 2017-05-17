@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<UDiGraph name="new tab0">
+<vertex name="ver_0" posX="60" posY="84"/>
+<vertex name="ver_1" posX="178" posY="184"/>
+<edge end="ver_1" name="edge_1" start="ver_0" weight="Text[text=&quot;0&quot;, x=0.0, y=0.0, alignment=LEFT, origin=BASELINE, boundsType=LOGICAL, font=Font[name=System Regular, family=System, style=Regular, size=12.0], fontSmoothingType=GRAY, fill=0x000000ff]"/>
+</UDiGraph>

@@ -41,7 +41,7 @@ public class AlgorithmPageController
         this.mainApp = mainApp;
     }
 
-    ArrayList<Line> edgeList;
+    ArrayList<DrawEdge> edgeList;
 
     UDiGraph graphTest;
 
@@ -55,7 +55,7 @@ public class AlgorithmPageController
     private void initialize()
     {
         initZoom();
-        edgeList = new ArrayList<Line>();
+        edgeList = new ArrayList<DrawEdge>();
     }
     @FXML
     private Slider slider;
@@ -180,15 +180,10 @@ public class AlgorithmPageController
             pane.getChildren().add(sPane);
         }
         for(int i=0; i<graph.getNbEdge(); i++) {
-            //adding all edges from xml
-            Line edge = graph.getEdge(i);
-            edge.setStrokeWidth(4);
-            edge.setSmooth(true);
-            edge.setStroke(Color.web("da5630"));
-
+            DrawEdge drawEdge = graphDom.getDrawEdge(i);
             //adding edge created to pane (at index 0 to have vertexes on front of edges)
-            pane.getChildren().add(0, edge);
-            edgeList.add(edge);
+            pane.getChildren().add(0, drawEdge.getRoot());
+            edgeList.add(drawEdge);
 
             graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
 //            System.out.println(graph.getFrom(i));
@@ -198,10 +193,10 @@ public class AlgorithmPageController
     }
 
     private void changeEdgeColor(Color color, int edgeNb){
-        Line edge = edgeList.get(edgeNb);
-        pane.getChildren().remove(edge);
-        edge.setStroke(color);
-        pane.getChildren().add(0, edge);
+        DrawEdge edge = edgeList.get(edgeNb);
+        pane.getChildren().remove(edge.getRoot());
+        //TODO: methode dans drawedge edge.setStroke(color);
+        pane.getChildren().add(0, edge.getRoot());
         //System.out.println(edge.getId());
     }
 

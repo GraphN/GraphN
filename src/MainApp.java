@@ -217,6 +217,7 @@ public class MainApp extends Application {
                 int vertexAdded = 0;
                 //for each node in racine add it to the graphdom if it is vertex or edge
 
+                graphDom.setGraphType(racine.getAttribute("graphType"));
                 for(int i = 0; i < nodes.getLength(); i++)
                 {
                     //this if is very important. when a node is equal to #text its just that it is a jump the line,
