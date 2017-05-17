@@ -8,7 +8,7 @@ import graph.Stockage.AdjacencyStockage;
  */
 public class testGraphs {
     public static void main(String[] args){
-        final String graphPath = "DataTest/col_exemple.txt";
+/*        final String graphPath = "DataTest/col_exemple.txt";
         final String resultGraphPath = "DataTest/col_exemple_Result.txt";
         System.out.println("Construction du graph non orienté");
         Graph gNO = new UDiGraph(graphPath, new AdjacencyStockage());
@@ -71,7 +71,7 @@ public class testGraphs {
             }
         });
         System.out.println("Poids Total : " + kru.getWeight());
-        System.out.println(kru.getPath());
+        System.out.println(kru.getPath());*/
 
     }
 }

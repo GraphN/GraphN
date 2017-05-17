@@ -13,6 +13,12 @@ public class Kruskall implements Algorithm{
     private UDiGraph g; // Kruskall ne prend en parametre que des graphes non orientes
 
     public LinkedList<Edge> getPath(){
+        visit(new EdgeVisit() {
+            @Override
+            public void applyFunction(Edge e) {
+
+            }
+        });
         return mst;
     }
 
