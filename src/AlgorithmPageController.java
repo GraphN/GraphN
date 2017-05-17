@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
@@ -83,7 +82,7 @@ public class AlgorithmPageController
 
         if(indexPath < path.size()) {
             Edge e = this.path.get(indexPath);
-            Line test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
+            DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
 
             for(int i = 0; i < edgeList.size() ; i++) {
                 if (edgeList.get(i).getStartX() == test.getStartX()

@@ -251,7 +251,7 @@ public class GraphDom {
             return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, new Text(edge.getAttribute("weight")));
         return null;
     }
-    public Line getEdge(int from, int to)
+    public DrawEdge getEdge(int from, int to)
     {
         //Element edge = (Element) edges.get(index);
         for(Element edge:edges){
@@ -269,8 +269,13 @@ public class GraphDom {
                     int startY = (int) ver1.getY();
                     int endX = (int) ver2.getX();
                     int endY = (int) ver2.getY();
-                    return new Line(startX, startY, endX, endY);
-                }
+                    if(graphType.equals("nonDiGraph"))
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY);
+                    else if (graphType.equals("diGraph"))
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, true);
+                    else if (graphType.equals("weightedDiGraph"))
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, new Text(edge.getAttribute("weight")));
+                    return null;                }
             }else {
                 System.out.println("NUll");
             }
