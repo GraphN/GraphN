@@ -42,7 +42,7 @@ public class MainApp extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("mainPage.fxml"));
+            loader.setLocation(MainApp.class.getResource("assets/fxml/mainPage.fxml"));
             rootLayout = (AnchorPane) loader.load();
 
             // Show the scene containing the root layout.
@@ -63,7 +63,7 @@ public class MainApp extends Application {
             System.out.println(graph.getName());
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("algorithmPage.fxml"));
+            loader.setLocation(MainApp.class.getResource("assets/fxml/algorithmPage.fxml"));
             //loader.setLocation(MainApp.class.getResource("algoPage.fxml"));
             BorderPane page = (BorderPane) loader.load();
 
@@ -103,7 +103,7 @@ public class MainApp extends Application {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("weight.fxml"));
+            loader.setLocation(MainApp.class.getResource("assets/fxml/weight.fxml"));
             BorderPane page = (BorderPane) loader.load();
 
             // Create the dialog Stage.
@@ -155,7 +155,7 @@ public class MainApp extends Application {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("Import.fxml"));
+            loader.setLocation(MainApp.class.getResource("assets/fxml/Import.fxml"));
             //loader.setLocation(MainApp.class.getResource("algoPage.fxml"));
             BorderPane page = (BorderPane) loader.load();
 
