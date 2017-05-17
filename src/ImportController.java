@@ -1,3 +1,8 @@
+import Algorithms.Algorithm;
+import Algorithms.BFS;
+import graph.Graph;
+import graph.Serialisation.ListEdgesTXT;
+import graph.Stockage.AdjacencyStockage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -16,6 +21,8 @@ public class ImportController {
     MainApp mainApp;
     private File fileOpen;
     private File fileSave;
+    private String algorithme = "";
+
     @FXML
     private Button saveButton;
     @FXML
@@ -23,7 +30,7 @@ public class ImportController {
 
     @FXML
     void initialize(){
-        List<String> algo = Arrays.asList("BFS", "DFS");
+        List<String> algo = Arrays.asList("BFS", "DFS", "Kruskall");
         for(String s:algo)
             choiceButton.getItems().add(s);
         choiceButton.setValue(algo.get(0));
@@ -33,8 +40,13 @@ public class ImportController {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 switch(choiceButton.getValue()){
                     case "DFS": saveButton.setVisible(true);
+                        algorithme = "DFS";
                         break;
-                    case "BFS": saveButton.setVisible(false);
+                    case "BFS": saveButton.setVisible(true);
+                        algorithme = "BFS";
+                        break;
+                    case "Kruskall": saveButton.setVisible(true);
+                        algorithme = "Kruskall";
                         break;
                 }
             }
@@ -43,7 +55,27 @@ public class ImportController {
     @FXML
     private void handleOk(){
         //fileOpen
-        //fileSave
+        ListEdgesTXT serialiseur = new ListEdgesTXT();
+        Graph g = serialiseur.importGraph(fileOpen.getAbsolutePath(), new AdjacencyStockage());
+
+        Algorithm algo = null;
+        switch (algorithme){
+            case "BFS":
+                algo = new BFS(g);
+                break;
+            case "DFS":
+                algo = new BFS(g);
+                break;
+            case "Kruskall":
+                algo = new BFS(g);
+                break;
+            default:
+                System.out.println("Algo Not find !!");
+                    // TODO: Error message
+        }
+
+        serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
+
     }
     @FXML
     private void handleOpen(){
@@ -52,11 +84,11 @@ public class ImportController {
         fileChooser.setTitle("Open Graph");
 
         //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
 
         //set initial directory
-        File directory = new File("./src/savedGraphsXML");
+        File directory = new File("./DataTest");
         fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
@@ -71,11 +103,11 @@ public class ImportController {
         fileChooser.setTitle("Save Graph");
 
         //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
 
         //set initial directory
-        File directory = new File("./src/savedGraphsXML");
+        File directory = new File("./DataTest");
         fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());

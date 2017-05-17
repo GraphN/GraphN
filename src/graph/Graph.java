@@ -15,54 +15,14 @@ public abstract class Graph {
     protected StockageType stockage;
     protected int E;
     protected int V;
-
-
-    // Constructeur par defaut
-    public Graph(String filename, StockageType stockage) {
-        try {
-            // On cree un scanner pour lire notre fichier
-            Scanner scanner = new Scanner(new File(filename));
-            String line;
-            int weightedGraph = 0;
-
-            // On lit la premiere ligne pour connaitre les dimensions de notre graphe
-            if (scanner.hasNextLine()) {
-                V = scanner.nextInt();
-                E = scanner.nextInt();
-                weightedGraph = scanner.nextInt();
-            }
-
-            System.out.println("nbNode = " + V + "\nnbEdges = " + E + ", weigthed : " + weightedGraph);
-
-            initList(V);
-
-            this.stockage = stockage;
-            stockage.init(V);
-
-            //  On lit les lignes suivante pour stocker le graphe
-
-            for (int i = 0; i < E; i++) {
-                Vertex node1 = vertexList.get(scanner.nextInt());
-                Vertex node2 = vertexList.get(scanner.nextInt());
-
-                int weigth = 0;
-                if (weightedGraph != 0) {
-                    weigth = scanner.nextInt();
-                }
-
-                //System.out.println("addEdge = v1: " + node1 + ", v2: " + node2 + ", w: " + weigth);
-                addEdge(node1, node2, weigth);
-            }
-
-        } catch (IOException e) {
-            System.err.print(e);
-        }
-    }
+    protected int TYPE;
 
     // Constructeur d'initialisation
     public Graph(int V, StockageType stockage){
-        initList(V);
+        this.E = 0;
         this.stockage = stockage;
+        initList(V);
+        stockage.init(V);
     }
 
     protected void initList(int V) {
@@ -88,6 +48,12 @@ public abstract class Graph {
 
     public int V(){
      return V;
+    }
+    public int E(){
+        return E;
+    }
+    public int getType(){
+        return TYPE;
     }
 
 

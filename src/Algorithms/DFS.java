@@ -17,6 +17,12 @@ public class DFS implements Algorithm{
     private Vertex lastVisitedVertex = null;
 
     public LinkedList<Edge> getPath(){
+        visit(g.getVertex(0), new VertexVisit() {
+            @Override
+            public void applyFunction(Vertex v) {
+
+            }
+        });
         return edgesPath;
     }
 

@@ -8,10 +8,7 @@ public class UDiGraph extends Graph {
 
     public UDiGraph(int V, StockageType s) {
         super(V,s);
-    }
-
-    public UDiGraph(String filename, StockageType stockage) {
-        super(filename, stockage);
+        TYPE = 0;
     }
 
     public void addEdge(Vertex v, Vertex w) {
@@ -21,6 +18,7 @@ public class UDiGraph extends Graph {
     public void addEdge(Vertex v, Vertex w, int weigth) {
         stockage.addEdge(v, w, weigth);
         stockage.addEdge(w, v, weigth);
+        E ++;
     }
 }
 

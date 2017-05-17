@@ -10,10 +10,7 @@ public class DiGraph extends Graph {
 
     public DiGraph(int V, StockageType s) {
         super(V,s);
-    }
-
-    public DiGraph(String filename, StockageType stockage) {
-     super(filename, stockage);
+        TYPE = 1;
     }
 
     public void addEdge(Vertex v, Vertex w) {
@@ -22,5 +19,6 @@ public class DiGraph extends Graph {
 
     public void addEdge(Vertex v, Vertex w, int weigth) {
         stockage.addEdge(v, w, weigth);
+        E++;
     }
 }

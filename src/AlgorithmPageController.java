@@ -84,6 +84,7 @@ public class AlgorithmPageController
         if(indexPath < path.size()) {
             Edge e = this.path.get(indexPath);
             Line test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
+
             for(int i = 0; i < edgeList.size() ; i++) {
                 if (edgeList.get(i).getStartX() == test.getStartX()
                         && edgeList.get(i).getStartY() == test.getStartY()
@@ -108,6 +109,8 @@ public class AlgorithmPageController
 
             }
         });
+        for(Edge e : path)
+            System.out.println("Edge : from " + e.getFrom() + "; to " + e.getTo());
     }
     @FXML
     private void handleDFS(){
@@ -118,6 +121,9 @@ public class AlgorithmPageController
 
             }
         });
+
+        for(Edge e : path)
+            System.out.println("Edge : from " + e.getFrom() + "; to " + e.getTo());
     }
     @FXML
     private void handleBFS(){
@@ -128,6 +134,8 @@ public class AlgorithmPageController
 
             }
         });
+        for(Edge e : path)
+            System.out.println("Edge : from " + e.getFrom() + "; to " + e.getTo());
     }
     private void initZoom(){
         slider.valueProperty().addListener(new ChangeListener<Number>() {
