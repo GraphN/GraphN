@@ -37,7 +37,7 @@
                   <Button layoutX="498.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleLaunch" prefHeight="26.0" prefWidth="95.0" styleClass="algoButton" text="Launch" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="4.0" />
                   <ImageView fitHeight="36.0" fitWidth="40.0" layoutX="1.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="3.0">
                      <image>
-                        <Image url="@logo.jpg" />
+                        <Image url="@../img/logo.jpg" />
                      </image>
                   </ImageView>
                   <Button id="newFileButton" ellipsisString="" layoutX="66.0" layoutY="10.0" maxHeight="26.0" maxWidth="26.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleNew" prefHeight="24.0" prefWidth="24.0" AnchorPane.leftAnchor="56.0" AnchorPane.topAnchor="10.0" />
@@ -48,11 +48,11 @@
             </AnchorPane>
          </top>
          <center>
-            <TabPane fx:id="tabPane" focusTraversable="false" prefHeight="358.0" prefWidth="526.0" styleClass="centerPage" stylesheets="@tab.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+            <TabPane fx:id="tabPane" focusTraversable="false" prefHeight="358.0" prefWidth="526.0" styleClass="centerPage" stylesheets="@../css/tab.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
          </center>
          <stylesheets>
-            <URL value="@designMainPage.css" />
-            <URL value="@designPages.css" />
+            <URL value="@../css/designMainPage.css" />
+            <URL value="@../css/designPages.css" />
          </stylesheets>
       </BorderPane>
       <AnchorPane fx:id="greyMain" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #383838; -fx-opacity: 0.7;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />

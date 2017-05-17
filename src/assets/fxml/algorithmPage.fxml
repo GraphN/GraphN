@@ -18,7 +18,7 @@
          <children>
             <ImageView fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="2.0">
                <image>
-                  <Image url="@logo.jpg" />
+                  <Image url="@../img/logo.jpg" />
                </image>
                <viewport>
                   <Rectangle2D />
@@ -79,7 +79,7 @@
       </SplitPane>
    </center>
    <stylesheets>
-      <URL value="@designAlgoPage.css" />
-      <URL value="@designPages.css" />
+      <URL value="@../css/designAlgoPage.css" />
+      <URL value="@../css/designPages.css" />
    </stylesheets>
 </BorderPane>
