@@ -89,7 +89,8 @@ public class AlgorithmPageController
                         && edgeList.get(i).getStartY() == test.getStartY()
                         && edgeList.get(i).getEndX() == test.getEndX()
                         && edgeList.get(i).getEndY() == test.getEndY())
-                        || ( edgeList.get(i).getEndY() == test.getStartY()
+                        || ( !edgeList.get(i).isDirected()
+                        && edgeList.get(i).getEndY() == test.getStartY()
                         && edgeList.get(i).getStartX() == test.getEndX()
                         && edgeList.get(i).getStartY() == test.getEndY()))
                     edgeList.get(i).updateColor(Color.web("42f45f"));
@@ -202,14 +203,6 @@ public class AlgorithmPageController
         }
        return pane;
     }
-
-    /*private void changeEdgeColor(Color color, int edgeNb){
-        DrawEdge edge = edgeList.get(edgeNb);
-        pane.getChildren().remove(edge.getRoot());
-        //TODO: methode dans drawedge edge.setStroke(color);
-        pane.getChildren().add(0, edge.getRoot());
-        //System.out.println(edge.getId());
-    }*/
 
     private Circle createVertexShape(double x, double y, String id)
     {
