@@ -13,6 +13,9 @@ import javafx.scene.text.Text;
 
 // todo: Mettre la pointe des flèches au bord du cercle
 public class DrawEdge {
+    final private Color UNCOLORED = Color.web("da5630");
+    final private Color COLORED = Color.web("42f45f");
+
     private CubicCurve curve1;
     Group root;
     Text text;
@@ -45,7 +48,7 @@ public class DrawEdge {
         curve1 = new CubicCurve(startX, startY, controlX1, controlY1, controlX2, controlY2, endX, endY);
         curve1.setStrokeWidth(4);
         curve1.setSmooth(true);
-        curve1.setStroke(Color.web("da5630"));
+        curve1.setStroke(UNCOLORED);
 
         // Taille de la flèche
         double scale=50;
@@ -115,8 +118,12 @@ public class DrawEdge {
         return p;
     }
 
-    void updateColor(Color c) {
-        curve1.setStroke(c);
+    void setColored() {
+        curve1.setStroke(COLORED);
+    }
+
+    void setUncolored() {
+        curve1.setStroke(UNCOLORED);
     }
 
     void setStartX(double startX){

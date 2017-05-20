@@ -16,16 +16,13 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 /**
  * Created by LBX on 03/04/2017.
  */
-public class AlgorithmPageController
-{
+public class AlgorithmPageController {
     private MainApp mainApp;
 
     @FXML
@@ -50,11 +47,14 @@ public class AlgorithmPageController
 
     int indexPath = 0;
 
+    private Timer timer;
+
     @FXML
     private void initialize()
     {
         initZoom();
         edgeList = new ArrayList<DrawEdge>();
+        timer = new Timer();
     }
     @FXML
     private Slider slider;
@@ -66,41 +66,31 @@ public class AlgorithmPageController
     }
 
     @FXML
-    private void handlePlay(){
-
+    private void handlePlayTimer(){
+        timer.schedule(new TimerListener(), 1000, 2000);
     }
     @FXML
     private void handlePause(){
-
-        //changeEdgeColor(Color.BLUE, 1);
+        timer.cancel();
+        // Once a timer is cancelled we can't reuse it
+        timer = new Timer();
     }
     @FXML
     private void handleStop(){
-    }
-    @FXML
-    private void handleFastForward(){
-
-        if(indexPath < path.size()) {
-            Edge e = this.path.get(indexPath);
-            DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
-
-            for(int i = 0; i < edgeList.size() ; i++) {
-                if ((edgeList.get(i).getStartX() == test.getStartX()
-                        && edgeList.get(i).getStartY() == test.getStartY()
-                        && edgeList.get(i).getEndX() == test.getEndX()
-                        && edgeList.get(i).getEndY() == test.getEndY())
-                        || ( !edgeList.get(i).isDirected()
-                        && edgeList.get(i).getEndY() == test.getStartY()
-                        && edgeList.get(i).getStartX() == test.getEndX()
-                        && edgeList.get(i).getStartY() == test.getEndY()))
-                    edgeList.get(i).updateColor(Color.web("42f45f"));
-            }
+        for (DrawEdge edge : edgeList) {
+            edge.setUncolored();
         }
-        indexPath++;
+        indexPath = 0;
+        handlePause();
+    }
 
+    @FXML
+    private void handlePlay(){
+        while(colorNextEdge());
     }
     @FXML
-    private void handlePausePlay(){
+    private void handleStepByStep(){
+        colorNextEdge();
     }
 
     @FXML
@@ -238,4 +228,34 @@ public class AlgorithmPageController
         return node;
     }
 
+    private Boolean colorNextEdge() {
+        if(path != null && indexPath < path.size()) {
+            Edge e = this.path.get(indexPath);
+            DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
+
+            for (int i = 0; i < edgeList.size(); i++) {
+                if ((edgeList.get(i).getStartX() == test.getStartX()
+                        && edgeList.get(i).getStartY() == test.getStartY()
+                        && edgeList.get(i).getEndX() == test.getEndX()
+                        && edgeList.get(i).getEndY() == test.getEndY())
+                        || (!edgeList.get(i).isDirected()
+                        && edgeList.get(i).getEndY() == test.getStartY()
+                        && edgeList.get(i).getStartX() == test.getEndX()
+                        && edgeList.get(i).getStartY() == test.getEndY()))
+                    edgeList.get(i).setColored();
+            }
+            indexPath++;
+            return true;
+        }
+        return false;
+    }
+
+    class TimerListener extends TimerTask {
+        @Override
+        public void run() {
+            System.out.print("hello");
+            if(!colorNextEdge())
+                timer.cancel();
+        }
+    }
 }
