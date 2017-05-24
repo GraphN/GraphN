@@ -1,5 +1,6 @@
 import Algorithms.*;
 import Algorithms.Utils.EdgeVisit;
+import Algorithms.Utils.Step;
 import Algorithms.Utils.VertexVisit;
 import graph.Edge;
 import graph.Stockage.EdgeListStockage;
@@ -9,7 +10,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -30,6 +33,25 @@ public class AlgorithmPageController {
     @FXML
     private AnchorPane centerAlgoPage;
 
+    @FXML
+    private ToggleButton bfs;
+
+    @FXML
+    private ToggleButton dfs;
+
+    @FXML
+    private ToggleButton prim;
+
+    @FXML
+    private ToggleButton dijkstra;
+
+    @FXML
+    private ToggleButton bellman;
+
+    @FXML
+    private ToggleButton kruskall;
+
+
     public void setGraph(GraphDom g)
     {
         centerAlgoPage.getChildren().add(recreateAnchorWithXML(g));
@@ -45,7 +67,7 @@ public class AlgorithmPageController {
 
     Algorithm algo;
 
-    LinkedList<Edge> path;
+    LinkedList<Step> path;
 
     int indexPath = 0;
 
@@ -104,8 +126,11 @@ public class AlgorithmPageController {
 
             }
         });
-        for(Edge e : path)
-            System.out.println("Edge : from " + e.getFrom() + "; to " + e.getTo());
+        for(Step e : path)
+            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+
+        desactivateButtons(kruskall);
+
     }
     @FXML
     private void handleDFS(){
@@ -118,8 +143,10 @@ public class AlgorithmPageController {
             }
         });
 
-        for(Edge e : path)
-            System.out.println("Edge : from " + e.getFrom() + "; to " + e.getTo());
+        for(Step e : path)
+            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+
+        desactivateButtons(dfs);
     }
     @FXML
     private void handleBFS(){
@@ -130,9 +157,57 @@ public class AlgorithmPageController {
 
             }
         });
-        for(Edge e : path)
-            System.out.println("Edge : from " + e.getFrom() + "; to " + e.getTo());
+        for(Step e : path)
+            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+
+        desactivateButtons(bfs);
     }
+
+    @FXML
+    private void handleBellman(){
+        this.algo = new Kruskall(graphTest);
+        this.path = ((Kruskall) algo).visit(new EdgeVisit() {
+            @Override
+            public void applyFunction(Edge e) {
+
+            }
+        });
+        for(Step e : path)
+            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+
+        desactivateButtons(bellman);
+    }
+    @FXML
+    private void handleDijkstra(){
+        //pane.getChildren().remove(edgeList.get(0).getRoot());
+        this.algo = new DFS(graphTest);
+        this.path = ((DFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
+            @Override
+            public void applyFunction(Vertex v) {
+
+            }
+        });
+
+        for(Step e : path)
+            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+
+        desactivateButtons(dijkstra);
+    }
+    @FXML
+    private void handlePrim(){
+        this.algo = new BFS(graphTest);
+        this.path = ((BFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
+            @Override
+            public void applyFunction(Vertex v) {
+
+            }
+        });
+        for(Step e : path)
+            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+
+        desactivateButtons(prim);
+    }
+
     private void initZoom(){
         slider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -232,7 +307,7 @@ public class AlgorithmPageController {
 
     private Boolean colorNextEdge() {
         if(path != null && indexPath < path.size()) {
-            Edge e = this.path.get(indexPath);
+            Edge e = this.path.get(indexPath).getEdge();
             DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
             // TODO : On ne devrait pas avoir a faire ça !!!! mais avec ça ça marche ...
             if (test == null)
@@ -265,5 +340,20 @@ public class AlgorithmPageController {
             if(!colorNextEdge())
                 timer.cancel();
         }
+    }
+
+    private void desactivateButtons(ToggleButton avoid){
+        if (!bfs.equals(avoid))
+            bfs.setDisable(true);
+        if (!prim.equals(avoid))
+            prim.setDisable(true);
+        if (!dfs.equals(avoid))
+            dfs.setDisable(true);
+        if (!dijkstra.equals(avoid))
+            dijkstra.setDisable(true);
+        if (bellman.equals(avoid))
+            bellman.setDisable(true);
+        if (kruskall.equals(avoid))
+            kruskall.setDisable(true);
     }
 }

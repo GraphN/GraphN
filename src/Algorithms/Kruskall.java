@@ -1,6 +1,7 @@
 package Algorithms;
 
 import Algorithms.Utils.EdgeVisit;
+import Algorithms.Utils.Step;
 import Algorithms.Utils.UnionFind;
 import graph.Edge;
 import graph.UDiGraph;
@@ -14,7 +15,7 @@ import java.util.PriorityQueue;
 public class Kruskall implements Algorithm{
     private UDiGraph g; // Kruskall ne prend en parametre que des graphes non orientes
 
-    public LinkedList<Edge> getPath(){
+    public LinkedList<Step> getPath(){
         visit(new EdgeVisit() {
             @Override
             public void applyFunction(Edge e) {
@@ -25,13 +26,13 @@ public class Kruskall implements Algorithm{
     }
 
     private double weight;                        // weight of MST
-    private LinkedList<Edge> mst = new LinkedList<>();
+    private LinkedList<Step> mst = new LinkedList<>();
 
     public Kruskall(UDiGraph g) {
         this.g = g;
     }
 
-    public LinkedList<Edge> visit(EdgeVisit func) {
+    public LinkedList<Step> visit(EdgeVisit func) {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         for (Edge e : g.getEdgesList()) {
             pq.add(e);
@@ -45,7 +46,16 @@ public class Kruskall implements Algorithm{
             int w = e.getOther(e.getFrom()).getId();
             if (!uf.connected(v, w)) { // v-w does not create a cycle
                 uf.union(v, w);  // merge v and w components
-                mst.add(e);  // add edge e to mst
+
+                String message = "On selectionne le sommet " + w;
+                String structures = "Priority queue : " + pq.toString();
+
+                Step step = new Step(Step.TYPE.EDGE);
+                step.setMessage(message);
+                step.setStructures(structures);
+                step.setEdge(e);
+
+                mst.add(step);
                 weight += e.getWeigth();
                 func.applyFunction(e);
             }
