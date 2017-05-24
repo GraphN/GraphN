@@ -1,4 +1,4 @@
-package Algorithms;
+package Algorithms.Utils;
 
 import graph.Edge;
 

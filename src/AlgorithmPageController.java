@@ -1,4 +1,6 @@
 import Algorithms.*;
+import Algorithms.Utils.EdgeVisit;
+import Algorithms.Utils.VertexVisit;
 import graph.Edge;
 import graph.Stockage.EdgeListStockage;
 import graph.UDiGraph;
@@ -232,21 +234,27 @@ public class AlgorithmPageController {
         if(path != null && indexPath < path.size()) {
             Edge e = this.path.get(indexPath);
             DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
+            // TODO : On ne devrait pas avoir a faire ça !!!! mais avec ça ça marche ...
+            if (test == null)
+                test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId());
+                System.out.println("Draw edge : From : " + test.getStartX() + "; " + test.getStartY() + " | To : " + test.getEndX() + "; " + test.getEndY());
 
-            for (int i = 0; i < edgeList.size(); i++) {
-                if ((edgeList.get(i).getStartX() == test.getStartX()
-                        && edgeList.get(i).getStartY() == test.getStartY()
-                        && edgeList.get(i).getEndX() == test.getEndX()
-                        && edgeList.get(i).getEndY() == test.getEndY())
-                        || (!edgeList.get(i).isDirected()
-                        && edgeList.get(i).getEndY() == test.getStartY()
-                        && edgeList.get(i).getStartX() == test.getEndX()
-                        && edgeList.get(i).getStartY() == test.getEndY()))
-                    edgeList.get(i).setColored();
+                for (int i = 0; i < edgeList.size(); i++) {
+                    if (edgeList.get(i) != null)
+                        if ((edgeList.get(i).getStartX() == test.getStartX()
+                                && edgeList.get(i).getStartY() == test.getStartY()
+                                && edgeList.get(i).getEndX() == test.getEndX()
+                                && edgeList.get(i).getEndY() == test.getEndY())
+                                || (!edgeList.get(i).isDirected()
+                                && edgeList.get(i).getEndY() == test.getStartY()
+                                && edgeList.get(i).getStartX() == test.getEndX()
+                                && edgeList.get(i).getStartY() == test.getEndY()))
+                            edgeList.get(i).setColored();
+                }
+
+                indexPath++;
+                return true;
             }
-            indexPath++;
-            return true;
-        }
         return false;
     }
 

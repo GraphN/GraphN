@@ -13,6 +13,9 @@ public class EdgeListStockage implements StockageType {
 
     public void init(int V){};
 
+    public void addEdge(Edge e){
+        addEdge(e.getTo(), e.getFrom());
+    }
     public void addEdge(Vertex v, Vertex w){
         addEdge(v, w, 0);
     }

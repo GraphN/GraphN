@@ -41,6 +41,7 @@ public abstract class Graph {
     public Vertex getVertex(int id){
         return vertexList.get(id);
     }
+    public LinkedList<Vertex> getVertexsList(){return vertexList;}
 
     public Edge getEdge(Vertex v, Vertex w){
         return stockage.getEdge(v, w);
@@ -60,6 +61,10 @@ public abstract class Graph {
     public  LinkedList<Vertex> adjacentVertex(Vertex v){return stockage.adjacentVertex(v);}
     public  LinkedList<Edge> adjacentEdges(Vertex v){return stockage.adjacentEdges(v);}
 
+    public void addEdge(Edge e){
+        stockage.addEdge(e);
+        E++;
+    }
     public abstract void addEdge(Vertex v, Vertex w);
     public abstract void addEdge(Vertex v, Vertex w, int weigth);
 

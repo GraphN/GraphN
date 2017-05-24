@@ -1,5 +1,7 @@
 package Algorithms;
 
+import Algorithms.Utils.EdgeVisit;
+import Algorithms.Utils.UnionFind;
 import graph.Edge;
 import graph.UDiGraph;
 

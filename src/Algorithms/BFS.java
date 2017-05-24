@@ -1,5 +1,6 @@
 package Algorithms;
 
+import Algorithms.Utils.VertexVisit;
 import graph.Edge;
 import graph.Graph;
 import graph.Vertex;
