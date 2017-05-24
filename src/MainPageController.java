@@ -3,12 +3,14 @@
  */
 
 
+import graph.Graph;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -19,12 +21,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import javafx.stage.Screen;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
@@ -37,13 +41,20 @@ public class MainPageController {
     private MainApp mainApp;
     private ArrayList<GraphDom> listGraphXml; //list of xml files, from different tabs
 
+    private final float RAYON_CERCLE = 10f;
+
     //////////////////////buttons active or not/////////////////////////////////////////////////////////////////////////
     private boolean vertex1Active = false;
     private boolean vertex1ActiveOnce = false;
     private boolean edge1Active = false;
     private boolean edge1ActiveOnce = false;
+    private boolean eraserActive = false;
+    private boolean eraserActiveOnce = false;
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private float textTranslateY;
+    private float textTranslateX1Digit;
+    private float textTranslateX2Digits;
 
     // List for bind a circle and it's number
     //private ArrayList<ArrayList<Shape>> listCircleNumber;
@@ -53,6 +64,7 @@ public class MainPageController {
 
     private boolean firstVerForEdge = true;
     private Circle circleStart;
+    private Group groupStart;
     private String nameVertexStart;
     private Map<Tab, String> tabMap;
     @FXML
@@ -91,6 +103,19 @@ public class MainPageController {
         liveEdge.setStrokeWidth(4);
         liveEdge.setSmooth(true);
         liveEdge.setStroke(Color.web("da5630"));
+
+
+        // TODO: tester avec d'autres pc, apparement pas lié à la résolution
+        textTranslateY = 6;
+        textTranslateX1Digit = -4.5f;
+        textTranslateX2Digits = -8.5f;
+
+        if(Screen.getPrimary().getBounds().getMaxX() == 1920 && Screen.getPrimary().getBounds().getMaxY() == 1080){
+            textTranslateY = 6;
+            textTranslateX1Digit = -4.5f;
+            textTranslateX2Digits = -8.5f;
+        }
+
     }
     /**
      * Is called by the main application to give a reference back to itself.
@@ -129,97 +154,11 @@ public class MainPageController {
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
-        /*Tab tab = new Tab();
-        String tabName = "new tab"+ indiceTab++;
-        tab.setText(tabName);
-        tab.setId(tabName);
-
-        //creation of the xml file of this tab
-        try {
-            view.GraphDom currentGraphDom = new view.GraphDom(tabName);
-            //adding this xml to the list
-            listGraphXml.add(currentGraphDom);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-
-        // Ajouter tout ce qu'on veut dans la  tab
-        AnchorPane paneBack = new AnchorPane();
-        AnchorPane pane = new AnchorPane();
-
-        pane.setPrefSize(paneBack.getWidth(), paneBack.getHeight());
-
-        //mouselistener to add vertex etc
-        paneBack.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                panePressed(event);
-            }
-        });
-
-
-        // Slider of the current tab created
-        Slider slider = new Slider();
-        slider.setMin(1.);
-        slider.setMax(5.);
-        slider.setValue(1.);
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov,
-                                Number old_val, Number new_val) {
-                pane.setScaleX(slider.getValue());
-                pane.setScaleY(slider.getValue());
-
-                //to have the zoom at the center
-                pane.setTranslateX(-((paneBack.getWidth()*(slider.getValue()-1)) / 2));
-                pane.setTranslateY(-((paneBack.getHeight()*(slider.getValue()-1)) / 2));
-            }
-        });
-
-        //change the view, if you press the right arrow, the main page move right etc
-        tabPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-            public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.LEFT && pane.getTranslateX()*(-1) > 0)
-                {
-                    pane.setTranslateX(pane.getTranslateX()+20);
-                }
-                else if(event.getCode() == KeyCode.RIGHT && pane.getTranslateX()*(-1) < paneBack.getWidth()*(slider.getValue() -1))
-                {
-                    pane.setTranslateX(pane.getTranslateX() - 20);
-                }
-                else if(event.getCode() == KeyCode.UP && pane.getTranslateY()*(-1) > 0)
-                {
-                    pane.setTranslateY(pane.getTranslateY() + 20);
-                }
-                else if(event.getCode() == KeyCode.DOWN && pane.getTranslateY()*(-1) < paneBack.getHeight()*(slider.getValue() -1))
-                {
-                    pane.setTranslateY(pane.getTranslateY() - 20);
-                }
-            }
-        });
-
-
-        //delete focus on slider, to stop de right, left on slider
-        slider.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                pane.requestFocus();
-            }
-
-    });
-        AnchorPane.setRightAnchor(slider, 2.0);
-        AnchorPane.setBottomAnchor(slider, 5.0);
-        paneBack.getChildren().add(pane);
-        paneBack.getChildren().add(slider);
-
-        tab.setContent(paneBack);
-        tabPane.getTabs().add(tab);
-*/
     }
-    private Circle createVertexShape(double x, double y, String id)
-    {
-        Circle circle_base = new Circle(10.0f, Color.web("da5630"));
+
+    private Group createVertex (double x, double y, String id){
+
+        Circle circle_base = new Circle(RAYON_CERCLE, Color.web("da5630"));
         circle_base.setId(id);
 
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
@@ -230,25 +169,11 @@ public class MainPageController {
         Slider currentSlider = (Slider) currentPage.getChildren().get(1);
         System.out.println( currentPane.getTranslateX()+ "   " + currentPane.getTranslateY());
 
-        circle_base.setTranslateX( (x - currentPane.getTranslateX() )/currentSlider.getValue());
-        circle_base.setTranslateY( (y - currentPane.getTranslateY() )/currentSlider.getValue());
         circle_base.setOnMousePressed(nodeOnMousePressedEventHandler);
         circle_base.setOnMouseDragged(nodeOnMouseDraggedEventHandler);
         circle_base.setOnMouseEntered(nodeOnMouseEnteredEventHandler);
         circle_base.setOnMouseReleased(nodeOnMouseReleasedEventHandler);
 
-        return circle_base;
-    }
-    private Text createVertexNumber(double x, double y, String id){
-
-        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
-
-        AnchorPane currentPage = (AnchorPane) currentTab.getContent();
-        AnchorPane currentPane = (AnchorPane) currentPage.getChildren().get(0);
-
-        Slider currentSlider = (Slider) currentPage.getChildren().get(1);
-
-        //number of the vertex
         int nbVertex = Integer.parseInt(id.replaceAll("[\\D]", ""));
         Text text = new Text(""+nbVertex);
         //text.setFill(Color.WHITE);
@@ -256,28 +181,25 @@ public class MainPageController {
         text.setBoundsType(TextBoundsType.VISUAL);
         //centering the numbers
         if(nbVertex<10){
-            text.setTranslateX( (x - currentPane.getTranslateX() )/currentSlider.getValue() - 4.5);
-            text.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue() + 6);
+            text.setTranslateX(textTranslateX1Digit);
+            text.setTranslateY(textTranslateY);
         }else{
-            text.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue() - 8.5);
-            text.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue() + 6);
+            text.setTranslateX(textTranslateX2Digits);
+            text.setTranslateY(textTranslateY);
         }
         text.setOnMousePressed(nodeOnMousePressedEventHandler);
         text.setOnMouseDragged(nodeOnMouseDraggedEventHandler);
         text.setOnMouseEntered(nodeOnMouseEnteredEventHandler);
         text.setOnMouseReleased(nodeOnMouseReleasedEventHandler);
 
-        return text;
-    }
-    private List<Shape> createVertex (double x, double y, String id){
-        ArrayList<Shape> node = new ArrayList<>();
-        node.add(createVertexShape(x,y,id));
-        node.add(createVertexNumber(x,y,id));
-        mapNode.put(id.toString(),node);
+        Group vertex = new Group();
+        vertex.getChildren().addAll(circle_base,text);
+        vertex.setId(id);
+        vertex.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue());
+        vertex.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue());
         System.out.println("x: "+x+ " y: " + y);
-        //todo: Faire un Group
 
-        return node;
+        return vertex;
     }
 
     public void handleNewFromAlgoPage(){
@@ -304,8 +226,10 @@ public class MainPageController {
             AnchorPane currPage = (AnchorPane) currentTab.getContent();
             AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
             // Creation of a vertex
-            List<Shape> node = createVertex(mouseEvent.getX(), mouseEvent.getY(), nameOfVertex);
-            currP.getChildren().addAll(node.get(0), node.get(1));
+//            List<Shape> node = createVertex(mouseEvent.getX(), mouseEvent.getY(), nameOfVertex);
+//            currP.getChildren().addAll(node.get(0), node.get(1));
+            Group node = createVertex(mouseEvent.getX(), mouseEvent.getY(), nameOfVertex);
+            currP.getChildren().add(node);
             // Test de le flèche
             //currP.getChildren().add(new EdgeDraw(200,400,70,30,true, 1));
             //if we have the click once. we desactivate it
@@ -357,10 +281,10 @@ public class MainPageController {
                 int x = (int) point.getX();
                 int y = (int) point.getY();
                 String name = graphOpen.getName(i);
-
-                //adding vertex created to pane
-                List<Shape> node = createVertex(x,y,name);
-                pane.getChildren().addAll(node.get(0),node.get(1));
+                // TODO: Régler le soucis qui fait que le 0 est derrière
+                // Create vertex and add it to pane
+                Group node = createVertex(x,y,name);
+                pane.getChildren().add(node);
 
                 i++;
             }
@@ -371,10 +295,11 @@ public class MainPageController {
 
             i = 0;
             while (i < graphOpen.getNbEdge()) {
-                Circle cirleStart = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
-                Circle cirleEnd = (Circle) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
+                Group cirleStart = (Group) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
+                Group cirleEnd = (Group) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
                 drawEdge = graphOpen.getDrawEdge(i);
                 drawEdgesList.add(drawEdge);
+
                 moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, drawEdgesList.indexOf(drawEdge), pane);
                 pane.getChildren().add(1,drawEdge.getRoot());
                 i++;
@@ -566,38 +491,19 @@ public class MainPageController {
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent t) {
-                    Circle circle;
-                    Text text;
-                    if(t.getSource().getClass() == Circle.class){
-                        circle = (Circle) t.getSource();
-                        text = (Text) mapNode.get(circle.getId().toString()).get(1);
-                    }
-                    else{
-                        text = (Text) t.getSource();
-                        circle = (Circle) mapNode.get(text.getId().toString()).get(0);
-                    }
-
-                    circle.setCursor(Cursor.HAND);
-                    text.setCursor(Cursor.HAND);
+                    Shape shape = (Shape)t.getSource();
+                    Group group = (Group)shape.getParent();
+                    group.setCursor(Cursor.HAND);
                 }
             };
-
 
     EventHandler<MouseEvent> nodeOnMousePressedEventHandler =
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent t) {
 
-                    Circle circle;
-                    Text text;
-                    if(t.getSource().getClass() == Circle.class){
-                        circle = (Circle) t.getSource();
-                        text = (Text) mapNode.get(circle.getId().toString()).get(1);
-                    }
-                    else{
-                        text = (Text) t.getSource();
-                        circle = (Circle) mapNode.get(text.getId().toString()).get(0);
-                    }
+                    Shape shape = (Shape)t.getSource();
+                    Group group = (Group)shape.getParent();
 
                     orgSceneX = t.getSceneX();
                     orgSceneY = t.getSceneY();
@@ -607,11 +513,10 @@ public class MainPageController {
                     Slider slider = (Slider) anch.getChildren().get(1);
                     double sliderValue = slider.getValue();
 
-                    orgTranslateX = circle.getTranslateX()*sliderValue;
-                    orgTranslateY = circle.getTranslateY()*sliderValue;
+                    orgTranslateX = group.getTranslateX()*sliderValue;
+                    orgTranslateY = group.getTranslateY()*sliderValue;
 
-                    circle.setCursor(Cursor.CLOSED_HAND);
-                    text.setCursor(Cursor.CLOSED_HAND);
+                    group.setCursor(Cursor.CLOSED_HAND);
                 }
             };
 
@@ -620,18 +525,9 @@ public class MainPageController {
                 @Override
                 public void handle(MouseEvent t)
                 {
-                    Circle circle;
-                    Text text;
-                    if(t.getSource().getClass() == Circle.class){
-                        circle = (Circle) t.getSource();
-                        text = (Text) mapNode.get(circle.getId().toString()).get(1);
-                    }
-                    else{
-                        text = (Text) t.getSource();
-                        circle = (Circle) mapNode.get(text.getId().toString()).get(0);
-                    }
-                    circle.setCursor(Cursor.HAND);
-                    text.setCursor(Cursor.HAND);
+                    Shape shape = (Shape)t.getSource();
+                    Group group = (Group)shape.getParent();
+                    group.setCursor(Cursor.HAND);
 
 
                     //Do when the edge button is activate to draw a edge.
@@ -644,33 +540,33 @@ public class MainPageController {
                     {
                         if (firstVerForEdge)
                         {
-                            circleStart = circle;
-                            nameVertexStart = circle.getId();
+                            groupStart = group;
+                            nameVertexStart = group.getId();
                             firstVerForEdge = false;
 
                             // Edge that follow the mouse
-                            liveEdge.setStartX(circleStart.getTranslateX());
-                            liveEdge.setStartY(circleStart.getTranslateY());
-                            liveEdge.setEndX(circleStart.getTranslateX());
-                            liveEdge.setEndY(circleStart.getTranslateY());
+                            liveEdge.setStartX(groupStart.getTranslateX());
+                            liveEdge.setStartY(groupStart.getTranslateY());
+                            liveEdge.setEndX(groupStart.getTranslateX());
+                            liveEdge.setEndY(groupStart.getTranslateY());
 
                             currPage.setOnMouseMoved(followMouseHandler);
                             currP.getChildren().add(0,liveEdge);
 
-                        } else if(circleStart != circle)
+                        } else if(groupStart != group)
                         {
-                            Circle circleEnd = circle;
+                            Group groupEnd = group;
                             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                             DrawEdge drawEdge = null;
                             switch (graphType) {
                                 case "nonDiGraph":
-                                    drawEdge = new DrawEdge(circleStart.getTranslateX(), circleStart.getTranslateY(), circleEnd.getTranslateX(), circleEnd.getTranslateY());
+                                    drawEdge = new DrawEdge(groupStart.getTranslateX(), groupStart.getTranslateY(), groupEnd.getTranslateX(), groupEnd.getTranslateY());
 
-                                    graphXml.addEdge(nameVertexStart, circleEnd.getId());
+                                    graphXml.addEdge(nameVertexStart, groupEnd.getId());
                                     break;
                                 case "diGraph":
-                                    drawEdge = new DrawEdge(circleStart.getTranslateX(), circleStart.getTranslateY(), circle.getTranslateX(), circle.getTranslateY(), true);
-                                    graphXml.addDiEdge(nameVertexStart, circle.getId());
+                                    drawEdge = new DrawEdge(groupStart.getTranslateX(), groupStart.getTranslateY(), groupEnd.getTranslateX(), groupEnd.getTranslateY(), true);
+                                    graphXml.addDiEdge(nameVertexStart, groupEnd.getId());
                                     break;
                                 case "weightedDiGraph":
                                     Text weight = new Text(""+mainApp.showWeightPage());
@@ -681,12 +577,12 @@ public class MainPageController {
                                             // todo: Il faudrait aussi modifier le graphXML
                                         }
                                     });
-                                    drawEdge = new DrawEdge (circleStart.getTranslateX(),circleStart.getTranslateY(),circle.getTranslateX(),circle.getTranslateY(), weight);
-                                    graphXml.addEdgeWeighted(nameVertexStart, circle.getId(),weight.getText());
+                                    drawEdge = new DrawEdge (groupStart.getTranslateX(),groupStart.getTranslateY(),groupEnd.getTranslateX(),groupEnd.getTranslateY(), weight);
+                                    graphXml.addEdgeWeighted(nameVertexStart, groupEnd.getId(),weight.getText());
                                     break;
                             }
                             drawEdgesList.add(drawEdge);
-                            moveVertexMoveEdgeListenerDraw(circleStart, circleEnd, drawEdgesList.indexOf(drawEdge), currP);
+                            moveVertexMoveEdgeListenerDraw(groupStart, groupEnd, drawEdgesList.indexOf(drawEdge), currP);
                             currP.getChildren().add(1,drawEdge.getRoot());
 
                             // Edge that follow the mouse
@@ -722,45 +618,31 @@ public class MainPageController {
                     Slider slider = (Slider) anch.getChildren().get(1);
                     double sliderValue = slider.getValue();
 
-                    Circle circle;
-                    Text text;
-                    if(t.getSource().getClass() == Circle.class){
-                        circle = (Circle) t.getSource();
-                        text = (Text) mapNode.get(circle.getId().toString()).get(1);
-                    }
-                    else{
-                        text = (Text) t.getSource();
-                        circle = (Circle) mapNode.get(text.getId().toString()).get(0);
-                    }
+                    Shape shape = (Shape)t.getSource();
+                    Group group = (Group)shape.getParent();
+                    group.setCursor(Cursor.CLOSED_HAND);
+
 
                     double offsetX = t.getSceneX() - orgSceneX;
                     double offsetY = t.getSceneY() - orgSceneY;
                     double newTranslateX = (orgTranslateX + offsetX)/sliderValue;
                     double newTranslateY = (orgTranslateY + offsetY)/sliderValue;
-                    if(newTranslateX < circle.getRadius())
-                        newTranslateX = circle.getRadius();
-                    if(newTranslateX > tabPane.getWidth() - circle.getRadius())
-                        newTranslateX = tabPane.getWidth() - circle.getRadius();
-                    if(newTranslateY < circle.getRadius())
-                        newTranslateY = circle.getRadius();
+                    if(newTranslateX < RAYON_CERCLE) // 10 est le rayon du cercle
+                        newTranslateX = RAYON_CERCLE;
+                    if(newTranslateX > tabPane.getWidth() - RAYON_CERCLE)
+                        newTranslateX = tabPane.getWidth() - RAYON_CERCLE;
+                    if(newTranslateY <RAYON_CERCLE)
+                        newTranslateY = RAYON_CERCLE;
                     // tab height = 33
-                    if(newTranslateY > tabPane.getHeight() - circle.getRadius() -33)
-                        newTranslateY = tabPane.getHeight() - circle.getRadius() -33;
-                    circle.setTranslateX(newTranslateX);
-                    circle.setTranslateY(newTranslateY);
-
-                    if(Integer.parseInt(text.getId().toString().replaceAll("[\\D]", ""))<10){
-                        text.setTranslateX(newTranslateX-4.5);
-                        text.setTranslateY(newTranslateY+6);
-                    }else{
-                        text.setTranslateX(newTranslateX-8.5);
-                        text.setTranslateY(newTranslateY+6);
-                    }
+                    if(newTranslateY > tabPane.getHeight() - RAYON_CERCLE -33)
+                        newTranslateY = tabPane.getHeight() - RAYON_CERCLE -33;
+                    group.setTranslateX(newTranslateX);
+                    group.setTranslateY(newTranslateY);
 
                     //the vertex has been moved so we need to change it position in the xml
                     Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
                     GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-                    graphXml.setPosOfVertex(circle.getId(),(int) newTranslateX, (int) newTranslateY);
+                    graphXml.setPosOfVertex(group.getId(),(int) newTranslateX, (int) newTranslateY);
                 }
             };
 
@@ -949,11 +831,11 @@ public class MainPageController {
             }
 
 
-    private void moveVertexMoveEdgeListenerDraw(Circle circleStart, Circle circleEnd, int drawEdgeIndex, AnchorPane currP)
+    private void moveVertexMoveEdgeListenerDraw(Group groupStart, Group groupEnd, int drawEdgeIndex, AnchorPane currP)
     {
 
         //////////////////////////////////moving vertex move edges////////////////////
-        circleEnd.translateXProperty().addListener(new ChangeListener<Number>()
+        groupEnd.translateXProperty().addListener(new ChangeListener<Number>()
         {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
@@ -971,7 +853,7 @@ public class MainPageController {
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
-        circleEnd.translateYProperty().addListener(new ChangeListener<Number>()
+        groupEnd.translateYProperty().addListener(new ChangeListener<Number>()
         {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
@@ -989,7 +871,7 @@ public class MainPageController {
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
-        circleStart.translateXProperty().addListener(new ChangeListener<Number>()
+        groupStart.translateXProperty().addListener(new ChangeListener<Number>()
         {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
@@ -1008,7 +890,7 @@ public class MainPageController {
             }
         });
 
-        circleStart.translateYProperty().addListener(new ChangeListener<Number>()
+        groupStart.translateYProperty().addListener(new ChangeListener<Number>()
         {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
@@ -1035,11 +917,12 @@ public class MainPageController {
                 for(int i = 0; i < pane.getChildren().size(); i++)
                 {
                     Node node = pane.getChildren().get(i);
-                    if(node.getClass().equals(Circle.class))
+                    if(node.getClass().equals(Group.class))
                     {
-                        Circle circle = (Circle) node;
-                        if(circle.getId().equals(id))
+                        Group group = (Group) node;
+                        if(group.getChildren().get(0).getClass().equals(Circle.class) && group.getId().equals(id) ) {
                             return node;
+                        }
                     }
                 }
                 return null;

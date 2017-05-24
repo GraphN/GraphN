@@ -17,6 +17,7 @@ public class DrawEdge {
     final private Color COLORED = Color.web("42f45f");
 
     private CubicCurve curve1;
+    private Path arrowEnd;
     Group root;
     Text text;
     boolean directed;
@@ -62,9 +63,15 @@ public class DrawEdge {
         arrowIni.getElements().add(new LineTo(ori.getX()+0.2*tan.getX()+0.2*tan.getY(),
                 ori.getY()+0.2*tan.getY()-0.2*tan.getX()));*/
         if(directed) {
-            Point2D ori = eval(curve1, 1f);
+            double paramEval = Math.sqrt(Math.pow(curve1.getEndX() - curve1.getStartX(), 2) +
+                               Math.pow(curve1.getEndY() - curve1.getStartY(), 2));
+            paramEval = (paramEval-7)/paramEval;
+            Point2D ori = eval(curve1, paramEval);
             Point2D tan = evalDt(curve1, 1f).normalize().multiply(scale);
-            Path arrowEnd = new Path();
+            arrowEnd = new Path();
+            arrowEnd.setStrokeWidth(3);
+            arrowEnd.setSmooth(true);
+            arrowEnd.setStroke(UNCOLORED);
             arrowEnd.getElements().add(new MoveTo(ori.getX() - 0.2 * tan.getX() - 0.2 * tan.getY(),
                     ori.getY() - 0.2 * tan.getY() + 0.2 * tan.getX()));
             arrowEnd.getElements().add(new LineTo(ori.getX(), ori.getY()));
@@ -88,7 +95,7 @@ public class DrawEdge {
      * @param t param between 0 and 1
      * @return a Point2D
      */
-    private Point2D eval(CubicCurve c, float t){
+    private Point2D eval(CubicCurve c, double t){
         Point2D p=new Point2D(Math.pow(1-t,3)*c.getStartX()+
                 3*t*Math.pow(1-t,2)*c.getControlX1()+
                 3*(1-t)*t*t*c.getControlX2()+
@@ -120,10 +127,12 @@ public class DrawEdge {
 
     void setColored() {
         curve1.setStroke(COLORED);
+        if (directed) arrowEnd.setStroke(COLORED);
     }
 
     void setUncolored() {
         curve1.setStroke(UNCOLORED);
+        if(!directed) arrowEnd.setStroke(UNCOLORED);
     }
 
     void setStartX(double startX){
