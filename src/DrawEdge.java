@@ -132,7 +132,7 @@ public class DrawEdge {
 
     void setUncolored() {
         curve1.setStroke(UNCOLORED);
-        if(!directed) arrowEnd.setStroke(UNCOLORED);
+        if(directed) arrowEnd.setStroke(UNCOLORED);
     }
 
     void setStartX(double startX){
