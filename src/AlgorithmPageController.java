@@ -8,6 +8,8 @@ import graph.UDiGraph;
 import graph.Vertex;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
@@ -106,6 +108,8 @@ public class AlgorithmPageController {
         }
         indexPath = 0;
         handlePause();
+
+        activateButtons();
     }
 
     @FXML
@@ -343,17 +347,30 @@ public class AlgorithmPageController {
     }
 
     private void desactivateButtons(ToggleButton avoid){
-        if (!bfs.equals(avoid))
             bfs.setDisable(true);
-        if (!prim.equals(avoid))
             prim.setDisable(true);
-        if (!dfs.equals(avoid))
             dfs.setDisable(true);
-        if (!dijkstra.equals(avoid))
             dijkstra.setDisable(true);
-        if (bellman.equals(avoid))
             bellman.setDisable(true);
-        if (kruskall.equals(avoid))
             kruskall.setDisable(true);
+    }
+    private void activateButtons(){
+            bfs.setDisable(false);
+            bfs.setSelected(false);
+            prim.setDisable(false);
+        prim.setSelected(false);
+
+        dfs.setDisable(false);
+        dfs.setSelected(false);
+
+        dijkstra.setDisable(false);
+        dijkstra.setSelected(false);
+
+        bellman.setDisable(false);
+        bellman.setSelected(false);
+
+        kruskall.setDisable(false);
+        kruskall.setSelected(false);
+
     }
 }

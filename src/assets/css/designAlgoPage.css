@@ -47,24 +47,46 @@
 -fx-background-image: url("../img/pause.png");
 }
 
-
-
-
-
-#bfs:hover, #dfs:hover, #dijkstra:hover, #dijkstra:hover, #kruskal:hover, #prim:hover{
--fx-background-color: #3F3F3F;
+#bfs:selected, #dfs:selected, #dijkstra:selected, #dijkstra:selected, #kruskall:selected, #prim:selected, #bellman:selected{
+-fx-background-color: #FF0000;
+}
+#bfs:hover, #dfs:hover, #dijkstra:hover, #dijkstra:hover, #kruskall:hover, #prim:hover, #bellman:hover{
+-fx-background-color: #333333;
 
 }
-#bfs, #dfs, #dijkstra, #dijkstra, #kruskal, #prim {
-
+#bfs, #dfs, #dijkstra, #dijkstra, #kruskall, #prim, #bellman{
 -fx-background-color: #575757;
 -fx-border-color: #000000;
 -fx-background-insets: 0;
 -fx-text-fill: #FFFFFF;
 -fx-font-size: 11pt;
+}
 
+
+
+/*#bfs:hover, #dfs:hover, #dijkstra:hover, #dijkstra:hover, #kruskall:hover, #prim:hover, #bellman:hover{
+-fx-background-color: #575757;
 
 }
+#bfs, #dfs, #dijkstra, #dijkstra, #kruskall, #prim, #bellman{
+-fx-background-color: #575757;
+-fx-border-color: #000000;
+-fx-background-insets: 0;
+-fx-text-fill: #FFFFFF;
+-fx-font-size: 11pt;
+}
+
+#bfs:armed, #dfs:armed, #dijkstra:armed, #dijkstra:armed, #kruskall:armed, #prim:armed, #bellman:armed{
+-fx-background-color: #da5630;
+}
+
+#bfs:pressed, #dfs:pressed, #dijkstra:pressed, #dijkstra:pressed, #kruskall:pressed, #prim:pressed, #bellman:pressed{
+-fx-background-color: #333333;
+-fx-border-color: #000000;
+-fx-background-insets: 0;
+-fx-text-fill: #FFFFFF;
+-fx-font-size: 11pt;
+}*/
 
 
 .split-pane *.split-pane-divider {
