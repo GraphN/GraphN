@@ -1,4 +1,4 @@
-package Algorithms;
+package Algorithms.Utils;
 
 public class UnionFind{
 

@@ -10,6 +10,7 @@ import java.util.LinkedList;
  */
 public interface StockageType {
     void init(int V);
+    void addEdge(Edge e);
     void addEdge(Vertex v, Vertex w);
     void addEdge(Vertex v, Vertex w, int weigth);
     Edge getEdge(Vertex v, Vertex w);
