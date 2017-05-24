@@ -1,5 +1,6 @@
 package Algorithms;
 
+import Algorithms.Utils.Step;
 import Algorithms.Utils.VertexVisit;
 import graph.Edge;
 import graph.Graph;
@@ -14,24 +15,24 @@ import java.util.Vector;
 public class DFS implements Algorithm{
     private Graph g;
     private Vector<Boolean> marked;
-    private LinkedList<Edge> edgesPath = new LinkedList<>();
+    private LinkedList<Step> path = new LinkedList<>();
     private Vertex lastVisitedVertex = null;
 
-    public LinkedList<Edge> getPath(){
+    public LinkedList<Step> getPath(){
         visit(g.getVertex(0), new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {
 
             }
         });
-        return edgesPath;
+        return path;
     }
 
     public DFS(Graph g){
         this.g = g;
     }
 
-    public LinkedList<Edge> visit(Vertex v, VertexVisit f) {
+    public LinkedList<Step> visit(Vertex v, VertexVisit f) {
         visit(v,f, new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {}
@@ -40,7 +41,7 @@ public class DFS implements Algorithm{
     }
 
     // DFS en mode recursif
-    LinkedList<Edge> visit(Vertex v, VertexVisit fpre, VertexVisit fpost) {
+    LinkedList<Step> visit(Vertex v, VertexVisit fpre, VertexVisit fpost) {
         marked = new Vector<>(g.V());
         for(int i  = 0; i < g.V(); i++)
             marked.add(false);
@@ -52,8 +53,20 @@ public class DFS implements Algorithm{
     private void recursion(Vertex v, VertexVisit fpre, VertexVisit fpost) {
         fpre.applyFunction(v);
 
-        if(lastVisitedVertex != null)
-            edgesPath.add(g.getEdge(lastVisitedVertex, v));
+        if(lastVisitedVertex != null) {
+            String message = "On selectionne le sommet " + v.getId();
+            String structures = "last visited vertex : " + lastVisitedVertex.getId()
+                                + "\nmarked : " + marked.toString();
+            Edge e = g.getEdge(lastVisitedVertex, v);
+
+            Step step = new Step(Step.TYPE.EDGE);
+            step.setMessage(message);
+            step.setStructures(structures);
+            step.setEdge(e);
+
+            path.add(step);
+        }
+
         lastVisitedVertex = v;
 
         marked.set(v.getId(), true);

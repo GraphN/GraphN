@@ -1,5 +1,6 @@
 package Algorithms;
 
+import Algorithms.Utils.Step;
 import Algorithms.Utils.VertexVisit;
 import graph.Edge;
 import graph.Graph;
@@ -13,9 +14,9 @@ import java.util.Vector;
 public class BFS implements Algorithm{
     private Graph g;
     private Vector<Integer> parent;
-    private LinkedList<Edge> edgesPath;
+    private LinkedList<Step> path;
 
-    public LinkedList<Edge> getPath(){
+    public LinkedList<Step> getPath(){
         visit(g.getVertex(0), new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {
@@ -23,7 +24,7 @@ public class BFS implements Algorithm{
             }
         });
 
-        return edgesPath;
+        return path;
     }
 
     public BFS(Graph g){
@@ -31,7 +32,7 @@ public class BFS implements Algorithm{
     }
 
 
-    public LinkedList<Edge> visit(Vertex v, VertexVisit f) {
+    public LinkedList<Step> visit(Vertex v, VertexVisit f) {
         parent = new Vector<>(g.V());
         for(int i  = 0; i < g.V(); i++)
             parent.add(-1);
@@ -42,8 +43,8 @@ public class BFS implements Algorithm{
         return parent.get(v.getId());
     }
 
-    private LinkedList<Edge> bfs(Vertex v, VertexVisit f) {
-        edgesPath = new LinkedList<>();
+    private LinkedList<Step> bfs(Vertex v, VertexVisit f) {
+        path = new LinkedList<>();
         LinkedList<Edge> pile = new LinkedList<>();
 
         parent.set(v.getId(), v.getId());
@@ -63,13 +64,23 @@ public class BFS implements Algorithm{
                 }
             }
 
-            if(g.getEdge(g.getVertex(parent.get(current.getId())), current) != null)
-                edgesPath.add(g.getEdge(g.getVertex(parent.get(current.getId())), current));
+            if(g.getEdge(g.getVertex(parent.get(current.getId())), current) != null) {
+                String message = "On selectionne le sommet " + current.getId();
+                String structures = "parent : " + parent.toString();
+                Edge e = g.getEdge(g.getVertex(parent.get(current.getId())), current);
+
+                Step step = new Step(Step.TYPE.EDGE);
+                step.setMessage(message);
+                step.setStructures(structures);
+                step.setEdge(e);
+
+                path.add(step);
+            }
 
             f.applyFunction(current);
         }while (!pile.isEmpty());
 
-        return edgesPath;
+        return path;
     }
 
 }

@@ -12,74 +12,72 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.control.ToggleButton?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgorithmPageController">
-   <top>
-      <AnchorPane styleClass="toolBar" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="2.0">
-               <image>
-                  <Image url="@../img/logo.jpg" />
-               </image>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-            <Button id="buttonPlay" focusTraversable="false" mnemonicParsing="false" onAction="#handlePlay" prefHeight="24.0" prefWidth="24.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="9.0" />
-            <Button id="buttonForwardPlay" ellipsisString="" focusTraversable="false" mnemonicParsing="false" onAction="#handleStepByStep" prefHeight="24.0" prefWidth="34.0" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="9.0" />
-            <Button id="buttonPlayTimer" focusTraversable="false" mnemonicParsing="false" onAction="#handlePlayTimer" prefHeight="24.0" prefWidth="39.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="9.0" />
-            <Button id="buttonStop" minHeight="22.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="11.0" />
-            <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" onAction="#handlePause" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="11.0" />
-            <Button alignment="TOP_RIGHT" layoutX="518.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="28.0" prefWidth="159.0" styleClass="algoButton" text="New From Result" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="5.0" />
-         </children>
-      </AnchorPane>
-   </top>
-   <left>
-      <ToolBar minHeight="380.0" orientation="VERTICAL" prefHeight="380.0" prefWidth="99.0" style=": ;" styleClass="toolBar" BorderPane.alignment="CENTER">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets bottom="-1.0" left="-1.0" right="-1.0" />
-         </padding>
-         <items>
-            <Button id="bfs" alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleBFS" prefHeight="33.0" prefWidth="99.0" scaleShape="false" text="BFS" />
-            <Button id="dfs" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleDFS" prefHeight="33.0" prefWidth="99.0" text="DFS" translateY="-5.0" />
-            <Button id="dijkstra" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" text="Dijsktra" translateY="-10.0" />
-            <Button id="kruskal" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleKruskall" prefHeight="33.0" prefWidth="99.0" text="Kruskal" translateY="-15.0" />
-            <Button id="prim" alignment="BASELINE_LEFT" focusTraversable="false" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" style="-fx-background-insets: 0;" text="Prim's" translateY="-20.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Button>
-         </items>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </ToolBar>
-   </left>
-   <center>
-      <SplitPane dividerPositions="0.7336683417085427" orientation="VERTICAL" prefHeight="376.0" prefWidth="589.0" BorderPane.alignment="CENTER">
-        <items>
-          <AnchorPane fx:id="centerAlgoPage" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="centerPage">
-               <children>
-                  <Slider fx:id="slider" layoutX="445.0" layoutY="270.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="2.0" />
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-               <children>
-                  <SplitPane id="bottomSplit" dividerPositions="0.5" layoutX="-1.0" layoutY="-1.0" prefHeight="105.0" prefWidth="587.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-                    </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-   </center>
-   <stylesheets>
-      <URL value="@../css/designAlgoPage.css" />
-      <URL value="@../css/designPages.css" />
-   </stylesheets>
+    <top>
+        <AnchorPane styleClass="toolBar" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="2.0">
+                    <image>
+                        <Image url="@../img/logo.jpg" />
+                    </image>
+                    <viewport>
+                        <Rectangle2D />
+                    </viewport>
+                </ImageView>
+                <Button id="buttonPlay" focusTraversable="false" mnemonicParsing="false" onAction="#handlePlay" prefHeight="24.0" prefWidth="24.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="9.0" />
+                <Button id="buttonForwardPlay" ellipsisString="" focusTraversable="false" mnemonicParsing="false" onAction="#handleStepByStep" prefHeight="24.0" prefWidth="34.0" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="9.0" />
+                <Button id="buttonPlayTimer" focusTraversable="false" mnemonicParsing="false" onAction="#handlePlayTimer" prefHeight="24.0" prefWidth="39.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="9.0" />
+                <Button id="buttonStop" minHeight="22.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="11.0" />
+                <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" onAction="#handlePause" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="11.0" />
+                <Button alignment="TOP_RIGHT" layoutX="518.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="28.0" prefWidth="159.0" styleClass="algoButton" text="New From Result" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="5.0" />
+            </children>
+        </AnchorPane>
+    </top>
+    <left>
+        <ToolBar minHeight="380.0" orientation="VERTICAL" prefHeight="380.0" prefWidth="99.0" style=": ;" styleClass="toolBar" BorderPane.alignment="CENTER">
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <padding>
+                <Insets bottom="-1.0" left="-1.0" right="-1.0" />
+            </padding>
+            <items>
+                <ToggleButton id="bfs" fx:id="bfs" alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleBFS" prefHeight="33.0" prefWidth="99.0" scaleShape="false" text="BFS" />
+                <ToggleButton id="dfs" fx:id="dfs" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleDFS" prefHeight="33.0" prefWidth="99.0" text="DFS" translateY="-5.0" />
+                <ToggleButton id="dijkstra" fx:id="dijkstra" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleDijkstra" prefHeight="33.0" prefWidth="99.0" text="Dijsktra" translateY="-10.0" />
+                <ToggleButton id="kruskall" fx:id="kruskall" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleKruskall" prefHeight="33.0" prefWidth="99.0" text="Kruskal" translateY="-15.0" />
+                <ToggleButton id="prim" fx:id="prim" alignment="BASELINE_LEFT" focusTraversable="false" onAction="#handlePrim" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" style="-fx-background-insets: 0;" text="Prim's" translateY="-20.0" />
+                <ToggleButton id="bellman" fx:id="bellman" alignment="BASELINE_LEFT" focusTraversable="false" onAction="#handleBellman" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" style="-fx-background-insets: 0;" text="Bellman" translateY="-25.0" />
+            </items>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+        </ToolBar>
+    </left>
+    <center>
+        <SplitPane dividerPositions="0.7336683417085427" orientation="VERTICAL" prefHeight="376.0" prefWidth="589.0" BorderPane.alignment="CENTER">
+            <items>
+                <AnchorPane fx:id="centerAlgoPage" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="centerPage">
+                    <children>
+                        <Slider fx:id="slider" layoutX="445.0" layoutY="270.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="2.0" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                    <children>
+                        <SplitPane id="bottomSplit" dividerPositions="0.5" layoutX="-1.0" layoutY="-1.0" prefHeight="105.0" prefWidth="587.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </center>
+    <stylesheets>
+        <URL value="@../css/designAlgoPage.css" />
+        <URL value="@../css/designPages.css" />
+    </stylesheets>
 </BorderPane>

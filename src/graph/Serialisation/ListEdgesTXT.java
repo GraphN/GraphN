@@ -1,5 +1,6 @@
 package graph.Serialisation;
 
+import Algorithms.Utils.Step;
 import graph.*;
 import graph.Stockage.StockageType;
 
@@ -15,14 +16,14 @@ import java.util.Scanner;
 public class ListEdgesTXT implements Serialiseur {
     static final String EXTENSION_FILE = ".txt";
 
-    public void exportGraph(Graph g, LinkedList<Edge> path, String outputFile){
+    public void exportGraph(Graph g, LinkedList<Step> path, String outputFile){
         try{
             PrintWriter writer = new PrintWriter(outputFile + EXTENSION_FILE, "UTF-8");
             writer.println(g.V() + " " + g.E() + " " + g.getType());
 
             // On ecrit la liste de edges
-            for(Edge e : path)
-                writer.println(e.getFrom() + " " + e.getTo() + " " + e.getWeigth());
+            for(Step e : path)
+                writer.println(e.getEdge().getFrom() + " " + e.getEdge().getTo() + " " + e.getEdge().getWeigth());
 
             writer.close();
         } catch (IOException e) {

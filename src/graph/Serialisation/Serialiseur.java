@@ -1,5 +1,6 @@
 package graph.Serialisation;
 
+import Algorithms.Utils.Step;
 import graph.DiGraph;
 import graph.Edge;
 import graph.Graph;
@@ -14,6 +15,6 @@ import java.util.LinkedList;
 interface Serialiseur {
     int DIRECTED = 1;
     int UNDIRECTED = 0;
-    void exportGraph(Graph g, LinkedList<Edge> path, String outputFile);
+    void exportGraph(Graph g, LinkedList<Step> path, String outputFile);
     Graph importGraph(String inputFile, StockageType stockage);
 }

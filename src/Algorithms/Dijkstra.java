@@ -1,6 +1,7 @@
 package Algorithms;
 
 import Algorithms.Utils.IndexMinPQ;
+import Algorithms.Utils.Step;
 import graph.Edge;
 import graph.Graph;
 import graph.Vertex;
@@ -14,6 +15,8 @@ public class Dijkstra implements Algorithm{
     private Edge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
     private IndexMinPQ<Double> pq;    // priority queue of vertices
     private Vertex target;
+
+    private LinkedList<Step> path = new LinkedList<>();
 
     public void setTarget(Vertex target){
         this.target = target;
@@ -42,6 +45,21 @@ public class Dijkstra implements Algorithm{
             int v = pq.delMin();
             for (Edge e : G.adjacentEdges(G.getVertex(v)))
                 relax(e);
+            if(edgeTo[v] != null) {
+                String message = "On selectionne le sommet " + v;
+                String structures = "distTo : " + distTo.toString()
+                        + "\nedgeTo : " + edgeTo.toString()
+                        + "\nPriorityQueue : " + pq.toString();
+
+                Edge e = edgeTo[v];
+
+                Step step = new Step(Step.TYPE.EDGE);
+                step.setMessage(message);
+                step.setStructures(structures);
+                step.setEdge(e);
+
+                path.add(step);
+            }
         }
 
         // check optimality conditions
@@ -70,14 +88,15 @@ public class Dijkstra implements Algorithm{
         return distTo[v] < Double.POSITIVE_INFINITY;
     }
 
-    public LinkedList<Edge> getPath() {
-        validateVertex(target.getId());
+    public LinkedList<Step> getPath() {
+        return path;
+        /*validateVertex(target.getId());
         if (!hasPathTo(target.getId())) return null;
         LinkedList<Edge> path = new LinkedList<>();
         for (Edge e = edgeTo[target.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
             path.push(e);
         }
-        return path;
+        return path;*/
     }
 
 
