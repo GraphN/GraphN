@@ -11,8 +11,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgorithmPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlgorithmPageController">
    <top>
       <AnchorPane styleClass="toolBar" BorderPane.alignment="CENTER">
          <children>
@@ -42,8 +43,8 @@
             <Insets bottom="-1.0" left="-1.0" right="-1.0" />
          </padding>
          <items>
-            <Button id="bfs" alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleBFS" prefHeight="33.0" prefWidth="99.0" scaleShape="false" text="BFS" />
-            <Button id="dfs" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleDFS" prefHeight="33.0" prefWidth="99.0" text="DFS" translateY="-5.0" />
+            <Button id="bfs" fx:id="bfs" alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleBFS" prefHeight="33.0" prefWidth="99.0" scaleShape="false" text="BFS" />
+            <Button id="dfs" fx:id="dfs" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleDFS" prefHeight="33.0" prefWidth="99.0" text="DFS" translateY="-5.0" />
             <Button id="dijkstra" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" text="Dijsktra" translateY="-10.0" />
             <Button id="kruskal" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleKruskall" prefHeight="33.0" prefWidth="99.0" text="Kruskal" translateY="-15.0" />
             <Button id="prim" alignment="BASELINE_LEFT" focusTraversable="false" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" style="-fx-background-insets: 0;" text="Prim's" translateY="-20.0">
@@ -69,8 +70,14 @@
                <children>
                   <SplitPane id="bottomSplit" dividerPositions="0.5" layoutX="-1.0" layoutY="-1.0" prefHeight="105.0" prefWidth="587.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <TextFlow layoutX="45.0" layoutY="-37.0" prefHeight="101.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children></AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <TextFlow layoutX="57.0" layoutY="-58.0" prefHeight="101.0" prefWidth="289.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children></AnchorPane>
                     </items>
                   </SplitPane>
                </children>
