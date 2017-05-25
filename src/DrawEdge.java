@@ -24,9 +24,9 @@ public class DrawEdge {
     DrawEdge(double startX, double startY, double endX, double endY){
         this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, null, false);
     }
-    DrawEdge(double startX, double startY, double endX, double endY, Text text){
-        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, text, true);
-    }
+    /*DrawEdge(double startX, double startY, double endX, double endY, Text text, Boolean directed){
+        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, text, directed);
+    }*/
 
     DrawEdge(double startX, double startY, double endX, double endY, boolean directed){
         this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, null, directed);
@@ -84,8 +84,17 @@ public class DrawEdge {
                 text.setTranslateY((endY+startY)/2);
                 root.getChildren().addAll(curve1, arrowEnd, text);
             }
+        }else{
+            if(text == null)
+                root.getChildren().addAll(curve1);
+            else{
+                text.setTranslateX((endX+startX)/2);
+                text.setTranslateY((endY+startY)/2);
+                root.getChildren().addAll(curve1, text);
+            }
         }
-        else root.getChildren().add(curve1);
+
+
 
     }
 

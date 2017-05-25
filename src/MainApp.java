@@ -110,6 +110,7 @@ public class MainApp extends Application {
             // Create the dialog Stage.
             Stage weightStage = new Stage();
             weightStage.setTitle("Weight");
+            weightStage.setResizable(false);
             weightStage.initModality(Modality.WINDOW_MODAL);
             weightStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
@@ -136,6 +137,7 @@ public class MainApp extends Application {
             // Create the dialog Stage.
             Stage startVertexStage = new Stage();
             startVertexStage.setTitle("VertexNumber");
+            startVertexStage.setResizable(false);
             startVertexStage.initModality(Modality.WINDOW_MODAL);
             startVertexStage.initOwner(algoStage);
             Scene scene = new Scene(page);
@@ -261,12 +263,23 @@ public class MainApp extends Application {
                             // change the name of the vertex to have good one (corresponding of the xml file)
                             graphDom.setNameOfVertex(currentNode.getAttribute("name"), vertexAdded);
 
+
                             vertexAdded++;
                         }
                         else if (currentNode.getNodeName().equals("edge"))
                         {
-                            graphDom.addEdge(currentNode.getAttribute("start"),
-                                    currentNode.getAttribute("end"));
+                            if(racine.getAttribute("graphType").equals("nonDiGraph"))
+                                graphDom.addEdge(currentNode.getAttribute("start"),
+                                        currentNode.getAttribute("end"));
+                            else if(racine.getAttribute("graphType").equals("weightedNonDiGraph"))
+                                graphDom.addWeightedEdge(currentNode.getAttribute("start"),
+                                        currentNode.getAttribute("end"), currentNode.getAttribute("weight"));
+                            else if(racine.getAttribute("graphType").equals("diGraph"))
+                                graphDom.addDiEdge(currentNode.getAttribute("start"),
+                                        currentNode.getAttribute("end"));
+                            else
+                                graphDom.addWeightedDiEdge(currentNode.getAttribute("start"),
+                                        currentNode.getAttribute("end"), currentNode.getAttribute("weight"));
                         }
                     }
                 }

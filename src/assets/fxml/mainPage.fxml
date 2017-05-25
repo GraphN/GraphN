@@ -22,7 +22,7 @@
                   <Button id="diEdgeButton" fx:id="diEdgeButton" ellipsisString="" layoutX="19.0" layoutY="158.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleDiEdge" prefHeight="31.0" prefWidth="25.0" />
                   <Button id="diEdgeWeightedButton" fx:id="weightedDiEdgeButton" ellipsisString="" layoutX="19.0" layoutY="193.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleWeightedDiEdge" prefHeight="31.0" prefWidth="25.0" />
                   <Button id="textButton" layoutX="19.0" layoutY="241.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleText" prefHeight="31.0" prefWidth="25.0" text="Text" />
-                  <Button id="commentButton" layoutX="19.0" layoutY="277.0" maxHeight="26.0" maxWidth="26.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleNote" prefHeight="32.0" prefWidth="31.0" text="Note" />
+                  <Button id="commentButton" fx:id="weightedEdgeButton" layoutX="19.0" layoutY="277.0" maxHeight="26.0" maxWidth="26.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleWeightedEdge" prefHeight="32.0" prefWidth="31.0" text="Note" />
                   <Separator layoutX="7.0" layoutY="112.0" prefHeight="4.0" prefWidth="49.0" />
                   <Separator layoutX="7.0" layoutY="229.0" prefHeight="4.0" prefWidth="49.0" />
                </children>

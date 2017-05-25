@@ -334,6 +334,8 @@ public class AlgorithmPageController {
             DrawEdge drawEdge = graphDom.getDrawEdge(i);
             //adding edge created to pane (at index 0 to have vertexes on front of edges)
             pane.getChildren().add(0, drawEdge.getRoot());
+            System.out.println("" +drawEdge.getRoot().getChildren().get(0) + drawEdge.getRoot().getChildren().get(1));
+
             edgeList.add(drawEdge);
 
             graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));

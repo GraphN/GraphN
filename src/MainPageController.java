@@ -74,6 +74,8 @@ public class MainPageController {
     @FXML
     private Button edgeButton;
     @FXML
+    private Button weightedEdgeButton;
+    @FXML
     private Button diEdgeButton;
     @FXML
     private Button weightedDiEdgeButton;
@@ -298,6 +300,7 @@ public class MainPageController {
                 Group cirleStart = (Group) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
                 Group cirleEnd = (Group) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
                 drawEdge = graphOpen.getDrawEdge(i);
+
                 drawEdgesList.add(drawEdge);
 
                 moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, drawEdgesList.indexOf(drawEdge), pane);
@@ -389,6 +392,45 @@ public class MainPageController {
             edgeButton.setId("edgeButtonActivate");//let the button orange if he is used
         }
     }
+
+    @FXML
+    private void handleWeightedEdge(MouseEvent mouseEvent)
+    {
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+        String graphType = tabMap.get(currentTab);
+        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+        if(graphType == null){
+            tabMap.put(currentTab, "weightedNonDiGraph");
+            graphXml.setGraphType("weightedNonDiGraph");
+        } // todo: le setGraphType ne marche pas quand on sauve et relance
+        else if(!graphType.equals("weightedNonDiGraph")) {
+            mouseEvent.consume();
+            return;
+        }
+        //desactivate vertex if active
+        desactivateVertex();
+
+        // Reset to the first edge
+        firstVerForEdge = true;
+
+        int count = mouseEvent.getClickCount();
+        if (count == 2 && !isOtherButtonActivate("edge1")) // if we double click, we can put infinite edges
+        {
+            edge1Active = true;
+            edge1ActiveOnce = false;
+            weightedEdgeButton.setId("weightedEdgeButtonActivate");//let the button orange if he is used
+        } else if (count == 1 && (edge1ActiveOnce || edge1Active))// if we click and if we are activate, we desactive
+        {
+            edge1Active = false;
+            edge1ActiveOnce = false;
+            weightedEdgeButton.setId("weightedEdgeButton");// desactivate button of orange
+        } else if (count == 1 /*&& (!edge1ActiveOnce || !edge1Active)*/ && !isOtherButtonActivate("edge1"))// if we clicked and we are desactivate, we active
+        {
+            edge1ActiveOnce = true;
+            edge1Active = false;
+            weightedEdgeButton.setId("weightedEdgeButtonActivate");//let the button orange if he is used
+        }
+    }
     // todo: changer correctement les boutons
     @FXML
     private void handleDiEdge(MouseEvent mouseEvent)
@@ -474,6 +516,7 @@ public class MainPageController {
         edgeButton.setId("edgeButton");// desactivate button of orange
         diEdgeButton.setId("diEdgeButton");
         weightedDiEdgeButton.setId("weightedDiEdgeButton");
+        weightedEdgeButton.setId("weightedEdgeButton");
 
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         AnchorPane currPage = (AnchorPane) currentTab.getContent();
@@ -558,18 +601,15 @@ public class MainPageController {
                             Group groupEnd = group;
                             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                             DrawEdge drawEdge = null;
+                            Text weight;
                             switch (graphType) {
                                 case "nonDiGraph":
                                     drawEdge = new DrawEdge(groupStart.getTranslateX(), groupStart.getTranslateY(), groupEnd.getTranslateX(), groupEnd.getTranslateY());
 
                                     graphXml.addEdge(nameVertexStart, groupEnd.getId());
                                     break;
-                                case "diGraph":
-                                    drawEdge = new DrawEdge(groupStart.getTranslateX(), groupStart.getTranslateY(), groupEnd.getTranslateX(), groupEnd.getTranslateY(), true);
-                                    graphXml.addDiEdge(nameVertexStart, groupEnd.getId());
-                                    break;
-                                case "weightedDiGraph":
-                                    Text weight = new Text(""+mainApp.showWeightPage());
+                                case "weightedNonDiGraph":
+                                    weight = new Text(""+mainApp.showWeightPage());
                                     // pour que le text puisse être modifiable
                                     weight.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                         public void handle(MouseEvent event) {
@@ -577,8 +617,24 @@ public class MainPageController {
                                             // todo: Il faudrait aussi modifier le graphXML
                                         }
                                     });
-                                    drawEdge = new DrawEdge (groupStart.getTranslateX(),groupStart.getTranslateY(),groupEnd.getTranslateX(),groupEnd.getTranslateY(), weight);
-                                    graphXml.addEdgeWeighted(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    drawEdge = new DrawEdge (groupStart.getTranslateX(),groupStart.getTranslateY(),groupEnd.getTranslateX(),groupEnd.getTranslateY(), false, weight);
+                                    graphXml.addWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    break;
+                                case "diGraph":
+                                    drawEdge = new DrawEdge(groupStart.getTranslateX(), groupStart.getTranslateY(), groupEnd.getTranslateX(), groupEnd.getTranslateY(), true);
+                                    graphXml.addDiEdge(nameVertexStart, groupEnd.getId());
+                                    break;
+                                case "weightedDiGraph":
+                                    weight = new Text(""+mainApp.showWeightPage());
+                                    // pour que le text puisse être modifiable
+                                    weight.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        public void handle(MouseEvent event) {
+                                            weight.setText(""+mainApp.showWeightPage());
+                                            // todo: Il faudrait aussi modifier le graphXML
+                                        }
+                                    });
+                                    drawEdge = new DrawEdge (groupStart.getTranslateX(),groupStart.getTranslateY(),groupEnd.getTranslateX(),groupEnd.getTranslateY(), true, weight);
+                                    graphXml.addWeightedDiEdge(nameVertexStart, groupEnd.getId(),weight.getText());
                                     break;
                             }
                             drawEdgesList.add(drawEdge);
