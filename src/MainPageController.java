@@ -12,10 +12,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -137,7 +134,14 @@ public class MainPageController {
         //get the xml of the current graph to send it to showAlgoPage()
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-
+        if(graphXml.getNbVertex() < 0){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Votre graphe est vide");
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+            dialogPane.getStyleClass().add("myDialog");
+            alert.showAndWait();
+            return;
+        }
         mainApp.showAlgoPage(graphXml);
     }
     @FXML
