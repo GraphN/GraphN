@@ -3,7 +3,14 @@
 -fx-background-color: #232323;
 -fx-border-color: #000000;
 }
-
+.text-area .content{
+-fx-background-color: #232323;
+-fx-border-color: #000000;
+}
+.text-area{
+-fx-background-color: #888888;
+-fx-border-color: #888888;
+}
 .centerPage
 {
 -fx-background-color: #999999;
@@ -63,4 +70,46 @@
 .slider .track{
     -fx-background-color: rgb(20,20,20);
 
+}
+
+.list-view{
+   /*-fx-background-image: url("loups-garous-loup-large.jpg");
+   -fx-background-size: 400;*/
+   -fx-background-color: #232323;
+}
+
+.list-view .scroll-bar:vertical .thumb{
+	-fx-background-color:#222222;
+	-fx-background-insets: 2, 0, 0;
+	-fx-background-radius: 2em;
+}
+
+/* The main scrollbar CSS class of ListView */
+.list-view .scroll-bar:horizontal ,
+.list-view  .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+
+/* The increment and decrement button CSS class of scrollbar */
+.list-view .increment-button{
+    -fx-background-color:transparent;
+}
+
+.list-view .decrement-button{
+	-fx-background-color: transparent;
+}
+
+
+/* The main scrollbar **track** CSS class  */
+.list-view .scroll-bar:horizontal .track ,
+.list-view .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2em;
+	-fx-border-radius:2em;
+}
+
+.list-cell { 
+   -fx-background-color: transparent;
 }

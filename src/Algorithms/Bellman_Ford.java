@@ -44,7 +44,7 @@ public class Bellman_Ford implements Algorithm{
             relax(G, v);
 
             if(edgeTo[v] != null) {
-                String message = "On selectionne le sommet " + v;
+                String message = "On selectionne le sommet " + v + "\n\n\n";
                 String structures = "distTo : " + distTo.toString()
                         + "\nedgeTo : " + edgeTo.toString()
                         + "\nonQueue : " + onQueue.toString()

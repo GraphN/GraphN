@@ -46,7 +46,7 @@ public class Dijkstra implements Algorithm{
             for (Edge e : G.adjacentEdges(G.getVertex(v)))
                 relax(e);
             if(edgeTo[v] != null) {
-                String message = "On selectionne le sommet " + v;
+                String message = "On selectionne le sommet " + v + "\n\n";
                 String structures = "distTo : " + distTo.toString()
                         + "\nedgeTo : " + edgeTo.toString()
                         + "\nPriorityQueue : " + pq.toString();

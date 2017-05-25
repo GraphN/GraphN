@@ -32,7 +32,7 @@ public class Prim implements Algorithm{
             for (int v = 0; v < G.V(); v++) {    // run from each vertex to find
                 if (!marked[v]) prim(G, v);      // minimum spanning forest
                 if (edgeTo[v] != null) {
-                    String message = "On selectionne le sommet " + v;
+                    String message = "On selectionne le sommet " + v + "\n\n";
                     String structures = "distTo : " + distTo.toString()
                             + "\nedgeTo : " + edgeTo.toString()
                             + "\nmarked : " + marked.toString();

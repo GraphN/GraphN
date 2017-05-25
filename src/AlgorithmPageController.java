@@ -6,15 +6,15 @@ import graph.Edge;
 import graph.Stockage.EdgeListStockage;
 import graph.UDiGraph;
 import graph.Vertex;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -22,9 +22,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import javafx.scene.text.TextFlow;
 
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -56,10 +56,10 @@ public class AlgorithmPageController {
 
 
     @FXML
-    private Text description;
+    private ListView<String> description;
 
     @FXML
-    private Text structure;
+    private ListView<String> structure;
 
     public void setGraph(GraphDom g)
     {
@@ -83,11 +83,68 @@ public class AlgorithmPageController {
     private Timer timer;
 
     @FXML
+    private SplitPane splitPane;
+
+    @FXML
     private void initialize()
     {
         initZoom();
         edgeList = new ArrayList<DrawEdge>();
         timer = new Timer();
+        description.setCellFactory(lv -> new ListCell<String>() {
+
+            private final Text text;
+            {
+                text = new Text();
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setGraphic(text);
+
+                // bind wrapping width to available size
+                text.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() -> {
+                    Insets padding = getPadding();
+                    return getWidth() - padding.getLeft() - padding.getRight() -1;
+                }, widthProperty(), paddingProperty()));
+
+            }
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    text.setText(null);
+                } else {
+                    text.setText(item);
+                }
+                text.setFill(Color.WHITE);
+            }
+
+        });
+        structure.setCellFactory(lv -> new ListCell<String>() {
+
+            private final Text text;
+            {
+                text = new Text();
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setGraphic(text);
+
+                // bind wrapping width to available size
+                text.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() -> {
+                    Insets padding = getPadding();
+                    return getWidth() - padding.getLeft() - padding.getRight() -1;
+                }, widthProperty(), paddingProperty()));
+
+            }
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    text.setText(null);
+                } else {
+                    text.setText(item);
+                }
+                text.setFill(Color.WHITE);
+            }
+
+        });
     }
     @FXML
     private Slider slider;
@@ -116,6 +173,10 @@ public class AlgorithmPageController {
         }
         indexPath = 0;
         handlePause();
+        description.getItems().clear();
+        structure.getItems().clear();
+        path = null;
+        algo = null;
 
         activateButtons();
     }
@@ -131,6 +192,7 @@ public class AlgorithmPageController {
 
     @FXML
     private void handleKruskall(){
+        setDividerPosition(0.2);
         this.algo = new Kruskall(graphTest);
         this.path = ((Kruskall) algo).visit(new EdgeVisit() {
             @Override
@@ -146,9 +208,11 @@ public class AlgorithmPageController {
     }
     @FXML
     private void handleDFS(){
+        setDividerPosition(0.2);
+        int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
         //pane.getChildren().remove(edgeList.get(0).getRoot());
         this.algo = new DFS(graphTest);
-        this.path = ((DFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
+        this.path = ((DFS) algo).visit(graphTest.getVertex(startVertex), new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {
 
@@ -162,8 +226,10 @@ public class AlgorithmPageController {
     }
     @FXML
     private void handleBFS(){
+        setDividerPosition(0.2);
+        int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
         this.algo = new BFS(graphTest);
-        this.path = ((BFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
+        this.path = ((BFS) algo).visit(graphTest.getVertex(startVertex), new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {
 
@@ -177,7 +243,11 @@ public class AlgorithmPageController {
 
     @FXML
     private void handleBellman(){
-        this.algo = new Bellman_Ford(graphTest, 0);
+        setDividerPosition(0.2);
+        int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
+        int endVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "End Vertex");
+        // TODO François : pouvoir mettre le sommet d'arrivée
+        this.algo = new Bellman_Ford(graphTest, startVertex);
         this.path = algo.getPath();
         
         for(Step e : path)
@@ -187,8 +257,11 @@ public class AlgorithmPageController {
     }
     @FXML
     private void handleDijkstra(){
+        setDividerPosition(0.2);
+        int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
+        int endVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "End Vertex");
         //pane.getChildren().remove(edgeList.get(0).getRoot());
-        this.algo = new Dijkstra(graphTest, graphTest.getVertex(0), graphTest.getVertex(3));// TODO : Specifier le sommet de depart et le sommet d'arriver
+        this.algo = new Dijkstra(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
         this.path = algo.getPath();
 
         for(Step e : path)
@@ -198,6 +271,7 @@ public class AlgorithmPageController {
     }
     @FXML
     private void handlePrim(){
+        setDividerPosition(0.2);
         this.algo = new Prim(graphTest);
         this.path = algo.getPath();
         for(Step e : path)
@@ -323,8 +397,21 @@ public class AlgorithmPageController {
                                 && edgeList.get(i).getStartX() == test.getEndX()
                                 && edgeList.get(i).getStartY() == test.getEndY())) {
                             edgeList.get(i).setColored();
-                            description.setText(this.path.get(indexPath).getMessage());
-                            structure.setText(this.path.get(indexPath).getStrutures());
+                            description.getItems().add(this.path.get(indexPath).getMessage());
+                            structure.getItems().add(this.path.get(indexPath).getStrutures());
+                            description.scrollTo(description.getItems().size()-1);
+                            structure.scrollTo(structure.getItems().size()-1);
+
+                            Node n1 = description.lookup(".scroll-bar");
+                            if (n1 instanceof ScrollBar) {
+                                final ScrollBar bar1 = (ScrollBar) n1;
+                                Node n2 = structure.lookup(".scroll-bar");
+                                if (n2 instanceof ScrollBar) {
+                                    final ScrollBar bar2 = (ScrollBar) n2;
+                                    bar1.valueProperty().bindBidirectional(bar2.valueProperty());
+                                }
+                            }
+
                         }
                 }
 
@@ -334,12 +421,28 @@ public class AlgorithmPageController {
         return false;
     }
 
+    private void setDividerPosition(double position) {
+        splitPane.setDividerPosition(0,position);
+    }
+
+    /*class TimerListener extends TimerTask {
+            @Override
+            public void run() {
+                System.out.print("hello");
+                if(!colorNextEdge())
+                    timer.cancel();
+            }
+        }*/
     class TimerListener extends TimerTask {
         @Override
         public void run() {
             System.out.print("hello");
-            if(!colorNextEdge())
-                timer.cancel();
+            // FIXME Andrea J'ai du mettre un runLater pour que ça marche, ça fait une threadception mais bon ça marche
+            // FIXME Parce qu'on peut pas appeller une fonction javafx dans un thread non application
+            Platform.runLater(() -> {
+                if(!colorNextEdge())
+                    timer.cancel();
+            });
         }
     }
 
