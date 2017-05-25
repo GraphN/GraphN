@@ -21,11 +21,11 @@ public class Step
     }
 
     public void setStructures(String text){
-        this.strutures = strutures;
+        this.strutures = text;
     }
 
     public void setMessage(String text){
-        this.message = message;
+        this.message = text;
     }
 
     public void setEdge(Edge e) {

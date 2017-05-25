@@ -22,6 +22,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import javafx.scene.text.TextFlow;
 
 import java.util.*;
 
@@ -53,6 +54,12 @@ public class AlgorithmPageController {
     @FXML
     private ToggleButton kruskall;
 
+
+    @FXML
+    private Text description;
+
+    @FXML
+    private Text structure;
 
     public void setGraph(GraphDom g)
     {
@@ -170,13 +177,9 @@ public class AlgorithmPageController {
 
     @FXML
     private void handleBellman(){
-        this.algo = new Kruskall(graphTest);
-        this.path = ((Kruskall) algo).visit(new EdgeVisit() {
-            @Override
-            public void applyFunction(Edge e) {
-
-            }
-        });
+        this.algo = new Bellman_Ford(graphTest, 0);
+        this.path = algo.getPath();
+        
         for(Step e : path)
             System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
 
@@ -185,13 +188,8 @@ public class AlgorithmPageController {
     @FXML
     private void handleDijkstra(){
         //pane.getChildren().remove(edgeList.get(0).getRoot());
-        this.algo = new DFS(graphTest);
-        this.path = ((DFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
-            @Override
-            public void applyFunction(Vertex v) {
-
-            }
-        });
+        this.algo = new Dijkstra(graphTest, graphTest.getVertex(0), graphTest.getVertex(3));// TODO : Specifier le sommet de depart et le sommet d'arriver
+        this.path = algo.getPath();
 
         for(Step e : path)
             System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
@@ -200,13 +198,8 @@ public class AlgorithmPageController {
     }
     @FXML
     private void handlePrim(){
-        this.algo = new BFS(graphTest);
-        this.path = ((BFS) algo).visit(graphTest.getVertex(0), new VertexVisit() {
-            @Override
-            public void applyFunction(Vertex v) {
-
-            }
-        });
+        this.algo = new Prim(graphTest);
+        this.path = algo.getPath();
         for(Step e : path)
             System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
 
@@ -328,8 +321,11 @@ public class AlgorithmPageController {
                                 || (!edgeList.get(i).isDirected()
                                 && edgeList.get(i).getEndY() == test.getStartY()
                                 && edgeList.get(i).getStartX() == test.getEndX()
-                                && edgeList.get(i).getStartY() == test.getEndY()))
+                                && edgeList.get(i).getStartY() == test.getEndY())) {
                             edgeList.get(i).setColored();
+                            description.setText(this.path.get(indexPath).getMessage());
+                            structure.setText(this.path.get(indexPath).getStrutures());
+                        }
                 }
 
                 indexPath++;
