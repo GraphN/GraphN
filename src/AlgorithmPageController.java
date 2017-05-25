@@ -102,6 +102,7 @@ public class AlgorithmPageController {
         timer = new Timer();
     }
     @FXML
+
     private void handleStop(){
         for (DrawEdge edge : edgeList) {
             edge.setUncolored();
