@@ -212,15 +212,12 @@ public class AlgorithmPageController {
         int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
         //pane.getChildren().remove(edgeList.get(0).getRoot());
         this.algo = new DFS(graphTest);
-        this.path = ((DFS) algo).visit(graphTest.getVertex(startVertex), new VertexVisit() {
-            @Override
-            public void applyFunction(Vertex v) {
+        this.path = algo.getPath();
 
-            }
-        });
-
-        for(Step e : path)
-            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+        for(Step e : path) {
+            if(e.getEdge() != null)
+                System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+        }
 
         desactivateButtons(dfs);
     }
@@ -249,7 +246,7 @@ public class AlgorithmPageController {
         // TODO François : pouvoir mettre le sommet d'arrivée
         this.algo = new Bellman_Ford(graphTest, startVertex);
         this.path = algo.getPath();
-        
+
         for(Step e : path)
             System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
 
@@ -334,7 +331,7 @@ public class AlgorithmPageController {
             DrawEdge drawEdge = graphDom.getDrawEdge(i);
             //adding edge created to pane (at index 0 to have vertexes on front of edges)
             pane.getChildren().add(0, drawEdge.getRoot());
-            System.out.println("" +drawEdge.getRoot().getChildren().get(0) + drawEdge.getRoot().getChildren().get(1));
+//            System.out.println("" +drawEdge.getRoot().getChildren().get(0) + drawEdge.getRoot().getChildren().get(1));
 
             edgeList.add(drawEdge);
 
@@ -382,6 +379,8 @@ public class AlgorithmPageController {
     private Boolean colorNextEdge() {
         if(path != null && indexPath < path.size()) {
             Edge e = this.path.get(indexPath).getEdge();
+
+            System.out.println(e);
             DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
             // TODO : On ne devrait pas avoir a faire ça !!!! mais avec ça ça marche ...
             if (test == null)

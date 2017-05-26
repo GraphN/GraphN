@@ -22,7 +22,7 @@ public class DFS implements Algorithm{
         visit(g.getVertex(0), new VertexVisit() {
             @Override
             public void applyFunction(Vertex v) {
-
+                System.out.println("visit :" + v.getId() + " : " + marked);
             }
         });
         return path;
@@ -37,17 +37,20 @@ public class DFS implements Algorithm{
             @Override
             public void applyFunction(Vertex v) {}
         });
-        return getPath();
+        return path;
     }
 
     // DFS en mode recursif
     LinkedList<Step> visit(Vertex v, VertexVisit fpre, VertexVisit fpost) {
         marked = new Vector<>(g.V());
+        path = new LinkedList<>();
+
         for(int i  = 0; i < g.V(); i++)
             marked.add(false);
+
         recursion(v, fpre, fpost);
 
-        return getPath();
+        return path;
     }
 
     private void recursion(Vertex v, VertexVisit fpre, VertexVisit fpost) {
@@ -57,6 +60,7 @@ public class DFS implements Algorithm{
             String message = "On selectionne le sommet " + v.getId();
             String structures = "last visited vertex : " + lastVisitedVertex.getId()
                                 + "\nmarked : " + marked.toString();
+            System.out.println("Add step : " +lastVisitedVertex.getId() + v.getId());
             Edge e = g.getEdge(lastVisitedVertex, v);
 
             Step step = new Step(Step.TYPE.EDGE);
