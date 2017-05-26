@@ -72,11 +72,16 @@ public class AlgorithmPageController {
 
     ArrayList<DrawEdge> edgeList;
 
+    ArrayList<StackPane> vertexList;
+
     UDiGraph graphTest;
 
     Algorithm algo;
 
     LinkedList<Step> path;
+
+    final private Color UNCOLORED = Color.web("da5630");
+    final private Color COLORED = Color.web("42f45f");
 
     int indexPath = 0;
 
@@ -90,6 +95,7 @@ public class AlgorithmPageController {
     {
         initZoom();
         edgeList = new ArrayList<DrawEdge>();
+        vertexList = new ArrayList<>();
         timer = new Timer();
         description.setCellFactory(lv -> new ListCell<String>() {
 
@@ -327,6 +333,8 @@ public class AlgorithmPageController {
             StackPane sPane = new StackPane();
             sPane.getChildren().addAll(circle_base,text);
 
+            vertexList.add(sPane);
+
             //List<Shape> node = createVertex(x, x, name);
             pane.getChildren().add(sPane);
         }
@@ -343,6 +351,25 @@ public class AlgorithmPageController {
 //            System.out.println(graph.getTo(i));
         }
        return pane;
+    }
+
+    void setColoredVertex(int i){
+        Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
+        circle.setFill(COLORED);
+    }
+    void setUncoloredVertex(int i){
+        Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
+        circle.setFill(UNCOLORED);
+    }
+    void addTextVertex(int i, String weight){
+        Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
+        Text text =  new Text(weight);
+        text.setTranslateX(circle.getTranslateX());
+        text.setTranslateY(circle.getTranslateY()-20);
+        vertexList.get(i).getChildren().add(text);
+    }
+    void removeTextVertex(int i){
+        Text text = (Text) vertexList.get(i).getChildren().remove(2);
     }
 
     private Circle createVertexShape(double x, double y, String id)
