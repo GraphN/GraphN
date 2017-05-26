@@ -14,13 +14,13 @@ public class EdgeListStockage implements StockageType {
     public void init(int V){};
 
     public void addEdge(Edge e){
-        addEdge(e.getTo(), e.getFrom());
+        addEdge(e.getTo(), e.getFrom(), e.getWeigth());
     }
     public void addEdge(Vertex v, Vertex w){
         addEdge(v, w, 0);
     }
     public void addEdge(Vertex v, Vertex w, int weigth){
-        edgesList.add(new Edge(v, w, 0));
+        edgesList.add(new Edge(v, w, weigth));
     }
     public Edge getEdge(Vertex from, Vertex to){
         for(Edge e : edgesList)

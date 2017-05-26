@@ -2,10 +2,8 @@ import Algorithms.*;
 import Algorithms.Utils.EdgeVisit;
 import Algorithms.Utils.Step;
 import Algorithms.Utils.VertexVisit;
-import graph.Edge;
+import graph.*;
 import graph.Stockage.EdgeListStockage;
-import graph.UDiGraph;
-import graph.Vertex;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -74,7 +72,7 @@ public class AlgorithmPageController {
 
     ArrayList<StackPane> vertexList;
 
-    UDiGraph graphTest;
+    Graph graphTest;
 
     Algorithm algo;
 
@@ -177,6 +175,10 @@ public class AlgorithmPageController {
         for (DrawEdge edge : edgeList) {
             edge.setUncolored();
         }
+
+        for (int vertex = 0; vertex < vertexList.size(); vertex++)
+            setUncoloredVertex(vertex);
+
         indexPath = 0;
         handlePause();
         description.getItems().clear();
@@ -200,14 +202,7 @@ public class AlgorithmPageController {
     private void handleKruskall(){
         setDividerPosition(0.2);
         this.algo = new Kruskall(graphTest);
-        this.path = ((Kruskall) algo).visit(new EdgeVisit() {
-            @Override
-            public void applyFunction(Edge e) {
-
-            }
-        });
-        for(Step e : path)
-            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+        this.path = algo.getPath();
 
         desactivateButtons(kruskall);
 
@@ -217,13 +212,8 @@ public class AlgorithmPageController {
         setDividerPosition(0.2);
         int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
         //pane.getChildren().remove(edgeList.get(0).getRoot());
-        this.algo = new DFS(graphTest);
+        this.algo = new DFS(graphTest, graphTest.getVertex(startVertex));
         this.path = algo.getPath();
-
-        for(Step e : path) {
-            if(e.getEdge() != null)
-                System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
-        }
 
         desactivateButtons(dfs);
     }
@@ -231,15 +221,8 @@ public class AlgorithmPageController {
     private void handleBFS(){
         setDividerPosition(0.2);
         int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
-        this.algo = new BFS(graphTest);
-        this.path = ((BFS) algo).visit(graphTest.getVertex(startVertex), new VertexVisit() {
-            @Override
-            public void applyFunction(Vertex v) {
-
-            }
-        });
-        for(Step e : path)
-            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+        this.algo = new BFS(graphTest, graphTest.getVertex(startVertex));
+        this.path = algo.getPath();
 
         desactivateButtons(bfs);
     }
@@ -249,12 +232,9 @@ public class AlgorithmPageController {
         setDividerPosition(0.2);
         int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
         int endVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "End Vertex");
-        // TODO François : pouvoir mettre le sommet d'arrivée
-        this.algo = new Bellman_Ford(graphTest, startVertex);
-        this.path = algo.getPath();
 
-        for(Step e : path)
-            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
+        this.algo = new Bellman_Ford(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
+        this.path = algo.getPath();
 
         desactivateButtons(bellman);
     }
@@ -267,9 +247,6 @@ public class AlgorithmPageController {
         this.algo = new Dijkstra(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
         this.path = algo.getPath();
 
-        for(Step e : path)
-            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
-
         desactivateButtons(dijkstra);
     }
     @FXML
@@ -277,8 +254,6 @@ public class AlgorithmPageController {
         setDividerPosition(0.2);
         this.algo = new Prim(graphTest);
         this.path = algo.getPath();
-        for(Step e : path)
-            System.out.println("Edge : from " + e.getEdge().getFrom() + "; to " + e.getEdge().getTo());
 
         desactivateButtons(prim);
     }
@@ -301,6 +276,11 @@ public class AlgorithmPageController {
         graphTest = new UDiGraph(graph.getNbVertex()+1, new EdgeListStockage());
 
         graphDom = graph;
+
+        if(graph.getGraphType().equals("nonDiGraph") || graph.getGraphType().equals("weightedNonDiGraph"))
+            graphTest = new UDiGraph(graph.getNbVertex()+1, new EdgeListStockage());
+        else
+            graphTest = new DiGraph(graph.getNbVertex()+1, new EdgeListStockage());
 
         //adding all vertex from xml
         for(int i = 0; i <= graph.getNbVertex(); i++)
@@ -342,12 +322,16 @@ public class AlgorithmPageController {
 //            System.out.println("" +drawEdge.getRoot().getChildren().get(0) + drawEdge.getRoot().getChildren().get(1));
 
             edgeList.add(drawEdge);
-
-            graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
+            System.out.println("\nedge weigth : " + graphDom.getEdgeWeigth(i));
+            graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)), (int)graphDom.getEdgeWeigth(i));
 //            System.out.println(graph.getFrom(i));
 //            System.out.println(graph.getTo(i));
         }
-       return pane;
+
+        for(Edge e : graphTest.getEdgesList()) {
+            System.out.println("test : " + e + " poids : " + e.getWeigth());
+        }
+        return pane;
     }
 
     void setColoredVertex(int i){
@@ -359,6 +343,7 @@ public class AlgorithmPageController {
         circle.setFill(UNCOLORED);
     }
     void addTextVertex(int i, String weight){
+        removeTextVertex(i);
         Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
         Text text =  new Text(weight);
         text.setTranslateX(circle.getTranslateX());
@@ -366,7 +351,8 @@ public class AlgorithmPageController {
         vertexList.get(i).getChildren().add(text);
     }
     void removeTextVertex(int i){
-        Text text = (Text) vertexList.get(i).getChildren().remove(2);
+        if (vertexList.get(i).getChildren().size() > 2)
+            vertexList.get(i).getChildren().remove(2);
     }
 
     private Circle createVertexShape(double x, double y, String id)
@@ -404,49 +390,67 @@ public class AlgorithmPageController {
     }
 
     private Boolean colorNextEdge() {
-        if(path != null && indexPath < path.size()) {
-            Edge e = this.path.get(indexPath).getEdge();
+        boolean hasChange = false;
+        if(path == null || indexPath >= path.size())
+            return hasChange;
 
-            System.out.println(e);
+        Edge e = this.path.get(indexPath).getEdge();
+        Vertex v = this.path.get(indexPath).getVertex();
+        System.out.println(e);
+        System.out.println(v);
+
+        if (e != null) {
             DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
+
             // TODO : On ne devrait pas avoir a faire ça !!!! mais avec ça ça marche ...
             if (test == null)
                 test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId());
-                System.out.println("Draw edge : From : " + test.getStartX() + "; " + test.getStartY() + " | To : " + test.getEndX() + "; " + test.getEndY());
 
-                for (int i = 0; i < edgeList.size(); i++) {
-                    if (edgeList.get(i) != null)
-                        if ((edgeList.get(i).getStartX() == test.getStartX()
-                                && edgeList.get(i).getStartY() == test.getStartY()
-                                && edgeList.get(i).getEndX() == test.getEndX()
-                                && edgeList.get(i).getEndY() == test.getEndY())
-                                || (!edgeList.get(i).isDirected()
-                                && edgeList.get(i).getEndY() == test.getStartY()
-                                && edgeList.get(i).getStartX() == test.getEndX()
-                                && edgeList.get(i).getStartY() == test.getEndY())) {
-                            edgeList.get(i).setColored();
-                            description.getItems().add(this.path.get(indexPath).getMessage());
-                            structure.getItems().add(this.path.get(indexPath).getStrutures());
-                            description.scrollTo(description.getItems().size()-1);
-                            structure.scrollTo(structure.getItems().size()-1);
-
-                            Node n1 = description.lookup(".scroll-bar");
-                            if (n1 instanceof ScrollBar) {
-                                final ScrollBar bar1 = (ScrollBar) n1;
-                                Node n2 = structure.lookup(".scroll-bar");
-                                if (n2 instanceof ScrollBar) {
-                                    final ScrollBar bar2 = (ScrollBar) n2;
-                                    bar1.valueProperty().bindBidirectional(bar2.valueProperty());
-                                }
-                            }
-
-                        }
-                }
-
-                indexPath++;
-                return true;
+            for (int i = 0; i < edgeList.size(); i++) {
+                if (edgeList.get(i) != null)
+                    if ((edgeList.get(i).getStartX() == test.getStartX()
+                            && edgeList.get(i).getStartY() == test.getStartY()
+                            && edgeList.get(i).getEndX() == test.getEndX()
+                            && edgeList.get(i).getEndY() == test.getEndY())
+                            || (!edgeList.get(i).isDirected()
+                            && edgeList.get(i).getEndY() == test.getStartY()
+                            && edgeList.get(i).getStartX() == test.getEndX()
+                            && edgeList.get(i).getStartY() == test.getEndY())) {
+                        edgeList.get(i).setColored();
+                    }
             }
-        return false;
+
+            hasChange = true;
+        }
+
+        if(v != null) {
+            setColoredVertex(v.getId());
+            addTextVertex(v.getId(),v.getDescription());
+            hasChange = true;
+
+        }
+
+        // Update the descriptions
+        if (hasChange){
+
+            description.getItems().add(this.path.get(indexPath).getMessage());
+            structure.getItems().add(this.path.get(indexPath).getStrutures());
+            description.scrollTo(description.getItems().size() - 1);
+            structure.scrollTo(structure.getItems().size() - 1);
+
+            Node n1 = description.lookup(".scroll-bar");
+            if (n1 instanceof ScrollBar) {
+                final ScrollBar bar1 = (ScrollBar) n1;
+                Node n2 = structure.lookup(".scroll-bar");
+                if (n2 instanceof ScrollBar) {
+                    final ScrollBar bar2 = (ScrollBar) n2;
+                    bar1.valueProperty().bindBidirectional(bar2.valueProperty());
+                }
+            }
+        }
+
+        indexPath++;
+        return hasChange;
     }
 
     private void setDividerPosition(double position) {
@@ -475,17 +479,17 @@ public class AlgorithmPageController {
     }
 
     private void desactivateButtons(ToggleButton avoid){
-            bfs.setDisable(true);
-            prim.setDisable(true);
-            dfs.setDisable(true);
-            dijkstra.setDisable(true);
-            bellman.setDisable(true);
-            kruskall.setDisable(true);
+        bfs.setDisable(true);
+        prim.setDisable(true);
+        dfs.setDisable(true);
+        dijkstra.setDisable(true);
+        bellman.setDisable(true);
+        kruskall.setDisable(true);
     }
     private void activateButtons(){
-            bfs.setDisable(false);
-            bfs.setSelected(false);
-            prim.setDisable(false);
+        bfs.setDisable(false);
+        bfs.setSelected(false);
+        prim.setDisable(false);
         prim.setSelected(false);
 
         dfs.setDisable(false);

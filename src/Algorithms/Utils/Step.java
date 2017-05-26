@@ -8,17 +8,15 @@ import graph.Vertex;
  */
 public class Step
 {
-    public enum TYPE{EDGE, VERTEX};
 
-    private TYPE objectToColor;
+
+
     private String strutures;
     private String message;
     private Edge edge;
     private Vertex vertex;
 
-    public Step(TYPE objectToColor){
-        this.objectToColor = objectToColor;
-    }
+
 
     public void setStructures(String text){
         this.strutures = text;
@@ -32,12 +30,10 @@ public class Step
         edge = e;
     }
 
-    public void setEdge(Vertex v) {
+    public void setVertex(Vertex v) {
         vertex = v;
     }
 
-
-    public TYPE getType(){return objectToColor;}
     public String getMessage(){return message;}
     public String getStrutures(){return strutures;}
     public Edge getEdge(){return edge;}

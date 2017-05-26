@@ -46,7 +46,7 @@ public class Edge implements Comparable<Edge>{
     public int getWeigth(){return weigth;}
 
     public String toString(){
-        return "(From: " + v1 + "; To: " + v2 + ")";
+        return "(" + v1 + "; " + v2 + "; Poids : " + weigth + ")";
     }
 
 }

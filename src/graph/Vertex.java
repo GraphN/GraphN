@@ -7,27 +7,34 @@ import java.util.ArrayList;
  */
 public class Vertex {
     private int id;
-    private String name;
+    private String description;
 
     public Vertex(int id){
         this.id = id;
+        this.description = "";
     }
 
-    public Vertex(int id, String name){
+    public Vertex(int id, String description){
         this(id);
-        this.name = name;
+        this.description = description;
     }
+
 
     public int getId(){
         return id;
     }
 
-    public String getName(){
-        return name;
-    }
 
     public void setId(int id){
         this.id = id;
+    }
+
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
     }
 
     public String toString(){

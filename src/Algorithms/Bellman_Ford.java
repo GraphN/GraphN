@@ -6,7 +6,9 @@ import graph.DiGraph;
 import graph.Edge;
 import graph.Graph;
 import graph.Stockage.EdgeListStockage;
+import graph.Vertex;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -15,6 +17,27 @@ import java.util.LinkedList;
 public class Bellman_Ford implements Algorithm{
     private LinkedList<Step> path = new LinkedList<>();
     public LinkedList<Step> getPath(){
+        path = new LinkedList<>();
+        visit();
+
+        if (!hasPathTo(target.getId())) return path;
+        if (hasNegativeCycle()) return path;
+
+        for (Edge e = edgeTo[target.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
+            // On notifie que la distance min a changer
+            String message = "On selectionne l'arete " + source.getId() + e +  "\n\n";
+            String structures = "distTo : " + Arrays.toString(distTo)
+                    + "\nedgeTo : " + Arrays.toString(edgeTo)
+                    + "\nonQueue : " + Arrays.toString(onQueue)
+                    + "\nqueue : " + queue.toString();
+
+            Step step = new Step();
+            step.setMessage(message);
+            step.setStructures(structures);
+            step.setEdge(e);
+
+            path.add(step);
+        }
         return path;
     }
     private double[] distTo;               // distTo[v] = distance  of shortest s->v path
@@ -24,44 +47,33 @@ public class Bellman_Ford implements Algorithm{
     private int cost;                      // number of calls to relax()
     private LinkedList<Edge> cycle;  // negative cycle (or null if no such cycle)
     private Graph G;
+    private Vertex source;
+    private Vertex target;
 
-    public Bellman_Ford(Graph G, int s) {
-        this.G = G;
+    public void visit(){
         distTo  = new double[G.V()];
         edgeTo  = new Edge[G.V()];
         onQueue = new boolean[G.V()];
         for (int v = 0; v < G.V(); v++)
             distTo[v] = Double.POSITIVE_INFINITY;
-        distTo[s] = 0.0;
+        distTo[source.getId()] = 0.0;
 
         // Bellman-Ford algorithm
         queue = new LinkedList<>();
-        queue.addLast(s);
-        onQueue[s] = true;
+        queue.addLast(source.getId());
+        onQueue[source.getId()] = true;
         while (!queue.isEmpty() && !hasNegativeCycle()) {
             int v = queue.removeLast();
             onQueue[v] = false;
             relax(G, v);
-
-            if(edgeTo[v] != null) {
-                String message = "On selectionne le sommet " + v + "\n\n\n";
-                String structures = "distTo : " + distTo.toString()
-                        + "\nedgeTo : " + edgeTo.toString()
-                        + "\nonQueue : " + onQueue.toString()
-                        + "\nqueue : " + queue.toString();
-
-                Edge e = edgeTo[v];
-
-                Step step = new Step(Step.TYPE.EDGE);
-                step.setMessage(message);
-                step.setStructures(structures);
-                step.setEdge(e);
-
-                path.add(step);
-            }
         }
 
-        check(G, s);
+    }
+
+    public Bellman_Ford(Graph G, Vertex source, Vertex target) {
+        this.G = G;
+        this.source = source;
+        this.target = target;
     }
 
     private void relax(Graph G, int v) {
@@ -70,6 +82,23 @@ public class Bellman_Ford implements Algorithm{
             if (distTo[w] > distTo[v] + e.getWeigth()) {
                 distTo[w] = distTo[v] + e.getWeigth();
                 edgeTo[w] = e;
+
+                // On notifie que la distance min a changer
+                String message = "On met à jour la distance qui separe " + source.getId() + " à " + w + ": " + distTo[w] + "\n\n";
+                String structures = "distTo : " + Arrays.toString(distTo)
+                        + "\nedgeTo : " + Arrays.toString(edgeTo)
+                        + "\nonQueue : " + Arrays.toString(onQueue)
+                        + "\nqueue : " + queue.toString();
+
+                Step step = new Step();
+                step.setMessage(message);
+                step.setStructures(structures);
+                G.getVertex(w).setDescription(distTo[w] + "");
+                step.setVertex(G.getVertex(w));
+
+                path.add(step);
+
+
                 if (!onQueue[w]) {
                     queue.addLast(w);
                     onQueue[w] = true;
@@ -101,6 +130,23 @@ public class Bellman_Ford implements Algorithm{
 
         EdgeWeightedCycle finder = new EdgeWeightedCycle(spt);
         cycle = finder.cycle();
+
+        if (cycle != null) {
+            // On notifie que la distance min a changer
+            String message = "Un circuit absorbant est détécté sur ce graphe, impossible de trouver un plus court chemin !";
+            String structures = "distTo : " + Arrays.toString(distTo)
+                    + "\nedgeTo : " + Arrays.toString(edgeTo)
+                    + "\nonQueue : " + Arrays.toString(onQueue)
+                    + "\nqueue : " + queue.toString();
+
+            Step step = new Step();
+            step.setMessage(message);
+            step.setStructures(structures);
+            step.setVertex(source);
+
+            path.add(step);
+        }
+
     }
 
     public double distTo(int v) {
@@ -112,77 +158,19 @@ public class Bellman_Ford implements Algorithm{
 
     public boolean hasPathTo(int v) {
         validateVertex(v);
-        return distTo[v] < Double.POSITIVE_INFINITY;
+        boolean ret = distTo[v] < Double.POSITIVE_INFINITY;
+        if (!ret){
+            path.clear();
+            String message = "Il n'y a pas de chemin entre " + source + " et " + G.getVertex(v);
+
+            Step step = new Step();
+            step.setMessage(message);
+            step.setVertex(source);
+            path.add(step);
+        }
+        return ret;
     }
 
-    public LinkedList<Edge> pathTo(int v) {
-        validateVertex(v);
-        if (hasNegativeCycle())
-            throw new UnsupportedOperationException("Negative cost cycle exists");
-        if (!hasPathTo(v)) return null;
-        LinkedList<Edge> path = new LinkedList<>();
-        for (Edge e = edgeTo[v]; e != null; e = edgeTo[e.getFrom().getId()]) {
-            path.push(e);
-        }
-        return path;
-    }
-
-    private boolean check(Graph G, int s) {
-
-        // has a negative cycle
-        if (hasNegativeCycle()) {
-            double weight = 0.0;
-            for (Edge e : negativeCycle()) {
-                weight += e.getWeigth();
-            }
-            if (weight >= 0.0) {
-                System.err.println("error: weight of negative cycle = " + weight);
-                return false;
-            }
-        }
-
-        else {
-
-            // check that distTo[v] and edgeTo[v] are consistent
-            if (distTo[s] != 0.0 || edgeTo[s] != null) {
-                System.err.println("distanceTo[s] and edgeTo[s] inconsistent");
-                return false;
-            }
-            for (int v = 0; v < G.V(); v++) {
-                if (v == s) continue;
-                if (edgeTo[v] == null && distTo[v] != Double.POSITIVE_INFINITY) {
-                    System.err.println("distTo[] and edgeTo[] inconsistent");
-                    return false;
-                }
-            }
-
-            // check that all edges e = v->w satisfy distTo[w] <= distTo[v] + e.weight()
-            for (int v = 0; v < G.V(); v++) {
-                for (Edge e : G.adjacentEdges(G.getVertex(v))) {
-                    int w = e.getTo().getId();
-                    if (distTo[v] + e.getWeigth() < distTo[w]) {
-                        System.err.println("edge " + e + " not relaxed");
-                        return false;
-                    }
-                }
-            }
-
-            // check that all edges e = v->w on SPT satisfy distTo[w] == distTo[v] + e.weight()
-            for (int w = 0; w < G.V(); w++) {
-                if (edgeTo[w] == null) continue;
-                Edge e = edgeTo[w];
-                int v = e.getFrom().getId();
-                if (w != e.getTo().getId()) return false;
-                if (distTo[v] + e.getWeigth() != distTo[w]) {
-                    System.err.println("edge " + e + " on shortest path not tight");
-                    return false;
-                }
-            }
-        }
-
-        System.out.println("Satisfies optimality conditions");
-        return true;
-    }
 
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
     private void validateVertex(int v) {
