@@ -19,7 +19,7 @@ public class WeightController {
     @FXML
     public void handleSendButton(){
         try {
-            weight = Integer.parseInt(weightField.getText().replaceAll("[\\D]", ""));
+            weight = Integer.parseInt(weightField.getText().replaceAll("[^0-9-]", ""));
         }catch (NumberFormatException e){
             System.out.println("C'eût été plus pertinant de mettre un chiffre ou un nombre");
         }
