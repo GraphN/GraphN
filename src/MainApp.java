@@ -3,7 +3,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -266,20 +265,27 @@ public class MainApp extends Application {
 
                             vertexAdded++;
                         }
-                        else if (currentNode.getNodeName().equals("edge"))
+                        else if (currentNode.getNodeName().equals("edges_group"))
                         {
-                            if(racine.getAttribute("graphType").equals("nonDiGraph"))
-                                graphDom.addEdge(currentNode.getAttribute("start"),
-                                        currentNode.getAttribute("end"));
-                            else if(racine.getAttribute("graphType").equals("weightedNonDiGraph"))
-                                graphDom.addWeightedEdge(currentNode.getAttribute("start"),
-                                        currentNode.getAttribute("end"), currentNode.getAttribute("weight"));
-                            else if(racine.getAttribute("graphType").equals("diGraph"))
-                                graphDom.addDiEdge(currentNode.getAttribute("start"),
-                                        currentNode.getAttribute("end"));
-                            else
-                                graphDom.addWeightedDiEdge(currentNode.getAttribute("start"),
-                                        currentNode.getAttribute("end"), currentNode.getAttribute("weight"));
+                            NodeList gNodes = currentNode.getChildNodes();
+                            System.out.println(gNodes.getLength());
+                            for(int j = 0; j < gNodes.getLength(); j++) {
+                                if(gNodes.item(j).getNodeName().equals("#text"))
+                                    continue;
+                                if(graphDom.getGraphType().equals("weightedDiGraph")) {
+                                    graphDom.addEdgeWeighted(((Element) gNodes.item(j)).getAttribute("start"),
+                                            ((Element) gNodes.item(j)).getAttribute("end"),
+                                            ((Element) gNodes.item(j)).getAttribute("weight"));
+                                }
+                                else if(graphDom.getGraphType().equals("weightedNonDiGraph")) {
+                                    graphDom.addWeightedEdge(currentNode.getAttribute("start"),
+                                            currentNode.getAttribute("end"), currentNode.getAttribute("weight"));
+                                }
+                                else {
+                                    graphDom.addDiEdge(((Element) gNodes.item(j)).getAttribute("start"),
+                                            ((Element) gNodes.item(j)).getAttribute("end"));
+                                }
+                            }
                         }
                     }
                 }

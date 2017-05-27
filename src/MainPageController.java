@@ -3,7 +3,6 @@
  */
 
 
-import graph.Graph;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -18,7 +17,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -30,7 +28,6 @@ import javafx.stage.Screen;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 // todo: Ajouter un bouton pour pouvoir supprimmer des trucs?
@@ -58,6 +55,7 @@ public class MainPageController {
     private Map<String,ArrayList<Shape>> mapNode;
 
     private ArrayList<DrawEdge> drawEdgesList;
+    private ArrayList<ArrayList<DrawEdge>> drawEdgesGroupList;
 
     private boolean firstVerForEdge = true;
     private Circle circleStart;
@@ -95,6 +93,7 @@ public class MainPageController {
         handleNew();
         support.addSupport(tabPane);
         drawEdgesList = new ArrayList<>();
+        drawEdgesGroupList = new ArrayList<>();
         tabMap = new HashMap<>();
 
 
@@ -300,15 +299,18 @@ public class MainPageController {
             DrawEdge drawEdge = null;
 
             i = 0;
-            while (i < graphOpen.getNbEdge()) {
-                Group cirleStart = (Group) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i));
-                Group cirleEnd = (Group) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i));
-                drawEdge = graphOpen.getDrawEdge(i);
+            while (i < graphOpen.getNbGroup()) {
+                ArrayList<DrawEdge> edges = graphOpen.getDrawEdges(i);
+                drawEdgesGroupList.add(edges);
 
-                drawEdgesList.add(drawEdge);
+                for(int j = 0; j < edges.size(); j++) {
+                    Group cirleStart = (Group) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i, j));
+                    Group cirleEnd = (Group) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i, j));
+                    drawEdgesList.add(edges.get(j));
 
-                moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, drawEdgesList.indexOf(drawEdge), pane);
-                pane.getChildren().add(1,drawEdge.getRoot());
+                    moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, drawEdgesList.indexOf(edges.get(j)), pane);
+                    pane.getChildren().add(1, edges.get(j).getRoot());
+                }
                 i++;
             }
 
@@ -605,12 +607,13 @@ public class MainPageController {
                             Group groupEnd = group;
                             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                             DrawEdge drawEdge = null;
+                            ArrayList<DrawEdge> drawEdges;
+                            int gIndex;
                             Text weight;
                             switch (graphType) {
                                 case "nonDiGraph":
-                                    drawEdge = new DrawEdge(groupStart.getTranslateX(), groupStart.getTranslateY(), groupEnd.getTranslateX(), groupEnd.getTranslateY());
-
-                                    graphXml.addEdge(nameVertexStart, groupEnd.getId());
+                                    gIndex = graphXml.addEdge(nameVertexStart, groupEnd.getId());
+                                    updateGroup(currentTab, gIndex);
                                     break;
                                 case "weightedNonDiGraph":
                                     weight = new Text(""+mainApp.showWeightPage());
@@ -621,12 +624,12 @@ public class MainPageController {
                                             // todo: Il faudrait aussi modifier le graphXML
                                         }
                                     });
-                                    drawEdge = new DrawEdge (groupStart.getTranslateX(),groupStart.getTranslateY(),groupEnd.getTranslateX(),groupEnd.getTranslateY(), false, weight);
-                                    graphXml.addWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    gIndex = graphXml.addWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    updateGroup(currentTab, gIndex);
                                     break;
                                 case "diGraph":
-                                    drawEdge = new DrawEdge(groupStart.getTranslateX(), groupStart.getTranslateY(), groupEnd.getTranslateX(), groupEnd.getTranslateY(), true);
-                                    graphXml.addDiEdge(nameVertexStart, groupEnd.getId());
+                                    gIndex = graphXml.addDiEdge(nameVertexStart, groupEnd.getId());
+                                    updateGroup(currentTab, gIndex);
                                     break;
                                 case "weightedDiGraph":
                                     weight = new Text(""+mainApp.showWeightPage());
@@ -637,13 +640,10 @@ public class MainPageController {
                                             // todo: Il faudrait aussi modifier le graphXML
                                         }
                                     });
-                                    drawEdge = new DrawEdge (groupStart.getTranslateX(),groupStart.getTranslateY(),groupEnd.getTranslateX(),groupEnd.getTranslateY(), true, weight);
-                                    graphXml.addWeightedDiEdge(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    gIndex = graphXml.addEdgeWeighted(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    updateGroup(currentTab, gIndex);
                                     break;
                             }
-                            drawEdgesList.add(drawEdge);
-                            moveVertexMoveEdgeListenerDraw(groupStart, groupEnd, drawEdgesList.indexOf(drawEdge), currP);
-                            currP.getChildren().add(1,drawEdge.getRoot());
 
                             // Edge that follow the mouse
                             currPage.setOnMouseMoved(null);
@@ -907,9 +907,10 @@ public class MainPageController {
                 double endY = drawEdge.getEndY();
                 Text text = drawEdge.getText();
                 boolean directed = drawEdge.isDirected();
+                int bending = drawEdge.getBending();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, (double)newValue, endY, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, (double)newValue, endY, bending, directed, text));
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
@@ -925,9 +926,10 @@ public class MainPageController {
                 double endY = drawEdge.getEndY();
                 Text text = drawEdge.getText();
                 boolean directed = drawEdge.isDirected();
+                int bending = drawEdge.getBending();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, endX , (double)newValue, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, endX , (double)newValue, bending, directed, text));
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
@@ -943,9 +945,10 @@ public class MainPageController {
                 double endY = drawEdge.getEndY();
                 Text text = drawEdge.getText();
                 boolean directed = drawEdge.isDirected();
+                int bending = drawEdge.getBending();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge((double)newValue, startY, endX , endY, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge((double)newValue, startY, endX , endY, bending, directed, text));
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
@@ -962,9 +965,10 @@ public class MainPageController {
                 double endY = drawEdge.getEndY();
                 Text text = drawEdge.getText();
                 boolean directed = drawEdge.isDirected();
+                int bending = drawEdge.getBending();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, (double)newValue, endX , endY, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, (double)newValue, endX , endY, bending, directed, text));
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
@@ -987,4 +991,32 @@ public class MainPageController {
                 }
                 return null;
             }
+
+    private void updateGroup(Tab tab, int index) {
+        AnchorPane currPage = (AnchorPane) tab.getContent();
+        AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
+        GraphDom graphXml = getXmlOfThisTab(tab.getId());
+
+        if(drawEdgesGroupList.size() == index) {
+            drawEdgesGroupList.add(graphXml.getDrawEdges(index));
+        }
+        else {
+            for(DrawEdge drawEdge: drawEdgesGroupList.get(index)) {
+                currP.getChildren().remove(drawEdge.getRoot());
+                drawEdgesList.remove(drawEdge);
+            }
+
+            drawEdgesGroupList.set(index, getXmlOfThisTab(tab.getId()).getDrawEdges(index));
+        }
+        for(int i = 0; i < drawEdgesGroupList.get(index).size(); i++) {
+            Group cirleStart = (Group) getChildrenVertexById(currP, graphXml.getEdgeStartName(index, i));
+            Group cirleEnd = (Group) getChildrenVertexById(currP, graphXml.getEdgeEndName(index, i));
+
+            DrawEdge drawEdge = drawEdgesGroupList.get(index).get(i);
+
+            drawEdgesList.add(drawEdge);
+            moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, drawEdgesList.indexOf(drawEdge), currP);
+            currP.getChildren().add(1, drawEdge.getRoot());
+        }
+    }
 }

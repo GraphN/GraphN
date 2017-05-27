@@ -321,17 +321,16 @@ public class AlgorithmPageController {
             //List<Shape> node = createVertex(x, x, name);
             pane.getChildren().add(sPane);
         }
-        for(int i=0; i<graph.getNbEdge(); i++) {
-            DrawEdge drawEdge = graphDom.getDrawEdge(i);
-            //adding edge created to pane (at index 0 to have vertexes on front of edges)
-            pane.getChildren().add(0, drawEdge.getRoot());
-//            System.out.println("" +drawEdge.getRoot().getChildren().get(0) + drawEdge.getRoot().getChildren().get(1));
 
-            edgeList.add(drawEdge);
-            System.out.println("\nedge weigth : " + graphDom.getEdgeWeigth(i));
-            graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)), (int)graphDom.getEdgeWeigth(i));
-//            System.out.println(graph.getFrom(i));
-//            System.out.println(graph.getTo(i));
+        for(int i=0; i<graph.getNbGroup(); i++) {
+            ArrayList<DrawEdge> edges = graphDom.getDrawEdges(i);
+
+            for(DrawEdge drawEdge: edges) {
+                pane.getChildren().add(0, drawEdge.getRoot());
+                edgeList.add(drawEdge);
+
+                graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
+            }
         }
 
         for(Edge e : graphTest.getEdgesList()) {
