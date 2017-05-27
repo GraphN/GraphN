@@ -8,11 +8,8 @@ import graph.UDiGraph;
 import graph.Vertex;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
@@ -22,7 +19,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import javafx.scene.text.TextFlow;
 
 import java.util.*;
 
@@ -256,15 +252,16 @@ public class AlgorithmPageController {
             //List<Shape> node = createVertex(x, x, name);
             pane.getChildren().add(sPane);
         }
-        for(int i=0; i<graph.getNbEdge(); i++) {
-            DrawEdge drawEdge = graphDom.getDrawEdge(i);
-            //adding edge created to pane (at index 0 to have vertexes on front of edges)
-            pane.getChildren().add(0, drawEdge.getRoot());
-            edgeList.add(drawEdge);
 
-            graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
-//            System.out.println(graph.getFrom(i));
-//            System.out.println(graph.getTo(i));
+        for(int i=0; i<graph.getNbGroup(); i++) {
+            ArrayList<DrawEdge> edges = graphDom.getDrawEdges(i);
+
+            for(DrawEdge drawEdge: edges) {
+                pane.getChildren().add(0, drawEdge.getRoot());
+                edgeList.add(drawEdge);
+
+                graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
+            }
         }
        return pane;
     }

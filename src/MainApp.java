@@ -221,7 +221,7 @@ public class MainApp extends Application {
                 for(int i = 0; i < nodes.getLength(); i++)
                 {
                     //this if is very important. when a node is equal to #text its just that it is a jump the line,
-                    // so we have to test if the current node is not a jump the line
+                    // so we have to test.uml if the current node is not a jump the line
                     if(!nodes.item(i).getNodeName().equals("#text"))
                     {
                         Element currentNode = (Element) nodes.item(i);
@@ -235,10 +235,23 @@ public class MainApp extends Application {
 
                             vertexAdded++;
                         }
-                        else if (currentNode.getNodeName().equals("edge"))
+                        else if (currentNode.getNodeName().equals("edges_group"))
                         {
-                            graphDom.addEdge(currentNode.getAttribute("start"),
-                                    currentNode.getAttribute("end"));
+                            NodeList gNodes = currentNode.getChildNodes();
+                            System.out.println(gNodes.getLength());
+                            for(int j = 0; j < gNodes.getLength(); j++) {
+                                if(gNodes.item(j).getNodeName().equals("#text"))
+                                    continue;
+                                if(graphDom.getGraphType().equals("weightedDiGraph")) {
+                                    graphDom.addEdgeWeighted(((Element) gNodes.item(j)).getAttribute("start"),
+                                            ((Element) gNodes.item(j)).getAttribute("end"),
+                                            ((Element) gNodes.item(j)).getAttribute("weight"));
+                                }
+                                else {
+                                    graphDom.addDiEdge(((Element) gNodes.item(j)).getAttribute("start"),
+                                            ((Element) gNodes.item(j)).getAttribute("end"));
+                                }
+                            }
                         }
                     }
                 }

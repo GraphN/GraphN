@@ -18,50 +18,71 @@ public class DrawEdge {
 
     private CubicCurve curve1;
     private Path arrowEnd;
+
     Group root;
     Text text;
     boolean directed;
-    DrawEdge(double startX, double startY, double endX, double endY){
-        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, null, false);
+    int bending;
+
+    DrawEdge(double startX, double startY, double endX, double endY, int bending){
+        this(startX, startY, endX, endY, bending, null, false);
     }
-    DrawEdge(double startX, double startY, double endX, double endY, Text text){
-        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, text, true);
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, Text text){
+        this(startX, startY, endX, endY, bending, text, true);
     }
 
-    DrawEdge(double startX, double startY, double endX, double endY, boolean directed){
-        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, null, directed);
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, boolean directed){
+        this(startX, startY, endX, endY, bending, null, directed);
     }
 
-    DrawEdge(double startX, double startY, double endX, double endY, boolean directed, Text text){
-        this(startX, startY, (startX+endX)/2, (startY+endY)/2, (startX+endX)/2, (startY+endY)/2, endX, endY, text, directed);
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, boolean directed, Text text){
+        this(startX, startY, endX, endY, bending, text, directed);
     }
 
-    DrawEdge(double startX, double startY, double controlX1,double controlY1,double controlX2,double controlY2, double endX, double endY, Text text, boolean directed){
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, Text text, boolean directed){
         root = new Group();
         this.text = text;
         this.directed = directed;
+        this.bending = bending;
 
-        // bending curve
-        //Rectangle srcRect1 = new Rectangle(100,100,50,50);
-        //Rectangle dstRect1 = new Rectangle(300,300,50,50);
+        // Calcul de l'angle du trait
+        double opp, adj, angle, sin, cos;
+        adj =  Math.abs(endX - startX);
+        opp = Math.abs(endY - startY);
+        angle = Math.atan(opp/adj);
+        sin = Math.sin(angle);
+        cos = Math.cos(angle);
 
+        System.out.println("sin: " + sin + " cos: " + cos);
+
+        double movX = 0, movY = 0;
+
+        if(bending > 0) {
+            movX = 40 * sin;
+            movY = 40 * cos;
+
+            if (startY < endY)
+                movX *= -1;
+            if (startX > endX)
+                movY *= -1;
+            if (bending == 2) {
+                movX *= -1;
+                movY *= -1;
+            }
+        }
+
+        double controlX1, controlX2, controlY1, controlY2;
+        controlX1 = controlX2 = (startX + endX) / 2 + movX;
+        controlY1 = controlY2 = (startY + endY) / 2 + movY;
 
         curve1 = new CubicCurve(startX, startY, controlX1, controlY1, controlX2, controlY2, endX, endY);
         curve1.setStrokeWidth(4);
         curve1.setSmooth(true);
         curve1.setStroke(UNCOLORED);
+        curve1.setFill(Color.TRANSPARENT);
 
         // Taille de la flèche
         double scale=50;
-        // si on veut une flèche au début
-        /*Point2D ori=eval(curve1,0);
-        Point2D tan=evalDt(curve1,0).normalize().multiply(scale);
-        Path arrowIni=new Path();
-        arrowIni.getElements().add(new MoveTo(ori.getX()+0.2*tan.getX()-0.2*tan.getY(),
-                ori.getY()+0.2*tan.getY()+0.2*tan.getX()));
-        arrowIni.getElements().add(new LineTo(ori.getX(), ori.getY()));
-        arrowIni.getElements().add(new LineTo(ori.getX()+0.2*tan.getX()+0.2*tan.getY(),
-                ori.getY()+0.2*tan.getY()-0.2*tan.getX()));*/
         if(directed) {
             double paramEval = Math.sqrt(Math.pow(curve1.getEndX() - curve1.getStartX(), 2) +
                                Math.pow(curve1.getEndY() - curve1.getStartY(), 2));
@@ -80,8 +101,8 @@ public class DrawEdge {
             if(text == null)
                 root.getChildren().addAll(curve1, arrowEnd);
             else{
-                text.setTranslateX((endX+startX)/2);
-                text.setTranslateY((endY+startY)/2);
+                text.setTranslateX(controlX1 + movX/4);
+                text.setTranslateY(controlY1 + movY/4);
                 root.getChildren().addAll(curve1, arrowEnd, text);
             }
         }
@@ -178,6 +199,9 @@ public class DrawEdge {
     }
     Text getText(){
         return text;
+    }
+    int getBending() {
+        return bending;
     }
 
     boolean isDirected(){
