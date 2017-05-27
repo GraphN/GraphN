@@ -19,7 +19,7 @@ public class EdgeListStockage implements StockageType {
     public void addEdge(Vertex v, Vertex w){
         addEdge(v, w, 0);
     }
-    public void addEdge(Vertex v, Vertex w, int weigth){
+    public void addEdge(Vertex v, Vertex w, double weigth){
         edgesList.add(new Edge(v, w, weigth));
     }
     public Edge getEdge(Vertex from, Vertex to){

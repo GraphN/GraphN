@@ -25,7 +25,7 @@ public class AdjacencyStockage implements StockageType {
         addEdge(v, w, 0);
     }
 
-    public void addEdge(Vertex v, Vertex w, int weigth) {
+    public void addEdge(Vertex v, Vertex w, double weigth) {
         Edge e = new Edge(v, w, weigth);
         adjacencyEdgeLists[v.getId()].push(e);
     }

@@ -66,7 +66,7 @@ public abstract class Graph {
         E++;
     }
     public abstract void addEdge(Vertex v, Vertex w);
-    public abstract void addEdge(Vertex v, Vertex w, int weigth);
+    public abstract void addEdge(Vertex v, Vertex w, double weigth);
 
     public void print(){
         System.out.println(this.getClass());

@@ -5,13 +5,13 @@ package graph;
  */
 public class Edge{
     // Le poids de l'arête
-    private int weigth;
+    private double weigth;
 
     // Les sommets qui connenctent l'arête Pour un graphe oriente v1 est le sommet de depart
     private Vertex v1, v2;
 
     // Constructeur arête avec poids
-    public Edge(Vertex v1, Vertex v2, int weigth){
+    public Edge(Vertex v1, Vertex v2, double weigth){
         this.v1 = v1;
         this.v2 = v2;
         this.weigth = weigth;
@@ -45,7 +45,7 @@ public class Edge{
         return ((Edge) other).weigth == weigth;
     }
 
-    public int getWeigth(){return weigth;}
+    public double getWeigth(){return weigth;}
 
     public String toString(){
         return "(" + v1 + "; " + v2 + "; Poids : " + weigth + ")";

@@ -15,7 +15,7 @@ public class UDiGraph extends Graph {
         addEdge(v, w, 0);
     }
 
-    public void addEdge(Vertex v, Vertex w, int weigth) {
+    public void addEdge(Vertex v, Vertex w, double weigth) {
         stockage.addEdge(v, w, weigth);
         stockage.addEdge(w, v, weigth);
         E ++;
