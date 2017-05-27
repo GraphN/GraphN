@@ -5,6 +5,9 @@ import Algorithms.Utils.Step;
 import graph.Edge;
 import graph.Graph;
 import graph.Vertex;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -14,56 +17,57 @@ public class Dijkstra implements Algorithm{
     private double[] distTo;          // distTo[v] = distance  of shortest s->v path
     private Edge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
     private IndexMinPQ<Double> pq;    // priority queue of vertices
+    private Vertex source;
     private Vertex target;
+    private Graph G;
 
-    private LinkedList<Step> path = new LinkedList<>();
+    private LinkedList<Step> path;
 
-    public void setTarget(Vertex target){
-        this.target = target;
-    }
 
-    public Dijkstra(Graph G, Vertex s, Vertex target) {
-        this.target = target;
+
+    public void visit(){
+        path = new LinkedList<>();
+
         for (Edge e : G.getEdgesList()) {
-            if (e.getWeigth() < 0)
-                throw new IllegalArgumentException("edge " + e + " has negative weight");
+            System.out.println(e + " p " + e.getWeigth());
+            if (e.getWeigth() < 0) {
+                Step step = new Step();
+                step.setEdge(e);
+                step.setMessage("L'arete  " + e + " a un poids négatif, Dijkstra ne peut pas s'appliquer sur les graphes " +
+                        "a poids négatif, essayer Bellman-Ford");
+                path.add(step);
+                return;
+            }
         }
 
-        distTo = new double[G.V()];
-        edgeTo = new Edge[G.V()];
+        if(!validateVertex(source.getId())) return;
 
-        validateVertex(s.getId());
-
-        for (int v = 0; v < G.V(); v++)
-            distTo[v] = Double.POSITIVE_INFINITY;
-        distTo[s.getId()] = 0.0;
+        distTo[source.getId()] = 0.0;
 
         // relax vertices in order of distance from s
         pq = new IndexMinPQ<Double>(G.V());
-        pq.insert(s.getId(), distTo[s.getId()]);
+        pq.insert(source.getId(), distTo[source.getId()]);
         while (!pq.isEmpty()) {
             int v = pq.delMin();
-            for (Edge e : G.adjacentEdges(G.getVertex(v)))
+            for (Edge e : G.adjacentEdges(G.getVertex(v))) {
                 relax(e);
-            if(edgeTo[v] != null) {
-                String message = "On selectionne le sommet " + v;
-                String structures = "distTo : " + distTo.toString()
-                        + "\nedgeTo : " + edgeTo.toString()
-                        + "\nPriorityQueue : " + pq.toString();
-
-                Edge e = edgeTo[v];
-
-                Step step = new Step(Step.TYPE.EDGE);
-                step.setMessage(message);
-                step.setStructures(structures);
-                step.setEdge(e);
-
-                path.add(step);
             }
         }
 
         // check optimality conditions
-        assert check(G, s.getId());
+        assert check(G, source.getId());
+    }
+
+    public Dijkstra(Graph G, Vertex source, Vertex target) {
+        this.source = source;
+        this.target = target;
+        this.G = G;
+
+        distTo = new double[G.V()];
+        edgeTo = new Edge[G.V()];
+
+        for (int v = 0; v < G.V(); v++)
+            distTo[v] = Double.POSITIVE_INFINITY;
     }
 
     // relax edge e and update pq if changed
@@ -72,6 +76,23 @@ public class Dijkstra implements Algorithm{
         if (distTo[w] > distTo[v] + e.getWeigth()) {
             distTo[w] = distTo[v] + e.getWeigth();
             edgeTo[w] = e;
+
+            // prepare the step
+            String message = "On met à jour la distance qui separe " + source.getId() + " à " + w + ": " + distTo[w] + "\n\n";
+            String structures = "distTo : " + Arrays.toString(distTo)
+                    + "\nedgeTo : " + Arrays.toString(edgeTo)
+                    + "\nPriorityQueue : " + pq.toString();
+
+
+            Step step = new Step();
+            step.setMessage(message);
+            step.setStructures(structures);
+            G.getVertex(w).setDescription(distTo[w] + "");
+            step.setVertex(G.getVertex(w));
+
+            path.add(step);
+
+
             if (pq.contains(w)) pq.decreaseKey(w, distTo[w]);
             else                pq.insert(w, distTo[w]);
         }
@@ -89,14 +110,28 @@ public class Dijkstra implements Algorithm{
     }
 
     public LinkedList<Step> getPath() {
-        return path;
-        /*validateVertex(target.getId());
-        if (!hasPathTo(target.getId())) return null;
-        LinkedList<Edge> path = new LinkedList<>();
-        for (Edge e = edgeTo[target.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
-            path.push(e);
+        visit();
+
+        validateVertex(target.getId());
+
+        if (!hasPathTo(target.getId())){
+            Step step = new Step();
+            step.setMessage("Il n'y a pas de chemin de " + source.getId() + " a " + target.getId());
+            path.add(step);
+            return path;
         }
-        return path;*/
+
+        for (Edge e = edgeTo[target.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
+            Step step = new Step();
+            step.setMessage("On selectionne l'arrete " + e);
+            step.setStructures("distTo : " + Arrays.toString(distTo)
+                    + "\nedgeTo : " + Arrays.toString(edgeTo)
+                    + "\nPriorityQueue : " + pq.toString());
+            step.setEdge(e);
+
+            path.add(step);
+        }
+        return path;
     }
 
 
@@ -149,10 +184,14 @@ public class Dijkstra implements Algorithm{
     }
 
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
+    private boolean validateVertex(int v) {
         int V = distTo.length;
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
+        if (v < 0 || v >= V) {
+            Step step = new Step();
+            step.setMessage("vertex " + v + " is not between 0 and " + (V - 1));
+            return false;
+        }
+        return true;
     }
 }
 

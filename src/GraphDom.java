@@ -103,6 +103,27 @@ public class GraphDom {
 
         return getId(group);
     }
+    public void addWeightedEdge(String vertexStart, String vertexEnd, String weight)
+    {
+        nbEdge++;
+        Element edge1 = document.createElement("edge");
+        edge1.setAttribute("name", "edge_"+nbEdge);
+        edge1.setAttribute("start", vertexStart);
+        edge1.setAttribute("end", vertexEnd);
+        edge1.setAttribute("weight", weight);
+        racine.setAttribute("graphType", "weightedNonDiGraph");
+        racine.appendChild(edge1);
+        Element edge2 = document.createElement("edge");
+        edge2.setAttribute("name", "edge_"+nbEdge);
+        edge2.setAttribute("start", vertexEnd);
+        edge2.setAttribute("end", vertexStart);
+        edge2.setAttribute("weight", weight);
+        racine.setAttribute("graphType", "weightedNonDiGraph");
+        racine.appendChild(edge1);
+        racine.appendChild(edge2);
+        edges.add(edge1);
+        //edges.add(edge2);
+    }
 
     public int addDiEdge(String vertexStart, String vertexEnd)
     {
@@ -248,7 +269,7 @@ public class GraphDom {
         int endY = (int)ver2.getY();
         return new Line(startX, startY, endX, endY);
     }
-    /*public DrawEdge getDrawEdge(int index){
+    public DrawEdge getDrawEdge(int index){
         Element edge = (Element) edges.get(index);
         String vertex1 = edge.getAttribute("start");
         String vertex2 = edge.getAttribute("end");
@@ -260,15 +281,17 @@ public class GraphDom {
         int startY = (int)ver1.getY();
         int endX = (int)ver2.getX();
         int endY = (int)ver2.getY();
-        System.out.println(graphType);
         if(graphType.equals("nonDiGraph"))
             return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0);
+        else if (graphType.equals("weightedNonDiGraph")) {
+            return new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, 0, false, new Text(edge.getAttribute("weight")));
+        }
         else if (graphType.equals("diGraph"))
             return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, true);
         else if (graphType.equals("weightedDiGraph"))
-            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, new Text(edge.getAttribute("weight")));
+            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, true, new Text(edge.getAttribute("weight")));
         return null;
-    }*/
+    }
 
     public ArrayList<DrawEdge> getDrawEdges(int index){
         ArrayList<Element> edges = edgesGroups.get(index);
@@ -332,10 +355,12 @@ public class GraphDom {
                     int endY = (int) ver2.getY();
                     if(graphType.equals("nonDiGraph"))
                         return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0);
+                    else if (graphType.equals("weightedNonDiGraph"))
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, false, new Text(edge.getAttribute("weight")));
                     else if (graphType.equals("diGraph"))
                         return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, true);
                     else if (graphType.equals("weightedDiGraph"))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, new Text(edge.getAttribute("weight")));
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, true, new Text(edge.getAttribute("weight")));
                     return null;                }
             }else {
                 System.out.println("NUll");
@@ -343,7 +368,12 @@ public class GraphDom {
         }
         return null;
     }
-
+    public double getEdgeWeigth(int i){
+        if(graphType.equals("nonDiGraph")||graphType.equals("diGraph"))
+            return 0;
+        else
+            return Double.parseDouble(edges.get(i).getAttribute("weight").replaceAll("[^1234567890.\\-]", ""));
+    }
     public int getFrom(int index){
         return Integer.parseInt(edges.get(index).getAttribute("start").replaceAll("[\\D]", ""));
     }

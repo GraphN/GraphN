@@ -1,4 +1,5 @@
 package Algorithms.Utils;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -322,6 +323,10 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
             if (!hasNext()) throw new NoSuchElementException();
             return copy.delMin();
         }
+    }
+
+    public String toString(){
+        return Arrays.toString(pq);
     }
 }
 

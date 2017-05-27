@@ -17,53 +17,43 @@ public class DFS implements Algorithm{
     private Vector<Boolean> marked;
     private LinkedList<Step> path = new LinkedList<>();
     private Vertex lastVisitedVertex = null;
+    private Vertex source;
 
     public LinkedList<Step> getPath(){
-        visit(g.getVertex(0), new VertexVisit() {
-            @Override
-            public void applyFunction(Vertex v) {
-
-            }
-        });
+        visit(source);
         return path;
     }
 
-    public DFS(Graph g){
+    public DFS(Graph g, Vertex source){
         this.g = g;
-    }
-
-    public LinkedList<Step> visit(Vertex v, VertexVisit f) {
-        visit(v,f, new VertexVisit() {
-            @Override
-            public void applyFunction(Vertex v) {}
-        });
-        return getPath();
+        this.source = source;
     }
 
     // DFS en mode recursif
-    LinkedList<Step> visit(Vertex v, VertexVisit fpre, VertexVisit fpost) {
+    LinkedList<Step> visit(Vertex v) {
         marked = new Vector<>(g.V());
+        path = new LinkedList<>();
+
         for(int i  = 0; i < g.V(); i++)
             marked.add(false);
-        recursion(v, fpre, fpost);
 
-        return getPath();
+        recursion(v);
+
+        return path;
     }
 
-    private void recursion(Vertex v, VertexVisit fpre, VertexVisit fpost) {
-        fpre.applyFunction(v);
-
+    private void recursion(Vertex v) {
         if(lastVisitedVertex != null) {
             String message = "On selectionne le sommet " + v.getId();
             String structures = "last visited vertex : " + lastVisitedVertex.getId()
                                 + "\nmarked : " + marked.toString();
-            Edge e = g.getEdge(lastVisitedVertex, v);
-
-            Step step = new Step(Step.TYPE.EDGE);
+            //System.out.println("Add step : " +lastVisitedVertex.getId() + v.getId());
+            //Edge e = g.getEdge(lastVisitedVertex, v);
+            Step step = new Step();
             step.setMessage(message);
             step.setStructures(structures);
-            step.setEdge(e);
-
+            //step.setEdge(e);
+            step.setVertex(v);
             path.add(step);
         }
 
@@ -73,8 +63,7 @@ public class DFS implements Algorithm{
 
         for (Vertex w : g.adjacentVertex(v))
             if (!marked.get(w.getId()))
-                recursion(w, fpre, fpost);
-        fpost.applyFunction(v);
+                recursion(w);
     }
 
 }

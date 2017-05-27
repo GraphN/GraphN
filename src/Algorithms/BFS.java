@@ -15,36 +15,28 @@ public class BFS implements Algorithm{
     private Graph g;
     private Vector<Integer> parent;
     private LinkedList<Step> path;
+    private Vertex source;
 
     public LinkedList<Step> getPath(){
-        visit(g.getVertex(0), new VertexVisit() {
-            @Override
-            public void applyFunction(Vertex v) {
-
-            }
-        });
-
+        visit(source);
         return path;
     }
 
-    public BFS(Graph g){
+    public BFS(Graph g, Vertex source){
         this.g = g;
+        this.source = source;
     }
 
 
-    public LinkedList<Step> visit(Vertex v, VertexVisit f) {
+    public LinkedList<Step> visit(Vertex v) {
         parent = new Vector<>(g.V());
+        path = new LinkedList<>();
         for(int i  = 0; i < g.V(); i++)
             parent.add(-1);
-        return bfs(v, f);
+        return bfs(v);
     }
 
-    public int parentOf(Vertex v) {
-        return parent.get(v.getId());
-    }
-
-    private LinkedList<Step> bfs(Vertex v, VertexVisit f) {
-        path = new LinkedList<>();
+    private LinkedList<Step> bfs(Vertex v) {
         LinkedList<Edge> pile = new LinkedList<>();
 
         parent.set(v.getId(), v.getId());
@@ -67,17 +59,17 @@ public class BFS implements Algorithm{
             if(g.getEdge(g.getVertex(parent.get(current.getId())), current) != null) {
                 String message = "On selectionne le sommet " + current.getId();
                 String structures = "parent : " + parent.toString();
-                Edge e = g.getEdge(g.getVertex(parent.get(current.getId())), current);
+                //Edge e = g.getEdge(g.getVertex(parent.get(current.getId())), current);
 
-                Step step = new Step(Step.TYPE.EDGE);
+                Step step = new Step();
                 step.setMessage(message);
                 step.setStructures(structures);
-                step.setEdge(e);
+                //step.setEdge(e);
+                step.setVertex(current);
 
                 path.add(step);
             }
 
-            f.applyFunction(current);
         }while (!pile.isEmpty());
 
         return path;

@@ -105,8 +105,17 @@ public class DrawEdge {
                 text.setTranslateY(controlY1 + movY/4);
                 root.getChildren().addAll(curve1, arrowEnd, text);
             }
+        }else{
+            if(text == null)
+                root.getChildren().addAll(curve1);
+            else{
+                text.setTranslateX((endX+startX)/2);
+                text.setTranslateY((endY+startY)/2);
+                root.getChildren().addAll(curve1, text);
+            }
         }
-        else root.getChildren().add(curve1);
+
+
 
     }
 

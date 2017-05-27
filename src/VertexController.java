@@ -3,23 +3,30 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.awt.*;
 
 
 /**
  * Created by LBX on 14/05/2017.
  */
-public class WeightController {
+public class VertexController {
     Stage dialogStage;
-    int weight;
+    int vertex;
+    int nbVertex;
     @FXML
     private Button sendButton;
     @FXML
-    private TextField weightField;
+    private TextField textField;
+    @FXML
+    private Text text;
     @FXML
     public void handleSendButton(){
         try {
-            weight = Integer.parseInt(weightField.getText().replaceAll("[^0-9-]", ""));
+            vertex = Integer.parseInt(textField.getText().replaceAll("[\\D]", ""));
+            if(vertex > nbVertex || vertex < 0) return;
         }catch (NumberFormatException e){
             System.out.println("C'eût été plus pertinant de mettre un chiffre ou un nombre");
         }
@@ -30,11 +37,19 @@ public class WeightController {
         if(event.getCode().equals(KeyCode.ENTER))
             handleSendButton();
     }
-    int getWeight(){
-        return weight;
+
+    public void setNbVertex(int nbVertex) {
+        this.nbVertex = nbVertex;
+    }
+
+    public void setText(String text) {
+        this.text.setText(text);
+    }
+
+    int getVertex(){
+        return vertex;
     }
     public void setStage(Stage dialogStage){
         this.dialogStage = dialogStage;
     }
-
 }

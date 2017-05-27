@@ -62,13 +62,13 @@ public class ImportController {
         Algorithm algo = null;
         switch (algorithme){
             case "BFS":
-                algo = new BFS(g);
+                algo = new BFS(g, g.getVertex(0));
                 break;
             case "DFS":
-                algo = new BFS(g);
+                algo = new BFS(g, g.getVertex(0));
                 break;
             case "Kruskall":
-                algo = new BFS(g);
+                algo = new BFS(g, g.getVertex(0));
                 break;
             default:
                 System.out.println("Algo Not find !!");

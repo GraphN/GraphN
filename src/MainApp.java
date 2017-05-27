@@ -74,10 +74,10 @@ public class MainApp extends Application {
             algoStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
             algoStage.setScene(scene);
+            algoStage.setMaximized(true);
 
             AlgorithmPageController controller = loader.getController();
             controller.setMainApp(this);
-
             //setting the graph pane to the algo page
             controller.setGraph(graph);
 
@@ -109,6 +109,7 @@ public class MainApp extends Application {
             // Create the dialog Stage.
             Stage weightStage = new Stage();
             weightStage.setTitle("Weight");
+            weightStage.setResizable(false);
             weightStage.initModality(Modality.WINDOW_MODAL);
             weightStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
@@ -120,6 +121,34 @@ public class MainApp extends Application {
             weightStage.showAndWait();
 
             return controller.getWeight();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public int showVertex(int nbVertex, String text) {
+        try {
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("assets/fxml/Vertex.fxml"));
+            BorderPane page = (BorderPane) loader.load();
+
+            // Create the dialog Stage.
+            Stage startVertexStage = new Stage();
+            startVertexStage.setTitle("VertexNumber");
+            startVertexStage.setResizable(false);
+            startVertexStage.initModality(Modality.WINDOW_MODAL);
+            startVertexStage.initOwner(algoStage);
+            Scene scene = new Scene(page);
+            startVertexStage.setScene(scene);
+
+            VertexController controller = loader.getController();
+            controller.setStage(startVertexStage);
+            controller.setNbVertex(nbVertex);
+            controller.setText(text);
+            startVertexStage.showAndWait();
+
+            return controller.getVertex();
         } catch (IOException e) {
             e.printStackTrace();
             return 0;
@@ -221,7 +250,7 @@ public class MainApp extends Application {
                 for(int i = 0; i < nodes.getLength(); i++)
                 {
                     //this if is very important. when a node is equal to #text its just that it is a jump the line,
-                    // so we have to test.uml if the current node is not a jump the line
+                    // so we have to test if the current node is not a jump the line
                     if(!nodes.item(i).getNodeName().equals("#text"))
                     {
                         Element currentNode = (Element) nodes.item(i);
@@ -232,6 +261,7 @@ public class MainApp extends Application {
 
                             // change the name of the vertex to have good one (corresponding of the xml file)
                             graphDom.setNameOfVertex(currentNode.getAttribute("name"), vertexAdded);
+
 
                             vertexAdded++;
                         }
@@ -246,6 +276,10 @@ public class MainApp extends Application {
                                     graphDom.addEdgeWeighted(((Element) gNodes.item(j)).getAttribute("start"),
                                             ((Element) gNodes.item(j)).getAttribute("end"),
                                             ((Element) gNodes.item(j)).getAttribute("weight"));
+                                }
+                                else if(graphDom.getGraphType().equals("weightedNonDiGraph")) {
+                                    graphDom.addWeightedEdge(currentNode.getAttribute("start"),
+                                            currentNode.getAttribute("end"), currentNode.getAttribute("weight"));
                                 }
                                 else {
                                     graphDom.addDiEdge(((Element) gNodes.item(j)).getAttribute("start"),

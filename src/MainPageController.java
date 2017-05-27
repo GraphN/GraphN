@@ -11,10 +11,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -71,6 +68,8 @@ public class MainPageController {
     private Button vertex1Button;
     @FXML
     private Button edgeButton;
+    @FXML
+    private Button weightedEdgeButton;
     @FXML
     private Button diEdgeButton;
     @FXML
@@ -134,7 +133,14 @@ public class MainPageController {
         //get the xml of the current graph to send it to showAlgoPage()
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
-
+        if(graphXml.getNbVertex() < 0){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Votre graphe est vide");
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+            dialogPane.getStyleClass().add("myDialog");
+            alert.showAndWait();
+            return;
+        }
         mainApp.showAlgoPage(graphXml);
     }
     @FXML
@@ -392,6 +398,45 @@ public class MainPageController {
             edgeButton.setId("edgeButtonActivate");//let the button orange if he is used
         }
     }
+
+    @FXML
+    private void handleWeightedEdge(MouseEvent mouseEvent)
+    {
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+        String graphType = tabMap.get(currentTab);
+        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+        if(graphType == null){
+            tabMap.put(currentTab, "weightedNonDiGraph");
+            graphXml.setGraphType("weightedNonDiGraph");
+        } // todo: le setGraphType ne marche pas quand on sauve et relance
+        else if(!graphType.equals("weightedNonDiGraph")) {
+            mouseEvent.consume();
+            return;
+        }
+        //desactivate vertex if active
+        desactivateVertex();
+
+        // Reset to the first edge
+        firstVerForEdge = true;
+
+        int count = mouseEvent.getClickCount();
+        if (count == 2 && !isOtherButtonActivate("edge1")) // if we double click, we can put infinite edges
+        {
+            edge1Active = true;
+            edge1ActiveOnce = false;
+            weightedEdgeButton.setId("weightedEdgeButtonActivate");//let the button orange if he is used
+        } else if (count == 1 && (edge1ActiveOnce || edge1Active))// if we click and if we are activate, we desactive
+        {
+            edge1Active = false;
+            edge1ActiveOnce = false;
+            weightedEdgeButton.setId("weightedEdgeButton");// desactivate button of orange
+        } else if (count == 1 /*&& (!edge1ActiveOnce || !edge1Active)*/ && !isOtherButtonActivate("edge1"))// if we clicked and we are desactivate, we active
+        {
+            edge1ActiveOnce = true;
+            edge1Active = false;
+            weightedEdgeButton.setId("weightedEdgeButtonActivate");//let the button orange if he is used
+        }
+    }
     // todo: changer correctement les boutons
     @FXML
     private void handleDiEdge(MouseEvent mouseEvent)
@@ -477,6 +522,7 @@ public class MainPageController {
         edgeButton.setId("edgeButton");// desactivate button of orange
         diEdgeButton.setId("diEdgeButton");
         weightedDiEdgeButton.setId("weightedDiEdgeButton");
+        weightedEdgeButton.setId("weightedEdgeButton");
 
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         AnchorPane currPage = (AnchorPane) currentTab.getContent();
@@ -563,17 +609,30 @@ public class MainPageController {
                             DrawEdge drawEdge = null;
                             ArrayList<DrawEdge> drawEdges;
                             int gIndex;
+                            Text weight;
                             switch (graphType) {
                                 case "nonDiGraph":
                                     gIndex = graphXml.addEdge(nameVertexStart, groupEnd.getId());
                                     updateGroup(currentTab, gIndex);
+                                    break;
+                                case "weightedNonDiGraph":
+                                    weight = new Text(""+mainApp.showWeightPage());
+                                    // pour que le text puisse être modifiable
+                                    weight.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        public void handle(MouseEvent event) {
+                                            weight.setText(""+mainApp.showWeightPage());
+                                            // todo: Il faudrait aussi modifier le graphXML
+                                        }
+                                    });
+                                    drawEdge = new DrawEdge (groupStart.getTranslateX(),groupStart.getTranslateY(),groupEnd.getTranslateX(),groupEnd.getTranslateY(), false, weight);
+                                    graphXml.addWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
                                     break;
                                 case "diGraph":
                                     gIndex = graphXml.addDiEdge(nameVertexStart, groupEnd.getId());
                                     updateGroup(currentTab, gIndex);
                                     break;
                                 case "weightedDiGraph":
-                                    Text weight = new Text(""+mainApp.showWeightPage());
+                                    weight = new Text(""+mainApp.showWeightPage());
                                     // pour que le text puisse être modifiable
                                     weight.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                         public void handle(MouseEvent event) {

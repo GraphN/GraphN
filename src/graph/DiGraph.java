@@ -18,6 +18,7 @@ public class DiGraph extends Graph {
     }
 
     public void addEdge(Vertex v, Vertex w, int weigth) {
+        System.out.println(" add edge " + v + " " + w + " " + weigth);
         stockage.addEdge(v, w, weigth);
         E++;
     }

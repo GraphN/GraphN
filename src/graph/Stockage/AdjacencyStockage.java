@@ -19,7 +19,7 @@ public class AdjacencyStockage implements StockageType {
     }
 
     public void addEdge(Edge e){
-        addEdge(e.getTo(), e.getFrom());
+        addEdge(e.getTo(), e.getFrom(), e.getWeigth());
     }
     public void addEdge(Vertex v, Vertex w) {
         addEdge(v, w, 0);
@@ -33,7 +33,7 @@ public class AdjacencyStockage implements StockageType {
     public Edge getEdge(Vertex from, Vertex to){
         for(LinkedList<Edge> l : adjacencyEdgeLists)
             for(Edge e : l)
-                if(e.getFrom() == from && e.getTo() == to)
+                if(e.getFrom().equals(from) && e.getTo().equals(to))
                     return e;
         return null;
     }

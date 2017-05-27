@@ -22,11 +22,13 @@ public class EdgeWeightedCycle {
         marked  = new boolean[G.V()];
         onStack = new boolean[G.V()];
         edgeTo  = new Edge[G.V()];
-        for (int v = 0; v < G.V(); v++)
-            if (!marked[v]) dfs(G, v);
+        for (int v = 0; v < G.V(); v++) {
+            if (!marked[v])
+                dfs(G, v);
+        }
 
         // check that digraph has a cycle
-        assert check();
+        //assert check();
     }
 
     // check that algorithm computes either the topological order or finds a directed cycle
