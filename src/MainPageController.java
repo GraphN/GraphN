@@ -624,8 +624,8 @@ public class MainPageController {
                                             // todo: Il faudrait aussi modifier le graphXML
                                         }
                                     });
-                                    drawEdge = new DrawEdge (groupStart.getTranslateX(),groupStart.getTranslateY(),groupEnd.getTranslateX(),groupEnd.getTranslateY(), false, weight);
-                                    graphXml.addWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    gIndex = graphXml.addWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    updateGroup(currentTab, gIndex);
                                     break;
                                 case "diGraph":
                                     gIndex = graphXml.addDiEdge(nameVertexStart, groupEnd.getId());

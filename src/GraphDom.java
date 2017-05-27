@@ -103,9 +103,11 @@ public class GraphDom {
 
         return getId(group);
     }
-    public void addWeightedEdge(String vertexStart, String vertexEnd, String weight)
+    public int addWeightedEdge(String vertexStart, String vertexEnd, String weight)
     {
         nbEdge++;
+        Element group = getGroup(vertexStart, vertexEnd);
+
         Element edge1 = document.createElement("edge");
         edge1.setAttribute("name", "edge_"+nbEdge);
         edge1.setAttribute("start", vertexStart);
@@ -119,10 +121,14 @@ public class GraphDom {
         edge2.setAttribute("end", vertexStart);
         edge2.setAttribute("weight", weight);
         racine.setAttribute("graphType", "weightedNonDiGraph");
-        racine.appendChild(edge1);
-        racine.appendChild(edge2);
+        group.appendChild(edge1);
+        group.appendChild(edge2);
+        edgesGroups.get(getId(group)).add(edge1);
+        edgesGroups.get(getId(group)).add(edge2);
         edges.add(edge1);
         //edges.add(edge2);
+
+        return getId(group);
     }
 
     public int addDiEdge(String vertexStart, String vertexEnd)

@@ -53,8 +53,6 @@ public class DrawEdge {
         sin = Math.sin(angle);
         cos = Math.cos(angle);
 
-        System.out.println("sin: " + sin + " cos: " + cos);
-
         double movX = 0, movY = 0;
 
         if(bending > 0) {
