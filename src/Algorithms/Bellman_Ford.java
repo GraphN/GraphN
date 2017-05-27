@@ -16,8 +16,27 @@ import java.util.LinkedList;
  */
 public class Bellman_Ford implements Algorithm{
     private LinkedList<Step> path = new LinkedList<>();
+    private double[] distTo;               // distTo[v] = distance  of shortest s->v path
+    private Edge[] edgeTo;         // edgeTo[v] = last edge on shortest s->v path
+    private boolean[] onQueue;             // onQueue[v] = is v currently on the queue?
+    private LinkedList<Integer> queue;          // queue of vertices to relax
+    private int cost;                      // number of calls to relax()
+    private LinkedList<Edge> cycle;  // negative cycle (or null if no such cycle)
+    private Graph G;
+    private Vertex source;
+    private Vertex target;
+    private boolean isDirected;
+
     public LinkedList<Step> getPath(){
         path = new LinkedList<>();
+
+        if (!isDirected){
+            String message = "Bellman-Ford ne peut pas être appliquer sur des graphes non orientés.";
+            Step step = new Step();
+            step.setMessage(message);
+            step.setVertex(G.getVertex(0));
+            path.add(step);
+        }else {
         visit();
 
         if (!hasPathTo(target.getId())) return path;
@@ -38,40 +57,35 @@ public class Bellman_Ford implements Algorithm{
 
             path.add(step);
         }
+        }
         return path;
     }
-    private double[] distTo;               // distTo[v] = distance  of shortest s->v path
-    private Edge[] edgeTo;         // edgeTo[v] = last edge on shortest s->v path
-    private boolean[] onQueue;             // onQueue[v] = is v currently on the queue?
-    private LinkedList<Integer> queue;          // queue of vertices to relax
-    private int cost;                      // number of calls to relax()
-    private LinkedList<Edge> cycle;  // negative cycle (or null if no such cycle)
-    private Graph G;
-    private Vertex source;
-    private Vertex target;
 
-    public void visit(){
-        distTo  = new double[G.V()];
-        edgeTo  = new Edge[G.V()];
-        onQueue = new boolean[G.V()];
-        for (int v = 0; v < G.V(); v++)
-            distTo[v] = Double.POSITIVE_INFINITY;
-        distTo[source.getId()] = 0.0;
+    private void visit(){
 
-        // Bellman-Ford algorithm
-        queue = new LinkedList<>();
-        queue.addLast(source.getId());
-        onQueue[source.getId()] = true;
-        while (!queue.isEmpty() && !hasNegativeCycle()) {
-            int v = queue.removeLast();
-            onQueue[v] = false;
-            relax(G, v);
-        }
+            distTo = new double[G.V()];
+            edgeTo = new Edge[G.V()];
+            onQueue = new boolean[G.V()];
+            for (int v = 0; v < G.V(); v++)
+                distTo[v] = Double.POSITIVE_INFINITY;
+            distTo[source.getId()] = 0.0;
+
+            // Bellman-Ford algorithm
+            queue = new LinkedList<>();
+            queue.addLast(source.getId());
+            onQueue[source.getId()] = true;
+            while (!queue.isEmpty() && !hasNegativeCycle()) {
+                int v = queue.removeLast();
+                onQueue[v] = false;
+                relax(G, v);
+            }
+
 
     }
 
     public Bellman_Ford(Graph G, Vertex source, Vertex target) {
         this.G = G;
+        this.isDirected = G instanceof DiGraph;
         this.source = source;
         this.target = target;
     }
@@ -133,7 +147,8 @@ public class Bellman_Ford implements Algorithm{
 
         if (cycle != null) {
             // On notifie que la distance min a changer
-            String message = "Un circuit absorbant est détécté sur ce graphe, impossible de trouver un plus court chemin !";
+            String message = "Un circuit absorbant est détécté sur ce graphe, impossible de trouver un plus court chemin !\n" +
+                    "Circuit : " + cycle;
             String structures = "distTo : " + Arrays.toString(distTo)
                     + "\nedgeTo : " + Arrays.toString(edgeTo)
                     + "\nonQueue : " + Arrays.toString(onQueue)

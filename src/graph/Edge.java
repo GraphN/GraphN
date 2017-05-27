@@ -3,7 +3,7 @@ package graph;
 /**
  * Created by francoisquellec on 24.03.17.
  */
-public class Edge implements Comparable<Edge>{
+public class Edge{
     // Le poids de l'arête
     private int weigth;
 
@@ -37,10 +37,12 @@ public class Edge implements Comparable<Edge>{
         else return null;
     }
 
-    // Compares this object with the specified object for order. Returns a negative integer,
-    // zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
-    public int compareTo(Edge e){
-        return this.weigth - e.weigth;
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Edge)) {
+            return false;
+        }
+        return ((Edge) other).weigth == weigth;
     }
 
     public int getWeigth(){return weigth;}

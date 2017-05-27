@@ -33,7 +33,7 @@ public class AdjacencyStockage implements StockageType {
     public Edge getEdge(Vertex from, Vertex to){
         for(LinkedList<Edge> l : adjacencyEdgeLists)
             for(Edge e : l)
-                if(e.getFrom() == from && e.getTo() == to)
+                if(e.getFrom().equals(from) && e.getTo().equals(to))
                     return e;
         return null;
     }

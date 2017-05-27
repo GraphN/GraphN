@@ -176,8 +176,10 @@ public class AlgorithmPageController {
             edge.setUncolored();
         }
 
-        for (int vertex = 0; vertex < vertexList.size(); vertex++)
+        for (int vertex = 0; vertex < vertexList.size(); vertex++) {
             setUncoloredVertex(vertex);
+            removeTextVertex(vertex);
+        }
 
         indexPath = 0;
         handlePause();
@@ -215,6 +217,7 @@ public class AlgorithmPageController {
         this.algo = new DFS(graphTest, graphTest.getVertex(startVertex));
         this.path = algo.getPath();
 
+        setColoredVertex(startVertex);
         desactivateButtons(dfs);
     }
     @FXML
@@ -224,6 +227,7 @@ public class AlgorithmPageController {
         this.algo = new BFS(graphTest, graphTest.getVertex(startVertex));
         this.path = algo.getPath();
 
+        setColoredVertex(startVertex);
         desactivateButtons(bfs);
     }
 
@@ -236,6 +240,7 @@ public class AlgorithmPageController {
         this.algo = new Bellman_Ford(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
         this.path = algo.getPath();
 
+        setColoredVertex(startVertex);
         desactivateButtons(bellman);
     }
     @FXML
@@ -247,6 +252,7 @@ public class AlgorithmPageController {
         this.algo = new Dijkstra(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
         this.path = algo.getPath();
 
+        setColoredVertex(startVertex);
         desactivateButtons(dijkstra);
     }
     @FXML

@@ -24,7 +24,7 @@ public class EdgeListStockage implements StockageType {
     }
     public Edge getEdge(Vertex from, Vertex to){
         for(Edge e : edgesList)
-            if(e.getFrom() == from && e.getTo() == to)
+            if(e.getFrom().equals(from) && e.getTo().equals(to))
                 return e;
         return null;
     }
@@ -32,7 +32,7 @@ public class EdgeListStockage implements StockageType {
     public LinkedList<Vertex> adjacentVertex(Vertex v){
         LinkedList<Vertex> ret = new LinkedList<>();
         for(Edge e : edgesList)
-            if(e.getFrom() == v)
+            if(e.getFrom().equals(v))
                 ret.add(e.getTo());
         return ret;
     }
@@ -40,7 +40,7 @@ public class EdgeListStockage implements StockageType {
     public  LinkedList<Edge> adjacentEdges(Vertex v){
         LinkedList<Edge> ret = new LinkedList<>();
         for(Edge e : edgesList)
-            if(e.getFrom() == v)
+            if(e.getFrom().equals(v))
                 ret.add(e);
         return ret;
     }

@@ -106,7 +106,7 @@ public class Prim implements Algorithm{
     public LinkedList<Step> getPath() {
         path = new LinkedList<>();
         if (isDirected){
-            String message = "Kruskall ne peut pas être appliquer sur des graphes orientés.";
+            String message = "Prim ne peut pas être appliquer sur des graphes orientés.";
             Step step = new Step();
             step.setMessage(message);
             step.setVertex(G.getVertex(0));

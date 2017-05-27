@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Adrian on 22.03.2017.
  */
-public class Vertex {
+public class Vertex{
     private int id;
     private String description;
 
@@ -35,6 +35,13 @@ public class Vertex {
 
     public void setDescription(String description){
         this.description = description;
+    }
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Vertex)) {
+            return false;
+        }
+        return ((Vertex) other).getId() == id;
     }
 
     public String toString(){

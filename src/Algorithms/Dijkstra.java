@@ -6,6 +6,7 @@ import graph.Edge;
 import graph.Graph;
 import graph.Vertex;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -123,8 +124,8 @@ public class Dijkstra implements Algorithm{
         for (Edge e = edgeTo[target.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
             Step step = new Step();
             step.setMessage("On selectionne l'arrete " + e);
-            step.setStructures("distTo : " + distTo.toString()
-                    + "\nedgeTo : " + edgeTo.toString()
+            step.setStructures("distTo : " + Arrays.toString(distTo)
+                    + "\nedgeTo : " + Arrays.toString(edgeTo)
                     + "\nPriorityQueue : " + pq.toString());
             step.setEdge(e);
 
