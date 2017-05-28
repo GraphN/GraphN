@@ -18,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -84,6 +85,16 @@ public class MainPageController {
     private double orgTranslateX, orgTranslateY;
 
     private Line liveEdge;
+
+
+    public Pane getGraphPane(){
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+
+        AnchorPane currPage = (AnchorPane) currentTab.getContent();
+
+        return currPage;
+    }
+
     public MainPageController(){
         indiceTab = 0;
     }
@@ -621,12 +632,82 @@ public class MainPageController {
                         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                         graphXml.deleteVertex(Integer.valueOf(group.getId().substring(4)));
 
+                        //deleting graphical elements
+                        AnchorPane ap = (AnchorPane) group.getParent();
+                        ap.getChildren().remove(0, ap.getChildren().size());
+
+                        //adding all vertex from xml
+                        int i = 0;
+                        while (i <= graphXml.getNbVertex())
+                        {
+                            Point2D point = graphXml.getPosOfVertex(i);
+                            int x = (int) point.getX();
+                            int y = (int) point.getY();
+                            String name = graphXml.getName(i);
+                            Group node = createVertex(x,y,name);
+                            ap.getChildren().add(node);
+
+                            i++;
+                        }
+
+                        DrawEdge drawEdge = null;
+
+                        drawEdgesGroupList.clear();
+                        drawEdgesList.clear();
+                        i = 0;
+                        while (i < graphXml.getNbGroup()) {
+                            ArrayList<DrawEdge> edges = graphXml.getDrawEdges(i);
+                            drawEdgesGroupList.add(edges);
+
+                            for(int j = 0; j < edges.size(); j++) {
+                                Group cirleStart = (Group) getChildrenVertexById(ap, graphXml.getEdgeStartName(i, j));
+                                Group cirleEnd = (Group) getChildrenVertexById(ap, graphXml.getEdgeEndName(i, j));
+                                drawEdgesList.add(edges.get(j));
+
+                                moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, drawEdgesList.indexOf(edges.get(j)), ap);
+                                ap.getChildren().add(1, edges.get(j).getRoot());
+                            }
+                            i++;
+                        }
 
 
-                        //if eraserActive just once, pass it to false, so we cannot erase again
+                        /*CubicCurve cub = new CubicCurve();
+                        //delete associated edges
+                        for(int i = 0; i < ap.getChildren().size(); i++)
+                        {
+                            Group gr = (Group)ap.getChildren().get(i);
+                            for(int j = 0; j < gr.getChildren().size(); j++)
+                            {
+                                //if edge
+                                /*if(gr.getChildren().get(j).getClass().equals(CubicCurve.class) )
+                                {
+                                    //ap.getChildren().remove(drawEdgesList.get(i).getRoot());
+                                    CubicCurve cubicCurve = (CubicCurve) drawEdgesList.get(i).getRoot().getChildren().get(0);
+                                    if((cubicCurve.getEndX() <= group.getTranslateX()+0.5
+                                        && cubicCurve.getEndX()>= group.getTranslateX() - 0.5)
+                                      && (cubicCurve.getEndY() <= group.getTranslateY()+0.5
+                                            && cubicCurve.getEndY()>= group.getTranslateY() - 0.5)
+                                    ||
+                                       (cubicCurve.getStartX() <= group.getTranslateX()+0.5
+                                          && cubicCurve.getStartX()>= group.getTranslateX() - 0.5)
+                                       && (cubicCurve.getStartY() <= group.getTranslateY()+0.5
+                                          && cubicCurve.getStartY()>= group.getTranslateY() - 0.5))
+                                    {
+                                        System.out.println("fdp");
+                                        System.out.println(((Group) ap.getChildren().get(i)).getChildren().get(0));
+                                    }
+                                }
+                            }
+                        }
+
+
+                        //delete the selected vertex
+                        ap.getChildren().remove(group);
+*/
+                        //if eraserActive just once, desactivate , so we cannot erase again
                         if(eraserActiveOnce)
                         {
-                            eraserActiveOnce = false;
+                            desactivateEraser();
                         }
                     }
                 }
