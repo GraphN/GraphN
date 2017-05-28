@@ -2,6 +2,11 @@
     -fx-background-color: #1d1d1d;
 }
 
+#apply{	
+-fx-background-color: #da5630;
+}
+
+
 .button{
 -fx-background-position: center;
 -fx-background-size: 30 40;

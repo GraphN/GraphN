@@ -5,15 +5,11 @@ import graph.Stockage.AdjacencyStockage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -30,8 +26,19 @@ public class ImportController {
     private String structure = "";
 
 
+
     @FXML
     private TextField startVertex;
+    @FXML
+    private Label startLabel;
+    @FXML
+    private Separator startSeparator;
+    @FXML
+    private TextField endVertex;
+    @FXML
+    private Label endingLabel;
+    @FXML
+    private Separator endingSeparator;
     @FXML
     private Button saveButton;
     @FXML
@@ -45,17 +52,42 @@ public class ImportController {
         for(String s:algo)
             choiceAlgo.getItems().add(s);
         choiceAlgo.setValue(algo.get(0));
+        hideEndVertex();
 
-        choiceAlgo.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                algorithme = choiceAlgo.getValue();
+        choiceAlgo.getSelectionModel().selectedIndexProperty().addListener((observableValue, number, number2) -> {
+            switch (algo.get(observableValue.getValue().intValue())){
+                case "BFS":
+                    hideEndVertex();
+                    showStartVertex();
+                    break;
+                case "DFS":
+                    hideEndVertex();
+                    showStartVertex();
+                    break;
+                case "Kruskal":
+                    hideEndVertex();
+                    hideStartVertex();
+                    break;
+                case "Prim":
+                    hideEndVertex();
+                    hideStartVertex();
+                    break;
+                case "Bellman-Ford":
+                    showEndVertex();
+                    showStartVertex();
+                    break;
+                case "Dijkstra":
+                    showEndVertex();
+                    showStartVertex();
+                    break;
+                default:
+                    System.err.println("Algorithme Not found !!");
             }
         });
         List<String> structures = Arrays.asList("AdjacencyList", "EdgesList");
         for(String s:structures)
             choiceStructure.getItems().add(s);
-        choiceStructure.setValue(algo.get(0));
+        choiceStructure.setValue(structures.get(0));
 
         choiceStructure.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -67,6 +99,13 @@ public class ImportController {
 
     @FXML
     private void handleApply(){
+        int start = 0;
+        int end = 0;
+        //System.out.println(startVertex.getText());
+        if(!startVertex.getText().equals(""))
+            start = Integer.parseInt(startVertex.getText().replaceAll("[\\D]", ""));
+        if(!endVertex.getText().equals(""))
+            end = Integer.parseInt(endVertex.getText().replaceAll("[^0-9]", ""));
 
         Serialiseur serialiseur = null;
         //fileOpen
@@ -84,12 +123,12 @@ public class ImportController {
         Graph g = serialiseur.importGraph(fileOpen.getAbsolutePath(), new AdjacencyStockage()); // TODO : Let the client choose the Stockage type
 
         Algorithm algo = null;
-        switch (algorithme){
+        switch (choiceAlgo.getValue()){
             case "BFS":
-                algo = new BFS(g, g.getVertex(0));
+                algo = new BFS(g, g.getVertex(start));
                 break;
             case "DFS":
-                algo = new DFS(g, g.getVertex(0));
+                algo = new DFS(g, g.getVertex(start));
                 break;
             case "Kruskal":
                 algo = new Kruskall(g);
@@ -98,18 +137,40 @@ public class ImportController {
                 algo = new Prim(g);
                 break;
             case "Bellman-Ford":
-                algo = new Bellman_Ford(g, g.getVertex(0), g.getVertex(1));// TODO : Let the client choose strt and end vertex
+                algo = new Bellman_Ford(g, g.getVertex(start), g.getVertex(end));// TODO : Let the client choose strt and end vertex
                 break;
             case "Dijkstra":
-                algo = new Dijkstra(g, g.getVertex(0), g.getVertex(1)); // TODO : Let the client choose strt and end vertex
+                algo = new Dijkstra(g, g.getVertex(start), g.getVertex(end)); // TODO : Let the client choose strt and end vertex
                 break;
             default:
-                System.err.println("Algorithme Not find !!");
+                System.err.println("Algorithme Not found !!");
         }
 
-        serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
+        //serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
 
     }
+
+    private void showEndVertex(){
+        endingLabel.setVisible(true);
+        endingSeparator.setVisible(true);
+        endVertex.setVisible(true);
+    }
+    private void hideEndVertex(){
+        endingLabel.setVisible(false);
+        endingSeparator.setVisible(false);
+        endVertex.setVisible(false);
+    }
+    private void showStartVertex(){
+        startLabel.setVisible(true);
+        startSeparator.setVisible(true);
+        startVertex.setVisible(true);
+    }
+    private void hideStartVertex(){
+        startLabel.setVisible(false);
+        startSeparator.setVisible(false);
+        startVertex.setVisible(false);
+    }
+
     @FXML
     private void handleOpen(){
 
