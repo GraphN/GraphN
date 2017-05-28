@@ -183,13 +183,6 @@ public class MainApp extends Application {
         if (file != null) {
             switch (file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf('.') + 1)) {
                 case "jpg":
-                    WritableImage imageJPG = mainPageController.getGraphPane().snapshot(new SnapshotParameters(), null);
-                    try {
-                        ImageIO.write(SwingFXUtils.fromFXImage(imageJPG, null), "png", file);
-                    } catch (IOException e) {
-                        // TODO: handle exception here
-                    }
-                    break;
                 case "png":
                     WritableImage imagePNG = mainPageController.getGraphPane().snapshot(new SnapshotParameters(), null);
                     try {
