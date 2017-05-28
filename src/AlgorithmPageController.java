@@ -1,7 +1,5 @@
 import Algorithms.*;
-import Algorithms.Utils.EdgeVisit;
 import Algorithms.Utils.Step;
-import Algorithms.Utils.VertexVisit;
 import graph.*;
 import graph.Stockage.EdgeListStockage;
 import javafx.application.Platform;
@@ -22,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 
 import java.util.*;
-import java.util.List;
 
 
 /**
@@ -322,14 +319,14 @@ public class AlgorithmPageController {
             pane.getChildren().add(sPane);
         }
 
-        for(int i=0; i<graph.getNbGroup(); i++) {
+        for(int i=0; i < graph.getNbGroup(); i++) {
             ArrayList<DrawEdge> edges = graphDom.getDrawEdges(i);
 
-            for(DrawEdge drawEdge: edges) {
-                pane.getChildren().add(0, drawEdge.getRoot());
-                edgeList.add(drawEdge);
+            for(int j=0; j < edges.size(); j++) {
+                pane.getChildren().add(0, edges.get(j).getRoot());
+                edgeList.add(edges.get(j));
 
-                graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
+                graphTest.addEdge(graphTest.getVertex(graph.getFrom(i, j)), graphTest.getVertex(graph.getTo(i, j)));
             }
         }
 

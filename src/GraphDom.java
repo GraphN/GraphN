@@ -386,6 +386,12 @@ public class GraphDom {
     public int getTo(int index){
         return Integer.parseInt(edges.get(index).getAttribute("end").replaceAll("[\\D]", ""));
     }
+    public int getFrom(int gIndex, int eIndex){
+        return Integer.parseInt(edgesGroups.get(gIndex).get(eIndex).getAttribute("start").replaceAll("[\\D]", ""));
+    }
+    public int getTo(int gIndex, int eIndex){
+        return Integer.parseInt(edgesGroups.get(gIndex).get(eIndex).getAttribute("end").replaceAll("[\\D]", ""));
+    }
     public String getEdgeStartName(int index)
     {
         Element edge = (Element) edges.get(index);
