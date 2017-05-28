@@ -309,21 +309,13 @@ public class GraphDom {
 
             int bending = 0;
             int bendFactor = 0;
-            if(graphType.equals("nonDiGraph") || graphType.equals("weightedNonDiGraph")) {
-                if (edges.size() > 2) {
-                    bending = ((i/2) % 2) + 1;
-                }
-                bendFactor = i / 4;
+            if (edges.size() > 1) {
+                if (groups.get(index).getAttribute("start").equals(vertex1))
+                    bending = (i % 2) + 1;
+                else
+                    bending = 2 - (i % 2);
             }
-            else {
-                if (edges.size() > 1) {
-                    if (groups.get(index).getAttribute("start").equals(vertex1))
-                        bending = (i % 2) + 1;
-                    else
-                        bending = 2 - (i % 2);
-                }
-                bendFactor = i / 2;
-            }
+            bendFactor = i / 2;
             bendFactor++;
 
             Point2D ver1 =  getPosOfVertex(vertex1);
