@@ -12,7 +12,7 @@ import java.util.LinkedList;
 /**
  * Created by francoisquellec on 17.05.17.
  */
-interface Serialiseur {
+public interface Serialiseur {
     int DIRECTED = 1;
     int UNDIRECTED = 0;
     void exportGraph(Graph g, LinkedList<Step> path, String outputFile);

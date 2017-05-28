@@ -535,7 +535,6 @@ public class MainPageController {
     @FXML
     private void handleEraser(MouseEvent mouseEvent)
     {
-
         //desactivate vertex and edge if active
         desactivateVertex();
         desactivateEdge();
@@ -544,17 +543,17 @@ public class MainPageController {
         firstVerForEdge = true;
 
         int count = mouseEvent.getClickCount();
-        if (count == 2 && !isOtherButtonActivate("edge1")) // if we double click, we can put infinite edges
+        if (count == 2 && (!eraserActiveOnce || !eraserActive)) // if we double click, we can put infinite edges
         {
             eraserActive = true;
             eraserActiveOnce = false;
             eraserButton.setId("eraserButtonActivate");//let the button orange if he is used
-        } else if (count == 1 && (edge1ActiveOnce || edge1Active))// if we click and if we are activate, we desactive
+        } else if (count == 1 && (eraserActiveOnce ||eraserActive))// if we click and if we are activate, we desactive
         {
             eraserActive = false;
             eraserActiveOnce = false;
             eraserButton.setId("eraserButton");// desactivate button of orange
-        } else if (count == 1 /*&& (!edge1ActiveOnce || !edge1Active)*/ && !isOtherButtonActivate("edge1"))// if we clicked and we are desactivate, we active
+        } else if (count == 1 && (!eraserActiveOnce || !eraserActive))// if we clicked and we are desactivate, we active
         {
             eraserActive = false;
             eraserActiveOnce = true;
@@ -578,6 +577,7 @@ public class MainPageController {
             };
 
     EventHandler<MouseEvent> nodeOnMousePressedEventHandler =
+            // TODO: ajouter l'erase
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent t) {
@@ -601,6 +601,7 @@ public class MainPageController {
             };
 
     EventHandler<MouseEvent> nodeOnMouseReleasedEventHandler =
+            // TODO: ajouter l'erase
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent t)
@@ -635,6 +636,7 @@ public class MainPageController {
 
                         } else if(groupStart != group)
                         {
+                            // TODO: ajouter un listener pour l'ERASER
                             Group groupEnd = group;
                             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                             DrawEdge drawEdge = null;
