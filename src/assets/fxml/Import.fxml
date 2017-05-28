@@ -30,7 +30,7 @@
    <bottom>
       <AnchorPane prefHeight="34.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="handleApply" maxHeight="31.0" mnemonicParsing="false" prefWidth="62.0" text="Apply" textFill="WHITE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" />
+            <Button fx:id="apply" maxHeight="31.0" mnemonicParsing="false" onAction="#handleApply" prefWidth="62.0" text="Apply" textFill="WHITE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" />
          </children>
       </AnchorPane>
    </bottom>

@@ -578,6 +578,7 @@ public class MainPageController {
             };
 
     EventHandler<MouseEvent> nodeOnMousePressedEventHandler =
+            // TODO: ajouter l'erase
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent t) {
@@ -601,6 +602,7 @@ public class MainPageController {
             };
 
     EventHandler<MouseEvent> nodeOnMouseReleasedEventHandler =
+            // TODO: ajouter l'erase
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent t)
@@ -635,6 +637,7 @@ public class MainPageController {
 
                         } else if(groupStart != group)
                         {
+                            // TODO: ajouter un listener pour l'ERASER
                             Group groupEnd = group;
                             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                             DrawEdge drawEdge = null;
