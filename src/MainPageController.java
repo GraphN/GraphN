@@ -151,8 +151,14 @@ public class MainPageController {
     {
         //create new tab whitout name to get one name like new tab 3, 4 ..
         Tab tab = createNewTab("");
+        tab.setOnClosed(new EventHandler<Event>(){
+            @Override
+            public void handle(Event e){
+                if(tabPane.getTabs().size() < 1)
+                    handleNew();
+            }
+        });
         tabPane.getTabs().add(tab);
-
 
         //creation of the xml file of this tab
         try {
@@ -682,7 +688,7 @@ public class MainPageController {
                                             // todo: Il faudrait aussi modifier le graphXML
                                         }
                                     });
-                                    gIndex = graphXml.addEdgeWeighted(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    gIndex = graphXml.addDiWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
                                     updateGroup(currentTab, gIndex);
                                     break;
                             }

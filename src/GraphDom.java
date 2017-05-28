@@ -148,7 +148,7 @@ public class GraphDom {
         return getId(group);
     }
 
-    public int addEdgeWeighted(String vertexStart, String vertexEnd, String weight)
+    public int addDiWeightedEdge(String vertexStart, String vertexEnd, String weight)
     {
         nbEdge++;
         Element group = getGroup(vertexStart, vertexEnd);
@@ -269,7 +269,7 @@ public class GraphDom {
 
             int bending = 0;
             int bendFactor = 0;
-            if(graphType.equals("nonDiGraph")) {
+            if(graphType.equals("nonDiGraph") || graphType.equals("weightedNonDiGraph")) {
                 if (edges.size() > 2) {
                     bending = ((i/2) % 2) + 1;
                 }
@@ -299,7 +299,9 @@ public class GraphDom {
             else if (graphType.equals("diGraph"))
                 res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true));
             else if (graphType.equals("weightedDiGraph"))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, new Text(edges.get(i).getAttribute("weight"))));
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true, new Text(edges.get(i).getAttribute("weight"))));
+            else if (graphType.equals("weightedNonDiGraph"))
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, false, new Text(edges.get(i).getAttribute("weight"))));
         }
 
         return res;

@@ -273,13 +273,14 @@ public class MainApp extends Application {
                                 if(gNodes.item(j).getNodeName().equals("#text"))
                                     continue;
                                 if(graphDom.getGraphType().equals("weightedDiGraph")) {
-                                    graphDom.addEdgeWeighted(((Element) gNodes.item(j)).getAttribute("start"),
+                                    graphDom.addDiWeightedEdge(((Element) gNodes.item(j)).getAttribute("start"),
                                             ((Element) gNodes.item(j)).getAttribute("end"),
                                             ((Element) gNodes.item(j)).getAttribute("weight"));
                                 }
                                 else if(graphDom.getGraphType().equals("weightedNonDiGraph")) {
-                                    graphDom.addWeightedEdge(currentNode.getAttribute("start"),
-                                            currentNode.getAttribute("end"), currentNode.getAttribute("weight"));
+                                    graphDom.addWeightedEdge(((Element) gNodes.item(j)).getAttribute("start"),
+                                            ((Element) gNodes.item(j)).getAttribute("end"),
+                                            ((Element) gNodes.item(j)).getAttribute("weight"));
                                 }
                                 else {
                                     graphDom.addDiEdge(((Element) gNodes.item(j)).getAttribute("start"),
