@@ -445,11 +445,11 @@ public class AlgorithmPageController {
         System.out.println(v);
 
         if (e != null) {
-            DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId(), 0);
+            DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId(), e.getWeigth());
 
             // TODO : On ne devrait pas avoir a faire ça !!!! mais avec ça ça marche ...
             if (test == null)
-                test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId(), 0);
+                test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId(), e.getWeigth());
 
             for (int i = 0; i < edgeList.size(); i++) {
                 if (edgeList.get(i) != null)

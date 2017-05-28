@@ -347,7 +347,7 @@ public class GraphDom {
         return res;
     }
 
-    public DrawEdge getEdge(int from, int to, int weight)
+    public DrawEdge getEdge(int from, int to, double weight)
     {
         //Element edge = (Element) edges.get(index);
         for(Element edge:edges){

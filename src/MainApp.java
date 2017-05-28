@@ -1,6 +1,11 @@
+import graph.Serialisation.ListEdgesCSV;
+import graph.Serialisation.ListEdgesTXT;
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
@@ -10,6 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -162,8 +168,10 @@ public class MainApp extends Application {
         fileChooser.setTitle("Save Graph");
 
         //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-        fileChooser.getExtensionFilters().add(extFilter);
+        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        FileChooser.ExtensionFilter pngFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+        fileChooser.getExtensionFilters().add(xmlFilter);
+        fileChooser.getExtensionFilters().add(pngFilter);
 
         //set initial directory
         File directory = new File("./src/savedGraphsXML");
@@ -171,12 +179,26 @@ public class MainApp extends Application {
 
         File file = fileChooser.showSaveDialog(primaryStage);
         if (file != null) {
-               try {
-                   graph.saveGraphXML(file);
-               } catch (TransformerException e) {
-                   e.printStackTrace();
-               }
-           }
+            switch (file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf('.') + 1)) {
+                case "png":
+                    WritableImage image = mainPageController.getGraphPane().snapshot(new SnapshotParameters(), null);
+                    try {
+                        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+                    } catch (IOException e) {
+                        // TODO: handle exception here
+                    }
+                    break;
+                case "xml":
+                    try {
+                        graph.saveGraphXML(file);
+                    } catch (TransformerException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    System.err.println("Wrong input type file !");
+            }
+        }
     }
 
     public void showImportPage()
