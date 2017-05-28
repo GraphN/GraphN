@@ -121,17 +121,8 @@ public class ImportController {
             return;
         }
 
-        switch (fileOpen.getAbsolutePath().substring(fileOpen.getAbsolutePath().lastIndexOf('.') + 1)) {
-            case "csv":
-                serialiseur = new ListEdgesCSV();
-                break;
-            case "txt":
-                serialiseur = new ListEdgesTXT();
-                break;
-            default:
-                alertMessage("Wrong input type file !");
-                return;
-        }
+        serialiseur = getSerialiseur(fileOpen);
+        if (serialiseur == null ) return;
 
 
         StockageType stockage;
@@ -152,6 +143,8 @@ public class ImportController {
         try{
             g = serialiseur.importGraph(fileOpen.getAbsolutePath(), stockage);
         }catch (Exception e){
+            System.out.println("Erreur");
+            e.printStackTrace();
             alertMessage(e.getMessage());
             return;
         }
@@ -199,9 +192,12 @@ public class ImportController {
             }
 
             if (fileSave != null) {
+                serialiseur = getSerialiseur(fileOpen);
+                if (serialiseur == null ) return;
                 serialiseur.exportGraph(g, path, fileSave.getAbsolutePath());
             }
         }catch(Exception e){
+            e.printStackTrace();
             alertMessage(e.getMessage());
         }
 
@@ -282,6 +278,22 @@ public class ImportController {
         dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
         dialogPane.getStyleClass().add("myDialog");
         alert.showAndWait();
+    }
+
+    private Serialiseur getSerialiseur(File file){
+        Serialiseur serialiseur;
+        switch (file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf('.') + 1)) {
+            case "csv":
+                serialiseur = new ListEdgesCSV();
+                break;
+            case "txt":
+                serialiseur = new ListEdgesTXT();
+                break;
+            default:
+                alertMessage("Wrong input type file !");
+                return null;
+        }
+        return serialiseur;
     }
 
     public void setMainApp(MainApp mainApp){

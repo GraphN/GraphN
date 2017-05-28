@@ -22,11 +22,12 @@ public class ListEdgesTXT implements Serialiseur {
 
             // On ecrit la liste de edges
             for(Step e : path)
-                writer.println(e.getEdge().getFrom() + " " + e.getEdge().getTo() + " " + e.getEdge().getWeigth());
+                if (e.getEdge() != null)
+                    writer.println(e.getEdge().getFrom() + " " + e.getEdge().getTo() + " " + e.getEdge().getWeigth());
 
             writer.close();
         } catch (IOException e) {
-            // do something
+            e.printStackTrace();
         }
     }
 
