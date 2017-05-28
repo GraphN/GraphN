@@ -1,7 +1,10 @@
 import Algorithms.*;
+import Algorithms.Utils.Step;
 import graph.Graph;
 import graph.Serialisation.*;
 import graph.Stockage.AdjacencyStockage;
+import graph.Stockage.EdgeListStockage;
+import graph.Stockage.StockageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -14,6 +17,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +31,6 @@ public class ImportController {
     private File fileSave;
     private String algorithme = "";
     private String structure = "";
-
 
 
     @FXML
@@ -84,10 +87,10 @@ public class ImportController {
                     showStartVertex();
                     break;
                 default:
-                    System.err.println("Algorithme Not found !!");
+                    System.err.println("Algorithm Not found !!");
             }
         });
-        List<String> structures = Arrays.asList("AdjacencyList", "EdgesList");
+        List<String> structures = Arrays.asList("EdgesList", "AdjacencyList");
         for(String s:structures)
             choiceStructure.getItems().add(s);
         choiceStructure.setValue(structures.get(0));
@@ -128,7 +131,20 @@ public class ImportController {
             }
 
 
-        Graph g = serialiseur.importGraph(fileOpen.getAbsolutePath(), new AdjacencyStockage()); // TODO : Let the client choose the Stockage type
+        StockageType stockage = null;
+        switch (choiceStructure.getValue()){
+            case "EdgesList":
+                stockage = new EdgeListStockage();
+                break;
+            case "AdjacencyList":
+                stockage = new AdjacencyStockage();
+                break;
+            default:
+                System.err.println("Unknown Stockage Type !");
+                return;
+        }
+
+        Graph g = serialiseur.importGraph(fileOpen.getAbsolutePath(), stockage);
 
         Algorithm algo = null;
         switch (choiceAlgo.getValue()){
@@ -145,52 +161,39 @@ public class ImportController {
                 algo = new Prim(g);
                 break;
             case "Bellman-Ford":
-                algo = new Bellman_Ford(g, g.getVertex(start), g.getVertex(end));// TODO : Let the client choose strt and end vertex
+                algo = new Bellman_Ford(g, g.getVertex(start), g.getVertex(end));
                 break;
             case "Dijkstra":
-                algo = new Dijkstra(g, g.getVertex(start), g.getVertex(end)); // TODO : Let the client choose strt and end vertex
+                algo = new Dijkstra(g, g.getVertex(start), g.getVertex(end));
                 break;
             default:
                 System.err.println("Algorithme Not found !!");
         }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Save");
-        alert.setHeaderText("The algorithm pass without problems");
-        alert.setContentText("Do you want to save the result?");
-        ButtonType buttonTypeSave = new ButtonType("Save");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
 
-        Label label = new Label("Parcours du graphe:");
+        try{
+            LinkedList<Step> path = algo.getPath();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Save");
+            alert.setHeaderText("The algorithm pass without problems");
+            alert.setContentText("Do you want to save the result?");
+            ButtonType buttonTypeSave = new ButtonType("Save");
+            ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("assets/css/alertGood.css").toExternalForm());
+            dialogPane.getStyleClass().add("myDialog");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == buttonTypeSave){
+                handleSave();
+            }
 
-        TextArea textArea = new TextArea("TON TEXTE");
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-        // Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alertGood.css").toExternalForm());
-        dialogPane.getStyleClass().add("myDialog");
-        Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == buttonTypeSave){
-            handleSave();
+            if (fileSave != null) {
+                serialiseur.exportGraph(g, path, fileSave.getAbsolutePath());
+            }
+        }catch(Exception e){
+            alertMessage(e.getMessage());
         }
 
-        if (fileSave != null) { // TODO: Find a way to enter the filesave
-            serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
-        }
     }
 
     private void showEndVertex(){

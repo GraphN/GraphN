@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<UDiGraph graphType="nonDiGraph" name="new tab0">
+<vertex name="ver_0" posX="128" posY="81"/>
+<vertex name="ver_1" posX="266" posY="193"/>
+<edges_group end="ver_1" name="group_0" start="ver_0">
+<edge end="ver_1" name="edge_1" start="ver_0"/>
+<edge end="ver_0" name="edge_1" start="ver_1"/>
+</edges_group>
+</UDiGraph>

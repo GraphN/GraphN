@@ -259,6 +259,46 @@ public class GraphDom {
         return new Line(startX, startY, endX, endY);
     }
 
+    public void deleteVertex(int index)
+    {
+
+        NodeList listEdges = document.getElementsByTagName("edges_group");
+        NodeList listvertexes = document.getElementsByTagName("vertex");
+
+        Element vertex = (Element) vertexes.get(index);
+
+        //removing edges connected to the vertex to remove
+        for(int i = groups.size()-1; i >= 0 ; i--)
+        {
+            if( groups.get(i).getAttribute("start").equals(vertex.getAttribute("name")) ||
+                groups.get(i).getAttribute("end").equals(vertex.getAttribute("name"))    )
+            {
+                Element edgeCurr = (Element) listEdges.item(i);
+                //removing the element from the corresponding deleted edge
+                edgeCurr.getParentNode().removeChild(edgeCurr);
+                // removing from list
+                groups.remove(i);
+            }
+        }
+        Element vertexCurr = (Element) listvertexes.item(index);
+        //removing the element from the corresponding deleted edge
+        vertexCurr.getParentNode().removeChild(vertexCurr);
+        //removing from list
+        vertexes.remove(index);
+
+        //we have here to change the name of the vertexes who are bigger than the deleted one.
+        //for example if we have 5 vertexes : ver_0, ver_1, ver_2, ver_3, ver_4
+        //if we delete ver_2, we have to change the name of ver_3 to ver_2 and ver_4 to ver_3
+        for(int i = index; i < vertexes.size(); i++)
+        {
+            Element vCurr = (Element) listvertexes.item(i);
+            int newIndex = Integer.valueOf(vCurr.getAttribute("name").substring(4)) - 1;
+            System.out.println( vCurr.getAttribute("name").substring(0,4) + String.valueOf(newIndex));
+            vCurr.setAttribute("name", vCurr.getAttribute("name").substring(0,4) + String.valueOf(newIndex));
+        }
+        nbVertex--;
+    }
+
     public ArrayList<DrawEdge> getDrawEdges(int index){
         ArrayList<Element> edges = edgesGroups.get(index);
         ArrayList<DrawEdge> res = new ArrayList<>();

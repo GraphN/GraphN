@@ -23,42 +23,6 @@ public class Dijkstra implements Algorithm{
 
     private LinkedList<Step> path;
 
-    private boolean visitAll;
-
-
-    public void visit(){
-        path = new LinkedList<>();
-
-        for (Edge e : G.getEdgesList()) {
-            System.out.println(e + " p " + e.getWeigth());
-            if (e.getWeigth() < 0) {
-                Step step = new Step();
-                step.setEdge(e);
-                step.setMessage("L'arete  " + e + " a un poids négatif, Dijkstra ne peut pas s'appliquer sur les graphes " +
-                        "a poids négatif, essayer Bellman-Ford");
-                path.add(step);
-                return;
-            }
-        }
-
-        if(!validateVertex(source.getId())) return;
-
-        distTo[source.getId()] = 0.0;
-
-        // relax vertices in order of distance from s
-        pq = new IndexMinPQ<Double>(G.V());
-        pq.insert(source.getId(), distTo[source.getId()]);
-        while (!pq.isEmpty()) {
-            int v = pq.delMin();
-            for (Edge e : G.adjacentEdges(G.getVertex(v))) {
-                relax(e);
-            }
-        }
-
-        // check optimality conditions
-        assert check(G, source.getId());
-    }
-
     public Dijkstra(Graph G, Vertex source, Vertex target) {
         this.source = source;
         this.target = target;
@@ -73,6 +37,39 @@ public class Dijkstra implements Algorithm{
 
     public Dijkstra(Graph G, Vertex source) {
         this(G, source, null);
+    }
+
+    public void visit() throws Exception{
+        path = new LinkedList<>();
+
+        for (Edge e : G.getEdgesList()) {
+            System.out.println(e + " p " + e.getWeigth());
+            if (e.getWeigth() < 0) {
+                throw new Exception("L'arete  " + e + " a un poids négatif, Dijkstra ne peut pas s'appliquer sur les graphes " +
+                        "a poids négatif, essayer Bellman-Ford");
+                /*Step step = new Step();
+                step.setEdge(e);
+                step.setMessage("L'arete  " + e + " a un poids négatif, Dijkstra ne peut pas s'appliquer sur les graphes " +
+                        "a poids négatif, essayer Bellman-Ford");
+                path.add(step);
+                return;*/
+            }
+        }
+
+        validateVertex(source.getId());
+
+        distTo[source.getId()] = 0.0;
+
+        // relax vertices in order of distance from s
+        pq = new IndexMinPQ<Double>(G.V());
+        pq.insert(source.getId(), distTo[source.getId()]);
+        while (!pq.isEmpty()) {
+            int v = pq.delMin();
+            for (Edge e : G.adjacentEdges(G.getVertex(v))) {
+                relax(e);
+            }
+        }
+
     }
 
     // relax edge e and update pq if changed
@@ -104,17 +101,17 @@ public class Dijkstra implements Algorithm{
     }
 
 
-    public double distTo(int v) {
+    public double distTo(int v) throws Exception{
         validateVertex(v);
         return distTo[v];
     }
 
-    public boolean hasPathTo(int v) {
+    public boolean hasPathTo(int v) throws Exception{
         validateVertex(v);
         return distTo[v] < Double.POSITIVE_INFINITY;
     }
 
-    public void pathTo(Vertex v){
+    public void pathTo(Vertex v) throws Exception{
 
         if (!hasPathTo(v.getId())){
             Step step = new Step();
@@ -134,7 +131,9 @@ public class Dijkstra implements Algorithm{
         }
     }
 
-    public LinkedList<Step> getPath() {
+    public LinkedList<Step> getPath() throws Exception{
+        System.out.println("Apply Dijkstra algorithme on :");
+        G.print();
         visit();
 
         if (target != null)
@@ -145,65 +144,15 @@ public class Dijkstra implements Algorithm{
                     pathTo(v);
         }
 
+        System.out.println("result : " + path);
         return path;
     }
 
-
-    private boolean check(Graph G, int s) {
-
-        // check that edge weights are nonnegative
-        for (Edge e : G.getEdgesList()) {
-            if (e.getWeigth() < 0) {
-                System.err.println("negative edge weight detected");
-                return false;
-            }
-        }
-
-        // check that distTo[v] and edgeTo[v] are consistent
-        if (distTo[s] != 0.0 || edgeTo[s] != null) {
-            System.err.println("distTo[s] and edgeTo[s] inconsistent");
-            return false;
-        }
-        for (int v = 0; v < G.V(); v++) {
-            if (v == s) continue;
-            if (edgeTo[v] == null && distTo[v] != Double.POSITIVE_INFINITY) {
-                System.err.println("distTo[] and edgeTo[] inconsistent");
-                return false;
-            }
-        }
-
-        // check that all edges e = v->w satisfy distTo[w] <= distTo[v] + e.weight()
-        for (int v = 0; v < G.V(); v++) {
-            for (Edge e : G.adjacentEdges(G.getVertex(v))) {
-                int w = e.getTo().getId();
-                if (distTo[v] + e.getWeigth() < distTo[w]) {
-                    System.err.println("edge " + e + " not relaxed");
-                    return false;
-                }
-            }
-        }
-
-        // check that all edges e = v->w on SPT satisfy distTo[w] == distTo[v] + e.weight()
-        for (int w = 0; w < G.V(); w++) {
-            if (edgeTo[w] == null) continue;
-            Edge e = edgeTo[w];
-            int v = e.getFrom().getId();
-            if (w != e.getTo().getId()) return false;
-            if (distTo[v] + e.getWeigth() != distTo[w]) {
-                System.err.println("edge " + e + " on shortest path not tight");
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private boolean validateVertex(int v) {
+    private boolean validateVertex(int v) throws Exception {
         int V = distTo.length;
         if (v < 0 || v >= V) {
-            Step step = new Step();
-            step.setMessage("vertex " + v + " is not between 0 and " + (V - 1));
-            return false;
+            String msg = "Invalid vertex number : " + v;
+            throw new Exception(msg);
         }
         return true;
     }

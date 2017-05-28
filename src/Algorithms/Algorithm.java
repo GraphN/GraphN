@@ -9,5 +9,5 @@ import java.util.LinkedList;
  * Created by francoisquellec on 29.04.17.
  */
 public interface Algorithm {
-    LinkedList<Step> getPath();
+    LinkedList<Step> getPath() throws Exception;
 }

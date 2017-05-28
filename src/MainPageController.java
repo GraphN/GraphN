@@ -612,6 +612,22 @@ public class MainPageController {
                     orgTranslateY = group.getTranslateY()*sliderValue;
 
                     group.setCursor(Cursor.CLOSED_HAND);
+
+                    //delete if the erease is activate
+                    if(eraserActiveOnce || eraserActive)
+                    {
+                        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+                        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+                        graphXml.deleteVertex(Integer.valueOf(group.getId().substring(4)));
+
+
+
+                        //if eraserActive just once, pass it to false, so we cannot erase again
+                        if(eraserActiveOnce)
+                        {
+                            eraserActiveOnce = false;
+                        }
+                    }
                 }
             };
 

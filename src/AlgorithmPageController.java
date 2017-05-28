@@ -18,6 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import jdk.nashorn.internal.runtime.ECMAException;
 
 import java.util.*;
 
@@ -199,66 +200,100 @@ public class AlgorithmPageController {
 
     @FXML
     private void handleKruskall(){
-        setDividerPosition(0.2);
-        this.algo = new Kruskall(graphTest);
-        this.path = algo.getPath();
-
-        desactivateButtons(kruskall);
-
+        try {
+            this.algo = new Kruskall(graphTest);
+            this.path = algo.getPath();
+            setDividerPosition(0.2);
+            desactivateButtons(kruskall);
+        } catch (Exception e){
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            handleStop();
+        }
     }
     @FXML
     private void handleDFS(){
-        setDividerPosition(0.2);
-        int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
-        //pane.getChildren().remove(edgeList.get(0).getRoot());
-        this.algo = new DFS(graphTest, graphTest.getVertex(startVertex));
-        this.path = algo.getPath();
+        try {
+            setDividerPosition(0.2);
+            int startVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "Start Vertex");
+            //pane.getChildren().remove(edgeList.get(0).getRoot());
+            this.algo = new DFS(graphTest, graphTest.getVertex(startVertex));
+            this.path = algo.getPath();
 
-        setColoredVertex(startVertex);
-        desactivateButtons(dfs);
+            setColoredVertex(startVertex);
+            desactivateButtons(dfs);
+        }catch (Exception e){
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            handleStop();
+        }
     }
     @FXML
     private void handleBFS(){
-        setDividerPosition(0.2);
-        int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
-        this.algo = new BFS(graphTest, graphTest.getVertex(startVertex));
-        this.path = algo.getPath();
+        try {
+            setDividerPosition(0.2);
+            int startVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "Start Vertex");
+            this.algo = new BFS(graphTest, graphTest.getVertex(startVertex));
+            this.path = algo.getPath();
 
-        setColoredVertex(startVertex);
-        desactivateButtons(bfs);
+            setColoredVertex(startVertex);
+            desactivateButtons(bfs);
+        }catch (Exception e){
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            handleStop();
+        }
     }
 
     @FXML
     private void handleBellman(){
-        setDividerPosition(0.2);
-        int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
-        int endVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "End Vertex");
+        try {
+            setDividerPosition(0.2);
+            int startVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "Start Vertex");
+            int endVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "End Vertex");
 
-        this.algo = new Bellman_Ford(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
-        this.path = algo.getPath();
+            this.algo = new Bellman_Ford(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
+            this.path = algo.getPath();
 
-        setColoredVertex(startVertex);
-        desactivateButtons(bellman);
+            setColoredVertex(startVertex);
+            desactivateButtons(bellman);
+        }catch (Exception e){
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            handleStop();
+        }
     }
     @FXML
     private void handleDijkstra(){
-        setDividerPosition(0.2);
-        int startVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "Start Vertex");
-        int endVertex = mainApp.showVertex(graphTest.getVertexsList().size()-1, "End Vertex");
-        //pane.getChildren().remove(edgeList.get(0).getRoot());
-        this.algo = new Dijkstra(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
-        this.path = algo.getPath();
+        try {
+            setDividerPosition(0.2);
+            int startVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "Start Vertex");
+            int endVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "End Vertex");
+            //pane.getChildren().remove(edgeList.get(0).getRoot());
+            this.algo = new Dijkstra(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
+            this.path = algo.getPath();
 
-        setColoredVertex(startVertex);
-        desactivateButtons(dijkstra);
+            setColoredVertex(startVertex);
+            desactivateButtons(dijkstra);
+        }catch (Exception e){
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            handleStop();
+        }
     }
     @FXML
     private void handlePrim(){
-        setDividerPosition(0.2);
-        this.algo = new Prim(graphTest);
-        this.path = algo.getPath();
+        try {
+            setDividerPosition(0.2);
+            this.algo = new Prim(graphTest);
+            this.path = algo.getPath();
 
-        desactivateButtons(prim);
+            desactivateButtons(prim);
+        }catch (Exception e){
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            handleStop();
+        }
     }
 
     private void initZoom(){
@@ -338,9 +373,6 @@ public class AlgorithmPageController {
             }
         }
 
-        //for(Edge e : graphTest.getEdgesList()) {
-        //    System.out.println("test : " + e + " poids : " + e.getWeigth());
-        //}
         return pane;
     }
 
@@ -514,5 +546,13 @@ public class AlgorithmPageController {
         kruskall.setDisable(false);
         kruskall.setSelected(false);
 
+    }
+
+    void alertMessage(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+        dialogPane.getStyleClass().add("myDialog");
+        alert.showAndWait();
     }
 }
