@@ -159,7 +159,7 @@ public class ImportController {
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alertGood.css").toExternalForm());
         dialogPane.getStyleClass().add("myDialog");
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == buttonTypeSave){
@@ -169,7 +169,6 @@ public class ImportController {
         if (fileSave != null) { // TODO: Find a way to enter the filesave
             serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
         }
-
     }
 
     private void showEndVertex(){
