@@ -42,7 +42,8 @@ public class Edge{
         if (!(other instanceof Edge)) {
             return false;
         }
-        return ((Edge) other).weigth == weigth;
+        //return ((Edge) other).weigth == weigth && ((Edge) other).v1 == v1 && ((Edge) other).v2 == v2;
+        return other == this;
     }
 
     public double getWeigth(){return weigth;}

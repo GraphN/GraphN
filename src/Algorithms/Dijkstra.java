@@ -23,6 +23,7 @@ public class Dijkstra implements Algorithm{
 
     private LinkedList<Step> path;
 
+    private boolean visitAll;
 
 
     public void visit(){
@@ -70,6 +71,10 @@ public class Dijkstra implements Algorithm{
             distTo[v] = Double.POSITIVE_INFINITY;
     }
 
+    public Dijkstra(Graph G, Vertex source) {
+        this(G, source, null);
+    }
+
     // relax edge e and update pq if changed
     private void relax(Edge e) {
         int v = e.getFrom().getId(), w = e.getTo().getId();
@@ -109,16 +114,12 @@ public class Dijkstra implements Algorithm{
         return distTo[v] < Double.POSITIVE_INFINITY;
     }
 
-    public LinkedList<Step> getPath() {
-        visit();
+    public void pathTo(Vertex v){
 
-        validateVertex(target.getId());
-
-        if (!hasPathTo(target.getId())){
+        if (!hasPathTo(v.getId())){
             Step step = new Step();
-            step.setMessage("Il n'y a pas de chemin de " + source.getId() + " a " + target.getId());
+            step.setMessage("Il n'y a pas de chemin de " + source.getId() + " a " + v.getId());
             path.add(step);
-            return path;
         }
 
         for (Edge e = edgeTo[target.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
@@ -131,6 +132,19 @@ public class Dijkstra implements Algorithm{
 
             path.add(step);
         }
+    }
+
+    public LinkedList<Step> getPath() {
+        visit();
+
+        if (target != null)
+            pathTo(target);
+        else{
+            for (Vertex v : G.getVertexsList())
+                if (v != source)
+                    pathTo(v);
+        }
+
         return path;
     }
 

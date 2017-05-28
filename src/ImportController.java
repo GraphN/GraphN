@@ -11,9 +11,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +41,7 @@ public class ImportController {
 
     @FXML
     void initialize(){
-        List<String> algo = Arrays.asList("BFS", "DFS", "Kruskal", "Dijkstra", "Prim", "Bellman-Ford");
+        List<String> algo = Arrays.asList("None", "BFS", "DFS", "Kruskal", "Dijkstra", "Prim", "Bellman-Ford");
         for(String s:algo)
             choiceAlgo.getItems().add(s);
         choiceAlgo.setValue(algo.get(0));
@@ -98,16 +98,18 @@ public class ImportController {
                 algo = new Prim(g);
                 break;
             case "Bellman-Ford":
-                algo = new Bellman_Ford(g, g.getVertex(0), g.getVertex(1));// TODO : Let the client choose strt and end vertex
+                algo = new Bellman_Ford(g, g.getVertex(Integer.valueOf(startVertex.getText())));// TODO : Let the client choose strt and end vertex
                 break;
             case "Dijkstra":
-                algo = new Dijkstra(g, g.getVertex(0), g.getVertex(1)); // TODO : Let the client choose strt and end vertex
+                algo = new Dijkstra(g,  g.getVertex(Integer.valueOf(startVertex.getText()))); // TODO : Let the client choose strt and end vertex
                 break;
             default:
                 System.err.println("Algorithme Not find !!");
         }
 
-        serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
+        if (fileSave != null) { // TODO: Find a way to enter the filesave
+            serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
+        }
 
     }
     @FXML
@@ -119,8 +121,8 @@ public class ImportController {
         //Set extension filter
         FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         FileChooser.ExtensionFilter csvFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-        fileChooser.getExtensionFilters().add(txtFilter);
         fileChooser.getExtensionFilters().add(csvFilter);
+        fileChooser.getExtensionFilters().add(txtFilter);
 
         //set initial directory
         File directory = new File("./DataTest");
@@ -140,8 +142,8 @@ public class ImportController {
         //Set extension filter
         FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         FileChooser.ExtensionFilter csvFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-        fileChooser.getExtensionFilters().add(txtFilter);
         fileChooser.getExtensionFilters().add(csvFilter);
+        fileChooser.getExtensionFilters().add(txtFilter);
 
         //set initial directory
         File directory = new File("./DataTest");

@@ -27,21 +27,7 @@ public class Bellman_Ford implements Algorithm{
     private Vertex target;
     private boolean isDirected;
 
-    public LinkedList<Step> getPath(){
-        path = new LinkedList<>();
-
-        if (!isDirected){
-            String message = "Bellman-Ford ne peut pas être appliquer sur des graphes non orientés.";
-            Step step = new Step();
-            step.setMessage(message);
-            step.setVertex(G.getVertex(0));
-            path.add(step);
-        }else {
-        visit();
-
-        if (!hasPathTo(target.getId())) return path;
-        if (hasNegativeCycle()) return path;
-
+    public void pathTo(Vertex v){
         for (Edge e = edgeTo[target.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
             // On notifie que la distance min a changer
             String message = "On selectionne l'arete " + source.getId() + e +  "\n\n";
@@ -57,6 +43,30 @@ public class Bellman_Ford implements Algorithm{
 
             path.add(step);
         }
+    }
+    public LinkedList<Step> getPath(){
+        path = new LinkedList<>();
+
+        if (!isDirected){
+            String message = "Bellman-Ford ne peut pas être appliquer sur des graphes non orientés.";
+            Step step = new Step();
+            step.setMessage(message);
+            step.setVertex(G.getVertex(0));
+            path.add(step);
+        }else {
+
+            visit();
+
+            if (hasNegativeCycle()) return path;
+
+            if (target != null){
+                pathTo(target);
+            }else {
+                for (Vertex v : G.getVertexsList())
+                    if (v != source)
+                        pathTo(v);
+            }
+
         }
         return path;
     }
@@ -88,6 +98,10 @@ public class Bellman_Ford implements Algorithm{
         this.isDirected = G instanceof DiGraph;
         this.source = source;
         this.target = target;
+    }
+
+    public Bellman_Ford(Graph G, Vertex source) {
+        this(G, source, null);
     }
 
     private void relax(Graph G, int v) {
