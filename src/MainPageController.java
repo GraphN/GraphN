@@ -21,7 +21,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
@@ -653,6 +652,8 @@ public class MainPageController {
 
                         DrawEdge drawEdge = null;
 
+                        drawEdgesGroupList.clear();
+                        drawEdgesList.clear();
                         i = 0;
                         while (i < graphXml.getNbGroup()) {
                             ArrayList<DrawEdge> edges = graphXml.getDrawEdges(i);
