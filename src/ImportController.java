@@ -5,9 +5,13 @@ import graph.Stockage.AdjacencyStockage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DialogPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -48,7 +52,7 @@ public class ImportController {
 
     @FXML
     void initialize(){
-        List<String> algo = Arrays.asList("BFS", "DFS", "Kruskal", "Dijkstra", "Prim", "Bellman-Ford");
+        List<String> algo = Arrays.asList("None", "BFS", "DFS", "Kruskal", "Dijkstra", "Prim", "Bellman-Ford");
         for(String s:algo)
             choiceAlgo.getItems().add(s);
         choiceAlgo.setValue(algo.get(0));
@@ -146,7 +150,9 @@ public class ImportController {
                 System.err.println("Algorithme Not found !!");
         }
 
-        //serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
+        if (fileSave != null) { // TODO: Find a way to enter the filesave
+            serialiseur.exportGraph(g, algo.getPath(), fileSave.getAbsolutePath());
+        }
 
     }
 
@@ -180,8 +186,8 @@ public class ImportController {
         //Set extension filter
         FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         FileChooser.ExtensionFilter csvFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-        fileChooser.getExtensionFilters().add(txtFilter);
         fileChooser.getExtensionFilters().add(csvFilter);
+        fileChooser.getExtensionFilters().add(txtFilter);
 
         //set initial directory
         File directory = new File("./DataTest");
@@ -201,8 +207,8 @@ public class ImportController {
         //Set extension filter
         FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         FileChooser.ExtensionFilter csvFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-        fileChooser.getExtensionFilters().add(txtFilter);
         fileChooser.getExtensionFilters().add(csvFilter);
+        fileChooser.getExtensionFilters().add(txtFilter);
 
         //set initial directory
         File directory = new File("./DataTest");
