@@ -1,7 +1,5 @@
 import Algorithms.*;
-import Algorithms.Utils.EdgeVisit;
 import Algorithms.Utils.Step;
-import Algorithms.Utils.VertexVisit;
 import graph.*;
 import graph.Stockage.EdgeListStockage;
 import javafx.application.Platform;
@@ -22,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 
 import java.util.*;
-import java.util.List;
 
 
 /**
@@ -283,10 +280,15 @@ public class AlgorithmPageController {
 
         graphDom = graph;
 
-        if(graph.getGraphType().equals("nonDiGraph") || graph.getGraphType().equals("weightedNonDiGraph"))
-            graphTest = new UDiGraph(graph.getNbVertex()+1, new EdgeListStockage());
-        else
-            graphTest = new DiGraph(graph.getNbVertex()+1, new EdgeListStockage());
+
+        if(graph.getGraphType().equals("nonDiGraph") || graph.getGraphType().equals("weightedNonDiGraph")) {
+            System.out.println("Algorithme page, construct graph with  " + (graph.getNbVertex())+ " vertexs");
+            graphTest = new UDiGraph(graph.getNbVertex() + 1, new EdgeListStockage());
+        }
+        else {
+            System.out.println("Algorithme page, construct Digraph with  " + (graph.getNbVertex())+ " vertexs");
+            graphTest = new DiGraph(graph.getNbVertex() + 1, new EdgeListStockage());
+        }
 
         //adding all vertex from xml
         for(int i = 0; i <= graph.getNbVertex(); i++)
@@ -322,20 +324,23 @@ public class AlgorithmPageController {
             pane.getChildren().add(sPane);
         }
 
-        for(int i=0; i<graph.getNbGroup(); i++) {
+        for(int i=0; i < graph.getNbGroup(); i++) {
             ArrayList<DrawEdge> edges = graphDom.getDrawEdges(i);
 
-            for(DrawEdge drawEdge: edges) {
-                pane.getChildren().add(0, drawEdge.getRoot());
-                edgeList.add(drawEdge);
+            for(int j=0; j < edges.size(); j++) {
+                pane.getChildren().add(0, edges.get(j).getRoot());
+                edgeList.add(edges.get(j));
 
-                graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
+                if(graph.getGraphType().equals("weightedDiGraph") || graph.getGraphType().equals("weightedNonDiGraph"))
+                    graphTest.addEdge(graphTest.getVertex(graph.getFrom(i, j)), graphTest.getVertex(graph.getTo(i, j)), graphDom.getEdgeWeigth(i, j));
+                else
+                    graphTest.addEdge(graphTest.getVertex(graph.getFrom(i, j)), graphTest.getVertex(graph.getTo(i, j)));
             }
         }
 
-        for(Edge e : graphTest.getEdgesList()) {
-            System.out.println("test : " + e + " poids : " + e.getWeigth());
-        }
+        //for(Edge e : graphTest.getEdgesList()) {
+        //    System.out.println("test : " + e + " poids : " + e.getWeigth());
+        //}
         return pane;
     }
 

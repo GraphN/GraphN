@@ -1,18 +1,14 @@
 package graph.Serialisation;
 
 import Algorithms.Utils.Step;
-import com.sun.deploy.security.ValidationState;
 import graph.DiGraph;
 import graph.Graph;
 import graph.Stockage.StockageType;
 import graph.UDiGraph;
 import graph.Vertex;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 /**
  * Created by francoisquellec on 27.05.17.
@@ -33,25 +29,38 @@ public class ListEdgesCSV implements Serialiseur{
 
                 writer.close();
             } catch (IOException e) {
-                // do something
+                e.printStackTrace();
             }
         }
 
         public Graph importGraph(String inputFile, StockageType stockage){
             Graph g = null;
+            int V, E;
+            String TYPE;
+
+            BufferedReader br = null;
+            String line = "";
+            String csvSplitBy = ";";
+            int nbEdges = 0;
+
             try {
-                // On cree un scanner pour lire notre fichier
-                Scanner scanner = new Scanner(new File(inputFile));
-                int V, E;
-                String TYPE;
 
-                // On lit la premiere ligne pour connaitre les dimensions et le type de notre graphe
-                V = scanner.nextInt();
-                E = scanner.nextInt();
-                TYPE = scanner.next();
+                br = new BufferedReader(new FileReader(inputFile));
+                line = br.readLine();
 
-                System.out.println("TYPE : " + TYPE);
+                if (line == null)
+                    throw new IOException("Input File Empty");
 
+                String [] structure = line.split(csvSplitBy);
+                System.out.println("Import structure : " + structure[0]  + "|" + structure[1] + "|" + structure[2]);
+
+                if (structure.length < 3)
+                    throw new IOException("ligne 1: Unsupported Format, has to be : {number of vertex; number of edges; Type(DIRECTED or UNDIRECTED)}");
+
+                V = Integer.valueOf(structure[0]);
+                E = Integer.valueOf(structure[1]);
+                TYPE = structure[2];
+                TYPE.toUpperCase();
                 switch (TYPE){
                     case "DIRECTED":
                         g = new DiGraph(V, stockage);
@@ -60,27 +69,52 @@ public class ListEdgesCSV implements Serialiseur{
                         g = new UDiGraph(V, stockage);
                         break;
                     default:
-                        throw new IOException("Graph Type unknow");
+                        throw new IOException("Graph Type unknown, has to be 'DIRECTED' or 'UNDIRECTED'");
                 }
 
-                System.out.println("Import graph : nbNode = " + V + "; nbEdges = " + E + "; weigthed : " + TYPE);
+                nbEdges = 0;
+                while ((line = br.readLine()) != null) {
+                    System.out.println("line while : " + line);
+                    if (++nbEdges > E)
+                        throw new IOException("Unsupported Format, Too many lines in the file, make sure the number of edges E is correct");
 
-                //  On lit les lignes suivante pour stocker le graphe
+                    // use comma as separator
+                    String[] edge = line.split(csvSplitBy);
+                    if(edge.length < 3)
+                        throw new IOException("Not enough arguments, has to be {start vertex; end vertex; weight}");
 
-                while (scanner.hasNext()) {
-                    String line = scanner.nextLine();
-                    for (int i = 0; i < E; i++) {
-                        Vertex node1 = g.getVertex(scanner.nextInt());
-                        Vertex node2 = g.getVertex((scanner.nextInt()));
-                        double weigth = scanner.nextDouble();
+                    Vertex node1 = g.getVertex(Integer.valueOf(edge[0]));
+                    Vertex node2 = g.getVertex(Integer.valueOf(edge[1]));
+                    double weight = Double.valueOf(edge[2]);
 
-                        g.addEdge(node1, node2, weigth);
+                    System.out.println("Import edge : " + edge[0] + edge[1] + edge[2]);
+
+                    if (node1 == null)
+                        throw new IOException("Vertex " + Integer.valueOf(edge[0]) + " doesn't exist");
+                    if (node2 == null)
+                        throw new IOException("Vertex " + Integer.valueOf(edge[1]) + " doesn't exist");
+
+                    g.addEdge(node1, node2 , weight);
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.err.println("Line " + nbEdges + 1 + ": " + e.getMessage());
+                e.printStackTrace();
+            } catch (NumberFormatException e){
+                System.err.println("Line " + nbEdges + 1 + ": " + e.getMessage());
+                e.printStackTrace();
+            } finally{
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
-
-            } catch (IOException e) {
-                System.err.print("Wrong input Format : " + e);
             }
+
 
             return g;
         }

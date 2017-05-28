@@ -29,3 +29,9 @@
 .choice-box .menu-item:focused {
 	-fx-background-color: transparent;
 }
+.text-field {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 0;
+}
