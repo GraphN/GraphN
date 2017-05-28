@@ -3,7 +3,7 @@ package graph;
 /**
  * Created by francoisquellec on 24.03.17.
  */
-public class Edge{
+public class Edge implements Comparable<Edge>{
     // Le poids de l'arête
     private double weigth;
 
@@ -50,6 +50,11 @@ public class Edge{
 
     public String toString(){
         return "(" + v1 + "; " + v2 + "; Poids : " + weigth + ")";
+    }
+
+    // Compare two edges for priority
+    public int compareTo(Edge e){
+        return (int)(weigth - e.weigth);
     }
 
 }

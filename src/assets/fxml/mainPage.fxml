@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPageController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPageController">
    <children>
       <BorderPane id="mainPage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -21,10 +21,9 @@
                   <Button id="diEdgeButton" fx:id="diEdgeButton" ellipsisString="" layoutX="19.0" layoutY="158.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleDiEdge" prefHeight="31.0" prefWidth="25.0" />
                   <Button id="weightedDiEdgeButton" fx:id="weightedDiEdgeButton" ellipsisString="" layoutX="19.0" layoutY="193.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleWeightedDiEdge" prefHeight="31.0" prefWidth="25.0" />
                   <Button id="eraserButton" fx:id="eraserButton" ellipsisString="" layoutX="19.0" layoutY="241.0" maxHeight="26.0" maxWidth="26.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleEraser" prefHeight="26.0" prefWidth="26.0" />
-                  <Button id="commentButton" fx:id="weightedEdgeButton" layoutX="19.0" layoutY="277.0" maxHeight="26.0" maxWidth="26.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleWeightedEdge" prefHeight="32.0" prefWidth="31.0" text="Note" />
                   <Separator layoutX="7.0" layoutY="76.0" prefHeight="4.0" prefWidth="49.0" />
                   <Separator layoutX="7.0" layoutY="229.0" prefHeight="4.0" prefWidth="49.0" />
-                  <Button fx:id="weightedEdgeButton" layoutX="19.0" layoutY="125.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="25.0" />
+                  <Button fx:id="weightedEdgeButton" layoutX="19.0" layoutY="125.0" maxHeight="26.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onMouseClicked="#handleWeightedEdge" prefHeight="31.0" prefWidth="25.0" />
                </children>
                <BorderPane.margin>
                   <Insets />

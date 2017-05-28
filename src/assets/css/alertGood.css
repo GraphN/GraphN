@@ -1,0 +1,55 @@
+.myDialog{
+    -fx-background-color: #1d1d1d;
+}
+.myDialog > *.button-bar > *.container{
+    -fx-background-color: #1d1d1d;
+}
+.myDialog > *.label.content{
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3A9D23;
+}
+.myDialog:header *.header-panel{
+    -fx-background-color: #333333;
+}
+.myDialog:header *.header-panel *.label{
+    -fx-font-size: 18px;
+    -fx-text-fill: #3A9D23;
+}
+
+
+.myDialog .button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #da5630;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #da5630;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, bold;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.myDialog .button:hover {
+    -fx-background-color: #bf4c28;
+    -fx-border-color: #bf4c28;
+}
+
+.myDialog .button:pressed, .algoButton:default:hover:pressed {
+  -fx-background-color: white;
+  -fx-text-fill: #1d1d1d;
+}
+
+.myDialog .button:focused {
+    -fx-border-color: white, white;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+.myDialog .button:disabled, .algoButton:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #1d1d1d;
+    -fx-text-fill: white;
+}

@@ -18,7 +18,11 @@ public class BFS implements Algorithm{
     private Vertex source;
 
     public LinkedList<Step> getPath(){
+        System.out.println("Apply DFS algorithme on :");
+        g.print();
         visit(source);
+
+        System.out.println("result : " + path);
         return path;
     }
 

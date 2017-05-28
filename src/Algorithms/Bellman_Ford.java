@@ -44,15 +44,16 @@ public class Bellman_Ford implements Algorithm{
             path.add(step);
         }
     }
-    public LinkedList<Step> getPath(){
+    public LinkedList<Step> getPath() throws Exception{
         path = new LinkedList<>();
 
         if (!isDirected){
-            String message = "Bellman-Ford ne peut pas être appliquer sur des graphes non orientés.";
+            throw new Exception("Bellman-Ford ne peut pas être appliquer sur des graphes non orientés.");
+            /*String message = "Bellman-Ford ne peut pas être appliquer sur des graphes non orientés.";
             Step step = new Step();
             step.setMessage(message);
             step.setVertex(G.getVertex(0));
-            path.add(step);
+            path.add(step);*/
         }else {
 
             visit();
@@ -71,7 +72,7 @@ public class Bellman_Ford implements Algorithm{
         return path;
     }
 
-    private void visit(){
+    private void visit() throws Exception{
 
             distTo = new double[G.V()];
             edgeTo = new Edge[G.V()];
@@ -104,7 +105,7 @@ public class Bellman_Ford implements Algorithm{
         this(G, source, null);
     }
 
-    private void relax(Graph G, int v) {
+    private void relax(Graph G, int v) throws Exception{
         for (Edge e : G.adjacentEdges(G.getVertex(v))) {
             int w = e.getTo().getId();
             if (distTo[w] > distTo[v] + e.getWeigth()) {
@@ -149,7 +150,7 @@ public class Bellman_Ford implements Algorithm{
     }
 
     // by finding a cycle in predecessor graph
-    private void findNegativeCycle() {
+    private void findNegativeCycle() throws Exception{
         int V = edgeTo.length;
         Graph spt = new DiGraph(V, new EdgeListStockage());
         for (int v = 0; v < V; v++)
@@ -160,7 +161,9 @@ public class Bellman_Ford implements Algorithm{
         cycle = finder.cycle();
 
         if (cycle != null) {
-            // On notifie que la distance min a changer
+            throw new Exception("Un circuit absorbant est détécté sur ce graphe, impossible de trouver un plus court chemin !\n" +
+            "Circuit : " + cycle);
+            /*// On notifie que la distance min a changer
             String message = "Un circuit absorbant est détécté sur ce graphe, impossible de trouver un plus court chemin !\n" +
                     "Circuit : " + cycle;
             String structures = "distTo : " + Arrays.toString(distTo)
@@ -173,39 +176,40 @@ public class Bellman_Ford implements Algorithm{
             step.setStructures(structures);
             step.setVertex(source);
 
-            path.add(step);
+            path.add(step);*/
         }
 
     }
 
-    public double distTo(int v) {
+    public double distTo(int v) throws Exception{
         validateVertex(v);
         if (hasNegativeCycle())
-            throw new UnsupportedOperationException("Negative cost cycle exists");
+            throw new Exception("Negative cost cycle exists");
         return distTo[v];
     }
 
-    public boolean hasPathTo(int v) {
+    public boolean hasPathTo(int v) throws Exception{
         validateVertex(v);
         boolean ret = distTo[v] < Double.POSITIVE_INFINITY;
         if (!ret){
-            path.clear();
+            throw new Exception("Il n'y a pas de chemin entre " + source + " et " + G.getVertex(v));
+            /*path.clear();
             String message = "Il n'y a pas de chemin entre " + source + " et " + G.getVertex(v);
 
             Step step = new Step();
             step.setMessage(message);
             step.setVertex(source);
-            path.add(step);
+            path.add(step);*/
         }
         return ret;
     }
 
 
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
+    private void validateVertex(int v) throws Exception{
         int V = distTo.length;
         if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
+            throw new Exception("vertex " + v + " is not between 0 and " + (V-1));
     }
 }
 
