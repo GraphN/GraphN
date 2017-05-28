@@ -373,9 +373,6 @@ public class AlgorithmPageController {
             }
         }
 
-        //for(Edge e : graphTest.getEdgesList()) {
-        //    System.out.println("test : " + e + " poids : " + e.getWeigth());
-        //}
         return pane;
     }
 
