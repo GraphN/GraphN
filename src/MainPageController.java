@@ -151,8 +151,14 @@ public class MainPageController {
     {
         //create new tab whitout name to get one name like new tab 3, 4 ..
         Tab tab = createNewTab("");
+        tab.setOnClosed(new EventHandler<Event>(){
+            @Override
+            public void handle(Event e){
+                if(tabPane.getTabs().size() < 1)
+                    handleNew();
+            }
+        });
         tabPane.getTabs().add(tab);
-
 
         //creation of the xml file of this tab
         try {
@@ -607,6 +613,22 @@ public class MainPageController {
                     orgTranslateY = group.getTranslateY()*sliderValue;
 
                     group.setCursor(Cursor.CLOSED_HAND);
+
+                    //delete if the erease is activate
+                    if(eraserActiveOnce || eraserActive)
+                    {
+                        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+                        GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+                        graphXml.deleteVertex(Integer.valueOf(group.getId().substring(4)));
+
+
+
+                        //if eraserActive just once, pass it to false, so we cannot erase again
+                        if(eraserActiveOnce)
+                        {
+                            eraserActiveOnce = false;
+                        }
+                    }
                 }
             };
 
@@ -683,7 +705,7 @@ public class MainPageController {
                                             // todo: Il faudrait aussi modifier le graphXML
                                         }
                                     });
-                                    gIndex = graphXml.addEdgeWeighted(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    gIndex = graphXml.addDiWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
                                     updateGroup(currentTab, gIndex);
                                     break;
                             }
