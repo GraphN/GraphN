@@ -70,7 +70,7 @@ public class AlgorithmPageController {
 
     ArrayList<StackPane> vertexList;
 
-    Graph graphTest;
+    Graph graph;
 
     Algorithm algo;
 
@@ -82,6 +82,7 @@ public class AlgorithmPageController {
     int indexPath = 0;
 
     private Timer timer;
+
 
     @FXML
     private SplitPane splitPane;
@@ -179,6 +180,9 @@ public class AlgorithmPageController {
             removeTextVertex(vertex);
         }
 
+        for (Vertex v : graph.getVertexsList())
+            v.setDescription(" ");
+
         indexPath = 0;
         handlePause();
         description.getItems().clear();
@@ -201,7 +205,7 @@ public class AlgorithmPageController {
     @FXML
     private void handleKruskall(){
         try {
-            this.algo = new Kruskall(graphTest);
+            this.algo = new Kruskall(graph);
             this.path = algo.getPath();
             setDividerPosition(0.2);
             desactivateButtons(kruskall);
@@ -215,9 +219,9 @@ public class AlgorithmPageController {
     private void handleDFS(){
         try {
             setDividerPosition(0.2);
-            int startVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "Start Vertex");
+            int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
             //pane.getChildren().remove(edgeList.get(0).getRoot());
-            this.algo = new DFS(graphTest, graphTest.getVertex(startVertex));
+            this.algo = new DFS(graph, graph.getVertex(startVertex));
             this.path = algo.getPath();
 
             setColoredVertex(startVertex);
@@ -232,8 +236,8 @@ public class AlgorithmPageController {
     private void handleBFS(){
         try {
             setDividerPosition(0.2);
-            int startVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "Start Vertex");
-            this.algo = new BFS(graphTest, graphTest.getVertex(startVertex));
+            int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
+            this.algo = new BFS(graph, graph.getVertex(startVertex));
             this.path = algo.getPath();
 
             setColoredVertex(startVertex);
@@ -249,10 +253,10 @@ public class AlgorithmPageController {
     private void handleBellman(){
         try {
             setDividerPosition(0.2);
-            int startVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "Start Vertex");
-            int endVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "End Vertex");
+            int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
+            int endVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "End Vertex");
 
-            this.algo = new Bellman_Ford(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
+            this.algo = new Bellman_Ford(graph, graph.getVertex(startVertex), graph.getVertex(endVertex));
             this.path = algo.getPath();
 
             setColoredVertex(startVertex);
@@ -267,10 +271,10 @@ public class AlgorithmPageController {
     private void handleDijkstra(){
         try {
             setDividerPosition(0.2);
-            int startVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "Start Vertex");
-            int endVertex = mainApp.showVertex(graphTest.getVertexsList().size() - 1, "End Vertex");
+            int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
+            int endVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "End Vertex");
             //pane.getChildren().remove(edgeList.get(0).getRoot());
-            this.algo = new Dijkstra(graphTest, graphTest.getVertex(startVertex), graphTest.getVertex(endVertex));
+            this.algo = new Dijkstra(graph, graph.getVertex(startVertex), graph.getVertex(endVertex));
             this.path = algo.getPath();
 
             setColoredVertex(startVertex);
@@ -285,7 +289,7 @@ public class AlgorithmPageController {
     private void handlePrim(){
         try {
             setDividerPosition(0.2);
-            this.algo = new Prim(graphTest);
+            this.algo = new Prim(graph);
             this.path = algo.getPath();
 
             desactivateButtons(prim);
@@ -309,30 +313,29 @@ public class AlgorithmPageController {
 
     GraphDom graphDom;
     AnchorPane pane = new AnchorPane();
-    private AnchorPane recreateAnchorWithXML(GraphDom graph) {
+    private AnchorPane recreateAnchorWithXML(GraphDom graphD) {
         //AnchorPane pane = new AnchorPane();
-        graphTest = new UDiGraph(graph.getNbVertex()+1, new EdgeListStockage());
 
-        graphDom = graph;
+        graphDom = graphD;
 
 
-        if(graph.getGraphType().equals("nonDiGraph") || graph.getGraphType().equals("weightedNonDiGraph")) {
-            System.out.println("Algorithme page, construct graph with  " + (graph.getNbVertex())+ " vertexs");
-            graphTest = new UDiGraph(graph.getNbVertex() + 1, new EdgeListStockage());
+        if(graphDom.getGraphType().equals("nonDiGraph") || graphDom.getGraphType().equals("weightedNonDiGraph")) {
+            System.out.println("Algorithme page, construct graph with  " + (graphDom.getNbVertex())+ " vertexs");
+            graph = new UDiGraph(graphDom.getNbVertex() + 1, new EdgeListStockage());
         }
         else {
-            System.out.println("Algorithme page, construct Digraph with  " + (graph.getNbVertex())+ " vertexs");
-            graphTest = new DiGraph(graph.getNbVertex() + 1, new EdgeListStockage());
+            System.out.println("Algorithme page, construct Digraph with  " + (graphDom.getNbVertex())+ " vertexs");
+            graph = new DiGraph(graphDom.getNbVertex() + 1, new EdgeListStockage());
         }
 
         //adding all vertex from xml
-        for(int i = 0; i <= graph.getNbVertex(); i++)
+        for(int i = 0; i <= graphDom.getNbVertex(); i++)
         {
             // Le -10 c'est pour le décalage du stackpane, à vérifier sur d'autres écrans
-            Point2D point = graph.getPosOfVertex(i);
+            Point2D point = graphDom.getPosOfVertex(i);
             int x = (int) point.getX()-10;
             int y = (int) point.getY()-10;
-            String name = graph.getName(i);
+            String name = graphDom.getName(i);
 
             //adding vertex created to pane
 
@@ -359,17 +362,17 @@ public class AlgorithmPageController {
             pane.getChildren().add(sPane);
         }
 
-        for(int i=0; i < graph.getNbGroup(); i++) {
+        for(int i=0; i < graphDom.getNbGroup(); i++) {
             ArrayList<DrawEdge> edges = graphDom.getDrawEdges(i);
 
             for(int j=0; j < edges.size(); j++) {
                 pane.getChildren().add(0, edges.get(j).getRoot());
                 edgeList.add(edges.get(j));
 
-                if(graph.getGraphType().equals("weightedDiGraph") || graph.getGraphType().equals("weightedNonDiGraph"))
-                    graphTest.addEdge(graphTest.getVertex(graph.getFrom(i, j)), graphTest.getVertex(graph.getTo(i, j)), graphDom.getEdgeWeigth(i, j));
+                if(graphDom.getGraphType().equals("weightedDiGraph") || graphDom.getGraphType().equals("weightedNonDiGraph"))
+                    graph.addEdge(graph.getVertex(graphDom.getFrom(i, j)), graph.getVertex(graphDom.getTo(i, j)), graphDom.getEdgeWeigth(i, j));
                 else
-                    graphTest.addEdge(graphTest.getVertex(graph.getFrom(i, j)), graphTest.getVertex(graph.getTo(i, j)));
+                    graph.addEdge(graph.getVertex(graphDom.getFrom(i, j)), graph.getVertex(graphDom.getTo(i, j)));
             }
         }
 
@@ -442,24 +445,26 @@ public class AlgorithmPageController {
         System.out.println(v);
 
         if (e != null) {
-            DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId());
+            DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId(), e.getWeigth());
 
             // TODO : On ne devrait pas avoir a faire ça !!!! mais avec ça ça marche ...
             if (test == null)
-                test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId());
+                test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId(), e.getWeigth());
 
             for (int i = 0; i < edgeList.size(); i++) {
-                if (edgeList.get(i) != null)
-                    if ((edgeList.get(i).getStartX() == test.getStartX()
+                if (edgeList.get(i) != null) {
+                    if (((edgeList.get(i).getStartX() == test.getStartX()
                             && edgeList.get(i).getStartY() == test.getStartY()
                             && edgeList.get(i).getEndX() == test.getEndX()
                             && edgeList.get(i).getEndY() == test.getEndY())
                             || (!edgeList.get(i).isDirected()
                             && edgeList.get(i).getEndY() == test.getStartY()
                             && edgeList.get(i).getStartX() == test.getEndX()
-                            && edgeList.get(i).getStartY() == test.getEndY())) {
+                            && edgeList.get(i).getStartY() == test.getEndY()))
+                            && (edgeList.get(i).getText().toString().equals(test.getText().toString()))) {
                         edgeList.get(i).setColored();
                     }
+                }
             }
 
             hasChange = true;

@@ -18,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
@@ -85,6 +86,16 @@ public class MainPageController {
     private double orgTranslateX, orgTranslateY;
 
     private Line liveEdge;
+
+
+    public Pane getGraphPane(){
+        Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+
+        AnchorPane currPage = (AnchorPane) currentTab.getContent();
+
+        return currPage;
+    }
+
     public MainPageController(){
         indiceTab = 0;
     }
@@ -152,8 +163,14 @@ public class MainPageController {
     {
         //create new tab whitout name to get one name like new tab 3, 4 ..
         Tab tab = createNewTab("");
+        tab.setOnClosed(new EventHandler<Event>(){
+            @Override
+            public void handle(Event e){
+                if(tabPane.getTabs().size() < 1)
+                    handleNew();
+            }
+        });
         tabPane.getTabs().add(tab);
-
 
         //creation of the xml file of this tab
         try {
@@ -204,6 +221,7 @@ public class MainPageController {
         Group vertex = new Group();
         vertex.getChildren().addAll(circle_base,text);
         vertex.setId(id);
+        System.out.println("Valeur du slider: " + currentSlider.getValue());
         vertex.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue());
         vertex.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue());
         System.out.println("x: "+x+ " y: " + y);
@@ -767,7 +785,7 @@ public class MainPageController {
                                             // todo: Il faudrait aussi modifier le graphXML
                                         }
                                     });
-                                    gIndex = graphXml.addEdgeWeighted(nameVertexStart, groupEnd.getId(),weight.getText());
+                                    gIndex = graphXml.addDiWeightedEdge(nameVertexStart, groupEnd.getId(),weight.getText());
                                     updateGroup(currentTab, gIndex);
                                     break;
                             }

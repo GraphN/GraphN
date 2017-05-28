@@ -7,6 +7,7 @@ import graph.Graph;
 import graph.Vertex;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Vector;
 
 /**
@@ -16,10 +17,11 @@ public class DFS implements Algorithm{
     private Graph g;
     private Vector<Boolean> marked;
     private LinkedList<Step> path = new LinkedList<>();
-    private Vertex lastVisitedVertex = null;
+    private LinkedList<Vertex> listLastVisitedVertex;
     private Vertex source;
 
     public LinkedList<Step> getPath(){
+        listLastVisitedVertex = new LinkedList<>();
         visit(source);
         return path;
     }
@@ -43,21 +45,25 @@ public class DFS implements Algorithm{
     }
 
     private void recursion(Vertex v) {
-        if(lastVisitedVertex != null) {
+        if(!listLastVisitedVertex.isEmpty()) {
             String message = "On selectionne le sommet " + v.getId();
-            String structures = "last visited vertex : " + lastVisitedVertex.getId()
+            String structures = "last visited vertex : " + listLastVisitedVertex.getLast().getId()
                                 + "\nmarked : " + marked.toString();
             //System.out.println("Add step : " +lastVisitedVertex.getId() + v.getId());
-            //Edge e = g.getEdge(lastVisitedVertex, v);
+            Edge e = null;
+            while (!listLastVisitedVertex.isEmpty() && (e = g.getEdge(listLastVisitedVertex.removeLast(), v)) == null);
             Step step = new Step();
             step.setMessage(message);
             step.setStructures(structures);
-            //step.setEdge(e);
+            if (e != null) {
+                step.setEdge(e);
+                listLastVisitedVertex.addLast(e.getFrom());
+            }
             step.setVertex(v);
             path.add(step);
         }
 
-        lastVisitedVertex = v;
+        listLastVisitedVertex.addLast(v);
 
         marked.set(v.getId(), true);
 

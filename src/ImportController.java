@@ -9,13 +9,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -94,13 +91,8 @@ public class ImportController {
         for(String s:structures)
             choiceStructure.getItems().add(s);
         choiceStructure.setValue(structures.get(0));
-
-        choiceStructure.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                structure = choiceStructure.getValue();
-            }
-        });
+        startVertex.setText("0");
+        endVertex.setText("0");
     }
 
     @FXML
@@ -119,19 +111,12 @@ public class ImportController {
             alertMessage("Open a file before apply the algorithm");
             return;
         }
-            switch (fileOpen.getAbsolutePath().substring(fileOpen.getAbsolutePath().lastIndexOf('.') + 1)) {
-                case "csv":
-                    serialiseur = new ListEdgesCSV();
-                    break;
-                case "txt":
-                    serialiseur = new ListEdgesTXT();
-                    break;
-                default:
-                    System.err.println("Wrong input type file !");
-            }
+
+        serialiseur = getSerialiseur(fileOpen);
+        if (serialiseur == null ) return;
 
 
-        StockageType stockage = null;
+        StockageType stockage;
         switch (choiceStructure.getValue()){
             case "EdgesList":
                 stockage = new EdgeListStockage();
@@ -140,13 +125,22 @@ public class ImportController {
                 stockage = new AdjacencyStockage();
                 break;
             default:
-                System.err.println("Unknown Stockage Type !");
+                alertMessage("Unknown Stockage Type !");
                 return;
         }
 
-        Graph g = serialiseur.importGraph(fileOpen.getAbsolutePath(), stockage);
 
-        Algorithm algo = null;
+        Graph g;
+        try{
+            g = serialiseur.importGraph(fileOpen.getAbsolutePath(), stockage);
+        }catch (Exception e){
+            System.out.println("Erreur");
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            return;
+        }
+
+        Algorithm algo;
         switch (choiceAlgo.getValue()){
             case "BFS":
                 algo = new BFS(g, g.getVertex(start));
@@ -167,7 +161,8 @@ public class ImportController {
                 algo = new Dijkstra(g, g.getVertex(start), g.getVertex(end));
                 break;
             default:
-                System.err.println("Algorithme Not found !!");
+                alertMessage("Algorithme Not found !!");
+                return;
         }
 
         try{
@@ -188,9 +183,12 @@ public class ImportController {
             }
 
             if (fileSave != null) {
+                serialiseur = getSerialiseur(fileOpen);
+                if (serialiseur == null ) return;
                 serialiseur.exportGraph(g, path, fileSave.getAbsolutePath());
             }
         }catch(Exception e){
+            e.printStackTrace();
             alertMessage(e.getMessage());
         }
 
@@ -271,6 +269,22 @@ public class ImportController {
         dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
         dialogPane.getStyleClass().add("myDialog");
         alert.showAndWait();
+    }
+
+    private Serialiseur getSerialiseur(File file){
+        Serialiseur serialiseur;
+        switch (file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf('.') + 1)) {
+            case "csv":
+                serialiseur = new ListEdgesCSV();
+                break;
+            case "txt":
+                serialiseur = new ListEdgesTXT();
+                break;
+            default:
+                alertMessage("Wrong input type file !");
+                return null;
+        }
+        return serialiseur;
     }
 
     public void setMainApp(MainApp mainApp){

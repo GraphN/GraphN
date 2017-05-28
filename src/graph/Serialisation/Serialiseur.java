@@ -7,6 +7,7 @@ import graph.Graph;
 import graph.Stockage.StockageType;
 import graph.UDiGraph;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
 /**
@@ -16,5 +17,5 @@ public interface Serialiseur {
     int DIRECTED = 1;
     int UNDIRECTED = 0;
     void exportGraph(Graph g, LinkedList<Step> path, String outputFile);
-    Graph importGraph(String inputFile, StockageType stockage);
+    Graph importGraph(String inputFile, StockageType stockage) throws Exception;
 }

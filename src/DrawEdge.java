@@ -113,8 +113,8 @@ public class DrawEdge {
             if(text == null)
                 root.getChildren().addAll(curve1);
             else{
-                text.setTranslateX((endX+startX)/2);
-                text.setTranslateY((endY+startY)/2);
+                text.setTranslateX(controlX1 - movX/4 * bendFactor);
+                text.setTranslateY(controlY1 - movY/4 * bendFactor);
                 root.getChildren().addAll(curve1, text);
             }
         }

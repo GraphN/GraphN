@@ -89,15 +89,15 @@ public class GraphDom {
         edge1.setAttribute("name", "edge_"+nbEdge);
         edge1.setAttribute("start", vertexStart);
         edge1.setAttribute("end", vertexEnd);
-        Element edge2 = document.createElement("edge");
+        /*Element edge2 = document.createElement("edge");
         edge2.setAttribute("name", "edge_"+nbEdge);
         edge2.setAttribute("start", vertexEnd);
-        edge2.setAttribute("end", vertexStart);
+        edge2.setAttribute("end", vertexStart);*/
         racine.setAttribute("graphType", "nonDiGraph");
         group.appendChild(edge1);
-        group.appendChild(edge2);
+        //group.appendChild(edge2);
         edgesGroups.get(getId(group)).add(edge1);
-        edgesGroups.get(getId(group)).add(edge2);
+        //edgesGroups.get(getId(group)).add(edge2);
         edges.add(edge1);
         //edges.add(edge2);
 
@@ -115,16 +115,16 @@ public class GraphDom {
         edge1.setAttribute("weight", weight);
         racine.setAttribute("graphType", "weightedNonDiGraph");
         racine.appendChild(edge1);
-        Element edge2 = document.createElement("edge");
+        /*Element edge2 = document.createElement("edge");
         edge2.setAttribute("name", "edge_"+nbEdge);
         edge2.setAttribute("start", vertexEnd);
         edge2.setAttribute("end", vertexStart);
         edge2.setAttribute("weight", weight);
-        racine.setAttribute("graphType", "weightedNonDiGraph");
+        racine.setAttribute("graphType", "weightedNonDiGraph");*/
         group.appendChild(edge1);
-        group.appendChild(edge2);
+        //group.appendChild(edge2);
         edgesGroups.get(getId(group)).add(edge1);
-        edgesGroups.get(getId(group)).add(edge2);
+        //edgesGroups.get(getId(group)).add(edge2);
         edges.add(edge1);
         //edges.add(edge2);
 
@@ -148,7 +148,7 @@ public class GraphDom {
         return getId(group);
     }
 
-    public int addEdgeWeighted(String vertexStart, String vertexEnd, String weight)
+    public int addDiWeightedEdge(String vertexStart, String vertexEnd, String weight)
     {
         nbEdge++;
         Element group = getGroup(vertexStart, vertexEnd);
@@ -309,7 +309,7 @@ public class GraphDom {
 
             int bending = 0;
             int bendFactor = 0;
-            if(graphType.equals("nonDiGraph")) {
+            if(graphType.equals("nonDiGraph") || graphType.equals("weightedNonDiGraph")) {
                 if (edges.size() > 2) {
                     bending = ((i/2) % 2) + 1;
                 }
@@ -339,20 +339,23 @@ public class GraphDom {
             else if (graphType.equals("diGraph"))
                 res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true));
             else if (graphType.equals("weightedDiGraph"))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, new Text(edges.get(i).getAttribute("weight"))));
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true, new Text(edges.get(i).getAttribute("weight"))));
+            else if (graphType.equals("weightedNonDiGraph"))
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, false, new Text(edges.get(i).getAttribute("weight"))));
         }
 
         return res;
     }
 
-    public DrawEdge getEdge(int from, int to)
+    public DrawEdge getEdge(int from, int to, double weight)
     {
         //Element edge = (Element) edges.get(index);
         for(Element edge:edges){
-            System.out.println("From: " + edge.getAttribute("start") + "end" + edge.getAttribute("end"));
             if(!edge.getAttribute("start").isEmpty() && !edge.getAttribute("end").isEmpty()) {
                 if (Integer.parseInt(edge.getAttribute("start").replaceAll("[\\D]", "")) == from &&
-                        Integer.parseInt(edge.getAttribute("end").replaceAll("[\\D]", "")) == to) {
+                        Integer.parseInt(edge.getAttribute("end").replaceAll("[\\D]", "")) == to &&
+                        (weight == 0 || Integer.parseInt(edge.getAttribute("weight").replaceAll("[\\D]", "")) == weight)) {
+
                     String vertex1 = edge.getAttribute("start");
                     String vertex2 = edge.getAttribute("end");
 
