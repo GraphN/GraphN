@@ -380,6 +380,12 @@ public class GraphDom {
         else
             return Double.parseDouble(edges.get(i).getAttribute("weight").replaceAll("[^1234567890.\\-]", ""));
     }
+    public double getEdgeWeigth(int gIndex, int eIndex){
+        if(graphType.equals("nonDiGraph")||graphType.equals("diGraph"))
+            return 0;
+        else
+            return Double.parseDouble(edgesGroups.get(gIndex).get(eIndex).getAttribute("weight").replaceAll("[^1234567890.\\-]", ""));
+    }
     public int getFrom(int index){
         return Integer.parseInt(edges.get(index).getAttribute("start").replaceAll("[\\D]", ""));
     }

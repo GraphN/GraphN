@@ -326,7 +326,10 @@ public class AlgorithmPageController {
                 pane.getChildren().add(0, edges.get(j).getRoot());
                 edgeList.add(edges.get(j));
 
-                graphTest.addEdge(graphTest.getVertex(graph.getFrom(i, j)), graphTest.getVertex(graph.getTo(i, j)));
+                if(graph.getGraphType().equals("weightedDiGraph") || graph.getGraphType().equals("weightedNonDiGraph"))
+                    graphTest.addEdge(graphTest.getVertex(graph.getFrom(i, j)), graphTest.getVertex(graph.getTo(i, j)), graphDom.getEdgeWeigth(i, j));
+                else
+                    graphTest.addEdge(graphTest.getVertex(graph.getFrom(i, j)), graphTest.getVertex(graph.getTo(i, j)));
             }
         }
 
