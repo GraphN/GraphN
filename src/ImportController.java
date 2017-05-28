@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -110,19 +111,21 @@ public class ImportController {
             alertMessage("Open a file before apply the algorithm");
             return;
         }
-            switch (fileOpen.getAbsolutePath().substring(fileOpen.getAbsolutePath().lastIndexOf('.') + 1)) {
-                case "csv":
-                    serialiseur = new ListEdgesCSV();
-                    break;
-                case "txt":
-                    serialiseur = new ListEdgesTXT();
-                    break;
-                default:
-                    System.err.println("Wrong input type file !");
-            }
+
+        switch (fileOpen.getAbsolutePath().substring(fileOpen.getAbsolutePath().lastIndexOf('.') + 1)) {
+            case "csv":
+                serialiseur = new ListEdgesCSV();
+                break;
+            case "txt":
+                serialiseur = new ListEdgesTXT();
+                break;
+            default:
+                alertMessage("Wrong input type file !");
+                return;
+        }
 
 
-        StockageType stockage = null;
+        StockageType stockage;
         switch (choiceStructure.getValue()){
             case "EdgesList":
                 stockage = new EdgeListStockage();
@@ -131,13 +134,20 @@ public class ImportController {
                 stockage = new AdjacencyStockage();
                 break;
             default:
-                System.err.println("Unknown Stockage Type !");
+                alertMessage("Unknown Stockage Type !");
                 return;
         }
 
-        Graph g = serialiseur.importGraph(fileOpen.getAbsolutePath(), stockage);
 
-        Algorithm algo = null;
+        Graph g;
+        try{
+            g = serialiseur.importGraph(fileOpen.getAbsolutePath(), stockage);
+        }catch (Exception e){
+            alertMessage(e.getMessage());
+            return;
+        }
+
+        Algorithm algo;
         switch (choiceAlgo.getValue()){
             case "BFS":
                 algo = new BFS(g, g.getVertex(start));
@@ -158,7 +168,8 @@ public class ImportController {
                 algo = new Dijkstra(g, g.getVertex(start), g.getVertex(end));
                 break;
             default:
-                System.err.println("Algorithme Not found !!");
+                alertMessage("Algorithme Not found !!");
+                return;
         }
 
         try{
