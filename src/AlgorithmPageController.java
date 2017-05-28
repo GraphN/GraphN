@@ -283,10 +283,15 @@ public class AlgorithmPageController {
 
         graphDom = graph;
 
-        if(graph.getGraphType().equals("nonDiGraph") || graph.getGraphType().equals("weightedNonDiGraph"))
-            graphTest = new UDiGraph(graph.getNbVertex()+1, new EdgeListStockage());
-        else
-            graphTest = new DiGraph(graph.getNbVertex()+1, new EdgeListStockage());
+
+        if(graph.getGraphType().equals("nonDiGraph") || graph.getGraphType().equals("weightedNonDiGraph")) {
+            System.out.println("Algorithme page, construct graph with  " + (graph.getNbVertex())+ " vertexs");
+            graphTest = new UDiGraph(graph.getNbVertex() + 1, new EdgeListStockage());
+        }
+        else {
+            System.out.println("Algorithme page, construct Digraph with  " + (graph.getNbVertex())+ " vertexs");
+            graphTest = new DiGraph(graph.getNbVertex() + 1, new EdgeListStockage());
+        }
 
         //adding all vertex from xml
         for(int i = 0; i <= graph.getNbVertex(); i++)
@@ -329,13 +334,14 @@ public class AlgorithmPageController {
                 pane.getChildren().add(0, drawEdge.getRoot());
                 edgeList.add(drawEdge);
 
+                System.out.println("Adding edge from : " + graphTest.getVertex(graph.getFrom(i)) + "; to  : " + graphTest.getVertex(graph.getTo(i)) + " the graph");
                 graphTest.addEdge(graphTest.getVertex(graph.getFrom(i)), graphTest.getVertex(graph.getTo(i)));
             }
         }
 
-        for(Edge e : graphTest.getEdgesList()) {
-            System.out.println("test : " + e + " poids : " + e.getWeigth());
-        }
+        //for(Edge e : graphTest.getEdgesList()) {
+        //    System.out.println("test : " + e + " poids : " + e.getWeigth());
+        //}
         return pane;
     }
 

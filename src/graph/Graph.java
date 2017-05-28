@@ -39,7 +39,10 @@ public abstract class Graph {
     }
 
     public Vertex getVertex(int id){
-        return vertexList.get(id);
+        if (id < vertexList.size())
+            return vertexList.get(id);
+        else
+            return null;
     }
     public LinkedList<Vertex> getVertexsList(){return vertexList;}
 
@@ -69,7 +72,7 @@ public abstract class Graph {
     public abstract void addEdge(Vertex v, Vertex w, double weigth);
 
     public void print(){
-        System.out.println(this.getClass());
+        System.out.println(this.getClass() + "nbVertex = " + V);
         for(Vertex v : vertexList){
             System.out.print("Sommet " + v.getId() + " : ");
             for(Edge e : adjacentEdges(v))

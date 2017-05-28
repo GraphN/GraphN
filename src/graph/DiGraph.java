@@ -11,6 +11,7 @@ public class DiGraph extends Graph {
     public DiGraph(int V, StockageType s) {
         super(V,s);
         TYPE = 1;
+        print();
     }
 
     public void addEdge(Vertex v, Vertex w) {

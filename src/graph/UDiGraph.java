@@ -9,6 +9,7 @@ public class UDiGraph extends Graph {
     public UDiGraph(int V, StockageType s) {
         super(V,s);
         TYPE = 0;
+        print();
     }
 
     public void addEdge(Vertex v, Vertex w) {
