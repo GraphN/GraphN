@@ -170,8 +170,10 @@ public class MainApp extends Application {
         //Set extension filter
         FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         FileChooser.ExtensionFilter pngFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+        FileChooser.ExtensionFilter jpgFilter = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.jpg");
         fileChooser.getExtensionFilters().add(xmlFilter);
         fileChooser.getExtensionFilters().add(pngFilter);
+        fileChooser.getExtensionFilters().add(jpgFilter);
 
         //set initial directory
         File directory = new File("./src/savedGraphsXML");
@@ -180,10 +182,18 @@ public class MainApp extends Application {
         File file = fileChooser.showSaveDialog(primaryStage);
         if (file != null) {
             switch (file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf('.') + 1)) {
-                case "png":
-                    WritableImage image = mainPageController.getGraphPane().snapshot(new SnapshotParameters(), null);
+                case "jpg":
+                    WritableImage imageJPG = mainPageController.getGraphPane().snapshot(new SnapshotParameters(), null);
                     try {
-                        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+                        ImageIO.write(SwingFXUtils.fromFXImage(imageJPG, null), "png", file);
+                    } catch (IOException e) {
+                        // TODO: handle exception here
+                    }
+                    break;
+                case "png":
+                    WritableImage imagePNG = mainPageController.getGraphPane().snapshot(new SnapshotParameters(), null);
+                    try {
+                        ImageIO.write(SwingFXUtils.fromFXImage(imagePNG, null), "png", file);
                     } catch (IOException e) {
                         // TODO: handle exception here
                     }
