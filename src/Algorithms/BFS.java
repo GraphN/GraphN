@@ -63,12 +63,12 @@ public class BFS implements Algorithm{
             if(g.getEdge(g.getVertex(parent.get(current.getId())), current) != null) {
                 String message = "On selectionne le sommet " + current.getId();
                 String structures = "parent : " + parent.toString();
-                //Edge e = g.getEdge(g.getVertex(parent.get(current.getId())), current);
+                Edge e = g.getEdge(g.getVertex(parent.get(current.getId())), current);
 
                 Step step = new Step();
                 step.setMessage(message);
                 step.setStructures(structures);
-                //step.setEdge(e);
+                step.setEdge(e);
                 step.setVertex(current);
 
                 path.add(step);
