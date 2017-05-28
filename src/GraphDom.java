@@ -288,14 +288,14 @@ public class GraphDom {
         int endX = (int)ver2.getX();
         int endY = (int)ver2.getY();
         if(graphType.equals("nonDiGraph"))
-            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0);
+            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0);
         else if (graphType.equals("weightedNonDiGraph")) {
-            return new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, 0, false, new Text(edge.getAttribute("weight")));
+            return new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, 0, 0, false, new Text(edge.getAttribute("weight")));
         }
         else if (graphType.equals("diGraph"))
-            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, true);
+            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true);
         else if (graphType.equals("weightedDiGraph"))
-            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, true, new Text(edge.getAttribute("weight")));
+            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true, new Text(edge.getAttribute("weight")));
         return null;
     }
 
@@ -308,10 +308,12 @@ public class GraphDom {
             String vertex2 = edges.get(i).getAttribute("end");
 
             int bending = 0;
+            int bendFactor = 0;
             if(graphType.equals("nonDiGraph")) {
                 if (edges.size() > 2) {
                     bending = ((i/2) % 2) + 1;
                 }
+                bendFactor = i / 4;
             }
             else {
                 if (edges.size() > 1) {
@@ -320,7 +322,9 @@ public class GraphDom {
                     else
                         bending = 2 - (i % 2);
                 }
+                bendFactor = i / 2;
             }
+            bendFactor++;
 
             Point2D ver1 =  getPosOfVertex(vertex1);
             Point2D ver2 =  getPosOfVertex(vertex2);
@@ -331,11 +335,11 @@ public class GraphDom {
             int endY = (int)ver2.getY();
             System.out.println(graphType);
             if(graphType.equals("nonDiGraph"))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending));
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor));
             else if (graphType.equals("diGraph"))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, true));
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true));
             else if (graphType.equals("weightedDiGraph"))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, new Text(edges.get(i).getAttribute("weight"))));
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, new Text(edges.get(i).getAttribute("weight"))));
         }
 
         return res;
@@ -360,13 +364,13 @@ public class GraphDom {
                     int endX = (int) ver2.getX();
                     int endY = (int) ver2.getY();
                     if(graphType.equals("nonDiGraph"))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0);
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0);
                     else if (graphType.equals("weightedNonDiGraph"))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, false, new Text(edge.getAttribute("weight")));
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, false, new Text(edge.getAttribute("weight")));
                     else if (graphType.equals("diGraph"))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, true);
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true);
                     else if (graphType.equals("weightedDiGraph"))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, true, new Text(edge.getAttribute("weight")));
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true, new Text(edge.getAttribute("weight")));
                     return null;                }
             }else {
                 System.out.println("NUll");

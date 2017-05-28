@@ -23,27 +23,29 @@ public class DrawEdge {
     Text text;
     boolean directed;
     int bending;
+    int bendFactor;
 
-    DrawEdge(double startX, double startY, double endX, double endY, int bending){
-        this(startX, startY, endX, endY, bending, null, false);
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor){
+        this(startX, startY, endX, endY, bending, bendFactor, null, false);
     }
-    DrawEdge(double startX, double startY, double endX, double endY, int bending, Text text){
-        this(startX, startY, endX, endY, bending, text, true);
-    }
-
-    DrawEdge(double startX, double startY, double endX, double endY, int bending, boolean directed){
-        this(startX, startY, endX, endY, bending, null, directed);
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, Text text){
+        this(startX, startY, endX, endY, bending, bendFactor, text, true);
     }
 
-    DrawEdge(double startX, double startY, double endX, double endY, int bending, boolean directed, Text text){
-        this(startX, startY, endX, endY, bending, text, directed);
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, boolean directed){
+        this(startX, startY, endX, endY, bending, bendFactor, null, directed);
     }
 
-    DrawEdge(double startX, double startY, double endX, double endY, int bending, Text text, boolean directed){
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, boolean directed, Text text){
+        this(startX, startY, endX, endY, bending, bendFactor, text, directed);
+    }
+
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, Text text, boolean directed){
         root = new Group();
         this.text = text;
         this.directed = directed;
         this.bending = bending;
+        this.bendFactor = bendFactor;
 
         // Calcul de l'angle du trait
         double opp, adj, angle, sin, cos;
@@ -53,11 +55,11 @@ public class DrawEdge {
         sin = Math.sin(angle);
         cos = Math.cos(angle);
 
-        double movX = 0, movY = 0;
+        double movX = 0, movY = 0, lblX = 0, lblY = 0;
 
         if(bending > 0) {
-            movX = 40 * sin;
-            movY = 40 * cos;
+            movX = 40 * bendFactor * sin;
+            movY = 40 * bendFactor * cos;
 
             if (startY < endY)
                 movX *= -1;
@@ -99,8 +101,12 @@ public class DrawEdge {
             if(text == null)
                 root.getChildren().addAll(curve1, arrowEnd);
             else{
-                text.setTranslateX(controlX1 + movX/4);
-                text.setTranslateY(controlY1 + movY/4);
+                if(bendFactor != 0) {
+                    movX /= bendFactor;
+                    movY /= bendFactor;
+                }
+                text.setTranslateX(controlX1 - movX/4 * bendFactor);
+                text.setTranslateY(controlY1 - movY/4 * bendFactor);
                 root.getChildren().addAll(curve1, arrowEnd, text);
             }
         }else{
@@ -209,6 +215,10 @@ public class DrawEdge {
     }
     int getBending() {
         return bending;
+    }
+
+    int getBendFactor() {
+        return bendFactor;
     }
 
     boolean isDirected(){
