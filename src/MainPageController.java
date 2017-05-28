@@ -699,6 +699,8 @@ public class MainPageController {
                                     case "nonDiGraph":
                                         edgeButton.setId("edgeButton");
                                         break;
+                                    case "weightedNonDiGraph":
+                                        weightedEdgeButton.setId("weightedEdgeButton");
                                     case "diGraph":
                                         diEdgeButton.setId("diEdgeButton");
                                         break;
