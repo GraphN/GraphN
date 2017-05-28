@@ -939,9 +939,10 @@ public class MainPageController {
                 Text text = drawEdge.getText();
                 boolean directed = drawEdge.isDirected();
                 int bending = drawEdge.getBending();
+                int bendFactor = drawEdge.getBendFactor();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, (double)newValue, endY, bending, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, (double)newValue, endY, bending, bendFactor, directed, text));
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
@@ -958,9 +959,10 @@ public class MainPageController {
                 Text text = drawEdge.getText();
                 boolean directed = drawEdge.isDirected();
                 int bending = drawEdge.getBending();
+                int bendFactor = drawEdge.getBendFactor();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, endX , (double)newValue, bending, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, startY, endX , (double)newValue, bending, bendFactor, directed, text));
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
@@ -977,9 +979,10 @@ public class MainPageController {
                 Text text = drawEdge.getText();
                 boolean directed = drawEdge.isDirected();
                 int bending = drawEdge.getBending();
+                int bendFactor = drawEdge.getBendFactor();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge((double)newValue, startY, endX , endY, bending, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge((double)newValue, startY, endX , endY, bending, bendFactor, directed, text));
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
@@ -997,9 +1000,10 @@ public class MainPageController {
                 Text text = drawEdge.getText();
                 boolean directed = drawEdge.isDirected();
                 int bending = drawEdge.getBending();
+                int bendFactor = drawEdge.getBendFactor();
                 currP.getChildren().remove(drawEdgesList.get(drawEdgeIndex).getRoot());
                 drawEdgesList.remove(drawEdgeIndex);
-                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, (double)newValue, endX , endY, bending, directed, text));
+                drawEdgesList.add(drawEdgeIndex,new DrawEdge(startX, (double)newValue, endX , endY, bending, bendFactor, directed, text));
                 currP.getChildren().add(1,drawEdgesList.get(drawEdgeIndex).getRoot());
             }
         });
