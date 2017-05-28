@@ -677,11 +677,14 @@ public class MainPageController {
                             Text weight;
                             switch (graphType) {
                                 case "nonDiGraph":
+                                    if(graphXml.getEdge(Integer.parseInt(groupStart.getId().replaceAll("[\\D]", "")), Integer.parseInt(groupEnd.getId().replaceAll("[\\D]", "")), 0)!=null) break;
                                     gIndex = graphXml.addEdge(nameVertexStart, groupEnd.getId());
                                     updateGroup(currentTab, gIndex);
                                     break;
                                 case "weightedNonDiGraph":
-                                    weight = new Text(""+mainApp.showWeightPage());
+                                    //FIXME Andrea: ça fait de la merde quand on ajoute plusieurs arrêtes, j'arrives pas à comprendre pourquoi
+                                      weight = new Text(""+mainApp.showWeightPage());
+                                    //if(graphXml.getEdge(Integer.parseInt(groupStart.getId().replaceAll("[\\D]", "")), Integer.parseInt(groupEnd.getId().replaceAll("[\\D]", "")), 0)!=null) break;
                                     // pour que le text puisse être modifiable
                                     weight.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                         public void handle(MouseEvent event) {

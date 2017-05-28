@@ -24,7 +24,6 @@ public class DrawEdge {
     boolean directed;
     int bending;
     int bendFactor;
-
     DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor){
         this(startX, startY, endX, endY, bending, bendFactor, null, false);
     }
