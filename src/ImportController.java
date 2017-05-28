@@ -6,8 +6,10 @@ import graph.Stockage.AdjacencyStockage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DialogPane;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.util.Arrays;
@@ -86,7 +88,8 @@ public class ImportController {
 
         //Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-        fileChooser.getExtensionFilters().add(extFilter);
+        FileChooser.ExtensionFilter extFilterCsv = new FileChooser.ExtensionFilter("Csv files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().addAll(extFilter,extFilterCsv);
 
         //set initial directory
         File directory = new File("./DataTest");
@@ -121,6 +124,15 @@ public class ImportController {
             }*/
         }
     }
+
+    void alertMessage(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+        dialogPane.getStyleClass().add("myDialog");
+        alert.showAndWait();
+    }
+
     public void setMainApp(MainApp mainApp){
         this.mainApp = mainApp;
     }
