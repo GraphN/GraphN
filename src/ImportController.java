@@ -5,18 +5,15 @@ import graph.Stockage.AdjacencyStockage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by LBX on 08/05/2017.
@@ -52,7 +49,7 @@ public class ImportController {
 
     @FXML
     void initialize(){
-        List<String> algo = Arrays.asList("None", "BFS", "DFS", "Kruskal", "Dijkstra", "Prim", "Bellman-Ford");
+        List<String> algo = Arrays.asList("BFS", "DFS", "Kruskal", "Dijkstra", "Prim", "Bellman-Ford");
         for(String s:algo)
             choiceAlgo.getItems().add(s);
         choiceAlgo.setValue(algo.get(0));
@@ -113,16 +110,21 @@ public class ImportController {
 
         Serialiseur serialiseur = null;
         //fileOpen
-        switch (fileOpen.getAbsolutePath().substring(fileOpen.getAbsolutePath().lastIndexOf('.') + 1)) {
-            case "csv":
-                serialiseur = new ListEdgesCSV();
-                break;
-            case "txt":
-                serialiseur = new ListEdgesTXT();
-                break;
-            default:
-                System.err.println("Wrong input type file !");
+        if(fileOpen==null){
+            alertMessage("Open a file before apply the algorithm");
+            return;
         }
+            switch (fileOpen.getAbsolutePath().substring(fileOpen.getAbsolutePath().lastIndexOf('.') + 1)) {
+                case "csv":
+                    serialiseur = new ListEdgesCSV();
+                    break;
+                case "txt":
+                    serialiseur = new ListEdgesTXT();
+                    break;
+                default:
+                    System.err.println("Wrong input type file !");
+            }
+
 
         Graph g = serialiseur.importGraph(fileOpen.getAbsolutePath(), new AdjacencyStockage()); // TODO : Let the client choose the Stockage type
 
@@ -148,6 +150,20 @@ public class ImportController {
                 break;
             default:
                 System.err.println("Algorithme Not found !!");
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Save");
+        alert.setHeaderText("The algorithm pass without problems");
+        alert.setContentText("Do you want to save the result?");
+        ButtonType buttonTypeSave = new ButtonType("Save");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+        dialogPane.getStyleClass().add("myDialog");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == buttonTypeSave){
+            handleSave();
         }
 
         if (fileSave != null) { // TODO: Find a way to enter the filesave
