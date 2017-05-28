@@ -452,17 +452,19 @@ public class AlgorithmPageController {
                 test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId(), e.getWeigth());
 
             for (int i = 0; i < edgeList.size(); i++) {
-                if (edgeList.get(i) != null)
-                    if ((edgeList.get(i).getStartX() == test.getStartX()
+                if (edgeList.get(i) != null) {
+                    if (((edgeList.get(i).getStartX() == test.getStartX()
                             && edgeList.get(i).getStartY() == test.getStartY()
                             && edgeList.get(i).getEndX() == test.getEndX()
                             && edgeList.get(i).getEndY() == test.getEndY())
                             || (!edgeList.get(i).isDirected()
                             && edgeList.get(i).getEndY() == test.getStartY()
                             && edgeList.get(i).getStartX() == test.getEndX()
-                            && edgeList.get(i).getStartY() == test.getEndY())) {
+                            && edgeList.get(i).getStartY() == test.getEndY()))
+                            && (edgeList.get(i).getText().toString().equals(test.getText().toString()))) {
                         edgeList.get(i).setColored();
                     }
+                }
             }
 
             hasChange = true;
