@@ -5,7 +5,9 @@
 }
 #newFileButton, #saveButton, #openFileButton,#importButton,
 #vertex1Button, #vertex1ButtonActivate, #vertex2Button,#edgeButton, #diEdgeButton,
-#diEdgeWeightedButton, #textButton, #commentButton, #edgeButtonActivate
+#diEdgeWeightedButton, #textButton, #commentButton, #edgeButtonActivate,
+#edgeButtonWeighted, #weightedEdgeButtonActivate, #weightedEdgeButton, #diEdgeButtonActivate,
+#weightedDiEdgeButtonActivate, #weightedDiEdgeButton, #eraserButton, #eraserButtonActivate
 {
 -fx-background-color: #232323;
 }
@@ -70,7 +72,16 @@
 -fx-background-image: url('../img/edge.png');
 }
 
-#diEdgeButton:hover{
+#weightedEdgeButton:hover, #weightedEdgeButtonActivate{
+-fx-background-image: url("../img/edgeWeighted-on.png");
+
+}
+#weightedEdgeButton{
+-fx-background-image: url('../img/edgeWeighted.png');
+}
+
+
+#diEdgeButton:hover, #diEdgeButtonActivate{
 -fx-background-image: url("../img/diEdge-on.png");
 
 }
@@ -78,20 +89,20 @@
 -fx-background-image: url('../img/diEdge.png');
 }
 
-#diEdgeWeightedButton:hover{
+#weightedDiEdgeButton:hover, #weightedDiEdgeButtonActivate{
 -fx-background-image: url("../img/diEdgeWeighted-on.png");
 
 }
-#diEdgeWeightedButton{
+#weightedDiEdgeButton{
 -fx-background-image: url('../img/diEdgeWeighted.png');
 }
 
-#textButton:hover{
--fx-background-image: url("../img/text-on.png");
+#eraserButton:hover, #eraserButtonActivate{
+-fx-background-image: url("../img/erase-on.png");
 
 }
-#textButton{
--fx-background-image: url('../img/text.png');
+#eraserButton{
+-fx-background-image: url('../img/erase.png');
 }
 
 #commentButton:hover{
