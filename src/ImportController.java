@@ -9,10 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -94,13 +90,8 @@ public class ImportController {
         for(String s:structures)
             choiceStructure.getItems().add(s);
         choiceStructure.setValue(structures.get(0));
-
-        choiceStructure.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                structure = choiceStructure.getValue();
-            }
-        });
+        startVertex.setText("0");
+        endVertex.setText("0");
     }
 
     @FXML

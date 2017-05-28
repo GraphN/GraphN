@@ -203,6 +203,7 @@ public class MainPageController {
         Group vertex = new Group();
         vertex.getChildren().addAll(circle_base,text);
         vertex.setId(id);
+        System.out.println("Valeur du slider: " + currentSlider.getValue());
         vertex.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue());
         vertex.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue());
         System.out.println("x: "+x+ " y: " + y);
