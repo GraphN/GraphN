@@ -196,17 +196,6 @@ public class GraphDom {
             }
         }
     }
-    /*public int getPosXOfVertex(int index)
-    {
-
-       Element vertex = (Element) racine.getChildNodes().item(index);
-       return Integer.valueOf(vertex.getAttribute("posX"));
-    }
-    public int getPosYOfVertex(int index)
-    {
-        Element vertex = (Element) racine.getChildNodes().item(index);
-        return Integer.valueOf(vertex.getAttribute("posY"));
-    }*/
 
     /**
      * get the position of vertex by his number
@@ -260,43 +249,14 @@ public class GraphDom {
         String vertex1 = edge.getAttribute("start");
         String vertex2 = edge.getAttribute("end");
 
-//        System.out.println("vertex 1: " + vertex1);
-//        System.out.println("vertex 2: " + vertex2);
-
         Point2D ver1 =  getPosOfVertex(vertex1);
         Point2D ver2 =  getPosOfVertex(vertex2);
-
-//        System.out.println(ver1);
-//        System.out.println(ver2);
 
         int startX = (int)ver1.getX();
         int startY = (int)ver1.getY();
         int endX = (int)ver2.getX();
         int endY = (int)ver2.getY();
         return new Line(startX, startY, endX, endY);
-    }
-    public DrawEdge getDrawEdge(int index){
-        Element edge = (Element) edges.get(index);
-        String vertex1 = edge.getAttribute("start");
-        String vertex2 = edge.getAttribute("end");
-
-        Point2D ver1 =  getPosOfVertex(vertex1);
-        Point2D ver2 =  getPosOfVertex(vertex2);
-
-        int startX = (int)ver1.getX();
-        int startY = (int)ver1.getY();
-        int endX = (int)ver2.getX();
-        int endY = (int)ver2.getY();
-        if(graphType.equals("nonDiGraph"))
-            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0);
-        else if (graphType.equals("weightedNonDiGraph")) {
-            return new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, 0, 0, false, new Text(edge.getAttribute("weight")));
-        }
-        else if (graphType.equals("diGraph"))
-            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true);
-        else if (graphType.equals("weightedDiGraph"))
-            return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true, new Text(edge.getAttribute("weight")));
-        return null;
     }
 
     public ArrayList<DrawEdge> getDrawEdges(int index){
@@ -378,23 +338,11 @@ public class GraphDom {
         }
         return null;
     }
-    public double getEdgeWeigth(int i){
-        if(graphType.equals("nonDiGraph")||graphType.equals("diGraph"))
-            return 0;
-        else
-            return Double.parseDouble(edges.get(i).getAttribute("weight").replaceAll("[^1234567890.\\-]", ""));
-    }
     public double getEdgeWeigth(int gIndex, int eIndex){
         if(graphType.equals("nonDiGraph")||graphType.equals("diGraph"))
             return 0;
         else
             return Double.parseDouble(edgesGroups.get(gIndex).get(eIndex).getAttribute("weight").replaceAll("[^1234567890.\\-]", ""));
-    }
-    public int getFrom(int index){
-        return Integer.parseInt(edges.get(index).getAttribute("start").replaceAll("[\\D]", ""));
-    }
-    public int getTo(int index){
-        return Integer.parseInt(edges.get(index).getAttribute("end").replaceAll("[\\D]", ""));
     }
     public int getFrom(int gIndex, int eIndex){
         return Integer.parseInt(edgesGroups.get(gIndex).get(eIndex).getAttribute("start").replaceAll("[\\D]", ""));

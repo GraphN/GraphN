@@ -5,6 +5,7 @@
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -275,6 +276,14 @@ public class MainPageController {
             //adding this xml to the list
             listGraphXml.add(graphOpen);
             Tab tab = createNewTab(graphOpen.getName());
+
+            tab.setOnClosed(new EventHandler<Event>(){
+                @Override
+                public void handle(Event e){
+                    if(tabPane.getTabs().size() < 1)
+                        handleNew();
+                }
+            });
 
             //get the Anchorpane who we need to fill
             AnchorPane paneBack = (AnchorPane) tab.getContent();
