@@ -18,7 +18,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import jdk.nashorn.internal.runtime.ParserException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.util.*;
 
 
@@ -27,6 +29,11 @@ import java.util.*;
  */
 public class AlgorithmPageController {
     private MainApp mainApp;
+
+    GraphDom graphNewFromResult;
+
+    GraphDom graphDom;
+    AnchorPane pane = new AnchorPane();
 
     @FXML
     private AnchorPane centerAlgoPage;
@@ -91,6 +98,7 @@ public class AlgorithmPageController {
         edgeList = new ArrayList<DrawEdge>();
         vertexList = new ArrayList<>();
         timer = new Timer();
+
         description.setCellFactory(lv -> new ListCell<String>() {
 
             private final Text text;
@@ -152,7 +160,7 @@ public class AlgorithmPageController {
 
     @FXML
     private void handleNewFromResult(){
-        mainApp.newTab();
+        mainApp.newFromAlgoPage(graphNewFromResult);
     }
 
     @FXML
@@ -187,6 +195,10 @@ public class AlgorithmPageController {
         path = null;
 
         activateButtons();
+
+        try{graphNewFromResult = new GraphDom(graphDom.getName());}
+        catch (Exception e){System.err.println("ParserException");}
+
     }
 
     @FXML
@@ -299,13 +311,14 @@ public class AlgorithmPageController {
         });
     }
 
-    GraphDom graphDom;
-    AnchorPane pane = new AnchorPane();
+
     private AnchorPane recreateAnchorWithXML(GraphDom graphD) {
         //AnchorPane pane = new AnchorPane();
 
         graphDom = graphD;
 
+        try{graphNewFromResult = new GraphDom(graphDom.getName());}
+        catch (Exception e){System.err.println("ParserException");}
 
         if(graphDom.getGraphType().equals("nonDiGraph") || graphDom.getGraphType().equals("weightedNonDiGraph")) {
             System.out.println("Algorithme page, construct graph with  " + (graphDom.getNbVertex())+ " vertexs");
@@ -451,6 +464,21 @@ public class AlgorithmPageController {
                             && edgeList.get(i).getStartY() == test.getEndY()))
                             && (test.getText() == null || test.getText() != null && (edgeList.get(i).getText().toString().equals(test.getText().toString())))) {
                         edgeList.get(i).setColored();
+
+                        // Essais pour newFromResult
+                        boolean startExists = false, endExists = false;
+                        System.out.println("TESTEU" +graphNewFromResult.getNbVertex());
+                        for(int j = 0; i<=graphNewFromResult.getNbVertex(); i++) {
+                            if (graphNewFromResult.getPosOfVertex(j) == new Point2D((int) edgeList.get(i).getStartX(), (int) edgeList.get(i).getStartY()))
+                                startExists = true;
+                            if (graphNewFromResult.getPosOfVertex(j) == new Point2D((int) edgeList.get(i).getEndX(), (int) edgeList.get(i).getEndX()))
+                                endExists = true;
+                        }
+                        if(!startExists)
+                            graphNewFromResult.addVertex((int) edgeList.get(i).getStartX(), (int) edgeList.get(i).getStartY());
+                        if(!endExists)
+                            graphNewFromResult.addVertex((int) edgeList.get(i).getEndX(), (int) edgeList.get(i).getEndX());
+                        graphNewFromResult.addEdge(graphNewFromResult.getVertexName(0), graphNewFromResult.getVertexName(1));
                     }
                 }
             }

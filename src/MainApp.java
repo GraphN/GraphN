@@ -319,8 +319,8 @@ public class MainApp extends Application {
 
 
 
-    public void newTab(){
-        mainPageController.handleNewFromAlgoPage();
+    public void newFromAlgoPage(GraphDom graphAlgoPage){
+        mainPageController.handleNewFromAlgoPage(graphAlgoPage);
         algoStage.close();
     }
 

@@ -35,7 +35,7 @@ public class AlgoPageController
 
     @FXML
     private void handleNewFromResult(){
-        mainApp.newTab();
+       // mainApp.newFromAlgoPage();
     }
 
     @FXML
