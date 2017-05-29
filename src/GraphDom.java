@@ -366,7 +366,8 @@ public class GraphDom {
                         return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true);
                     else if (graphType.equals("weightedDiGraph"))
                         return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true, new Text(edge.getAttribute("weight")));
-                    return null;                }
+                    return null;
+                }
             }else {
                 System.out.println("NUll");
             }
