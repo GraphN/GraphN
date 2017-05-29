@@ -264,6 +264,7 @@ public class GraphDom {
 
         NodeList listEdges = document.getElementsByTagName("edges_group");
         NodeList listvertexes = document.getElementsByTagName("vertex");
+        NodeList listGroups = document.getElementsByTagName("edges_group");
 
         Element vertex = (Element) vertexes.get(index);
 
@@ -286,6 +287,57 @@ public class GraphDom {
         //removing from list
         vertexes.remove(index);
 
+        //and now change the start and end of the edgesGroup
+        for (int j = 0; j < listGroups.getLength(); j++)
+        {
+            String nameOfStart = ((Element)listGroups.item(j)).getAttribute("start");
+            String nameOfEnd = ((Element)listGroups.item(j)).getAttribute("end");
+            System.out.println(nameOfEnd);
+
+            if(Integer.valueOf(nameOfStart.substring(4)) > index)
+            {
+                ((Element)listGroups.item(j)).setAttribute( "start", nameOfStart.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
+                groups.get(j).setAttribute( "start", nameOfStart.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
+            }
+            if(Integer.valueOf(nameOfEnd.substring(4)) > index)
+            {
+                ((Element)listGroups.item(j)).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
+                groups.get(j).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
+            }
+
+            ((Element) listEdges.item(j)).setAttribute("name", "group_"+j);
+        }
+        for (int j = 0; j < listEdges.getLength(); j++)
+        {
+            String nameOfStart = ((Element)listEdges.item(j)).getAttribute("start");
+            String nameOfEnd = ((Element)listEdges.item(j)).getAttribute("end");
+
+            if(Integer.valueOf(nameOfStart.substring(4)) > index)
+            {
+                ((Element)listEdges.item(j)).setAttribute( "start", nameOfStart.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
+                edges.get(j).setAttribute( "start", nameOfStart.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
+            }
+            if(Integer.valueOf(nameOfEnd.substring(4)) > index)
+            {
+                ((Element)listEdges.item(j)).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
+                edges.get(j).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
+            }
+            ((Element) listEdges.item(j)).setAttribute("name", "edge_"+j);
+        }
+        //change name of all edges, and edges_group names some have been deleted
+        for(int k = 0; k < groups.size(); k++)
+        {
+            groups.get(k).setAttribute("name", "group_"+k);
+        }
+
         //we have here to change the name of the vertexes who are bigger than the deleted one.
         //for example if we have 5 vertexes : ver_0, ver_1, ver_2, ver_3, ver_4
         //if we delete ver_2, we have to change the name of ver_3 to ver_2 and ver_4 to ver_3
@@ -293,9 +345,26 @@ public class GraphDom {
         {
             Element vCurr = (Element) listvertexes.item(i);
             int newIndex = Integer.valueOf(vCurr.getAttribute("name").substring(4)) - 1;
-            System.out.println( vCurr.getAttribute("name").substring(0,4) + String.valueOf(newIndex));
+            //System.out.println( vCurr.getAttribute("name").substring(0,4) + String.valueOf(newIndex));
             vCurr.setAttribute("name", vCurr.getAttribute("name").substring(0,4) + String.valueOf(newIndex));
         }
+        //and now change the start and end of the edges
+        /*for (int j = 0; j < edges.size(); j++)
+        {
+            String nameOfStart = edges.get(j).getAttribute("start");
+            String nameOfEnd = edges.get(j).getAttribute("end");
+            if(Integer.valueOf(nameOfStart.substring(4)) > index)
+            {
+                edges.get(j).setAttribute( "start", nameOfStart.substring(0, 4) +
+                                           String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
+            }
+            if(Integer.valueOf(nameOfEnd.substring(4)) > index)
+            {
+                edges.get(j).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                        String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
+            }
+        }*/
+
         nbVertex--;
     }
 
