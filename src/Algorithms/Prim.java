@@ -2,9 +2,7 @@ package Algorithms;
 
 import Algorithms.Utils.IndexMinPQ;
 import Algorithms.Utils.Step;
-import graph.DiGraph;
-import graph.Edge;
-import graph.Graph;
+import graph.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -12,35 +10,19 @@ import java.util.LinkedList;
 /**
  * Created by francoisquellec on 24.03.17.
  */
-public class Prim implements Algorithm{
-    private static final double FLOATING_POINT_EPSILON = 1E-12;
-
+public class Prim implements AlgorithmVisitor{
     private Edge[] edgeTo;        // edgeTo[v] = shortest edge from tree vertex to non-tree vertex
     private double[] distTo;      // distTo[v] = weight of shortest such edge
     private boolean[] marked;     // marked[v] = true if v on tree, false otherwise
     private IndexMinPQ<Double> pq;
 
-    private Graph g;
-    private boolean isDirected;
-
     LinkedList<Step> path = new LinkedList<>();
 
-    public Prim(Graph G) {
-        this.g = G;
-        edgeTo = new Edge[G.V()];
-        distTo = new double[G.V()];
-        marked = new boolean[G.V()];
-        pq = new IndexMinPQ<Double>(G.V());
-        for (int v = 0; v < G.V(); v++)
-            distTo[v] = Double.POSITIVE_INFINITY;
-
-        isDirected = G instanceof DiGraph;
-    }
 
     // run Prim's algorithm in graph g, starting from vertex s
-    private void prim(int s) {
-        distTo[s] = 0.0;
-        pq.insert(s, distTo[s]);
+    private void prim(Graph g, Vertex s) {
+        distTo[s.getId()] = 0.0;
+        pq.insert(s.getId(), distTo[s.getId()]);
         while (!pq.isEmpty()) {
             int v = pq.delMin();
             scan(g, v);
@@ -78,9 +60,18 @@ public class Prim implements Algorithm{
         }
     }
 
-    public void visit(){
+
+    public LinkedList<Step> visit(UDiGraph g, Vertex source, Vertex target) throws Exception{
+        edgeTo = new Edge[g.V()];
+        distTo = new double[g.V()];
+        marked = new boolean[g.V()];
+        pq = new IndexMinPQ<>(g.V());
+        for (int v = 0; v < g.V(); v++)
+            distTo[v] = Double.POSITIVE_INFINITY;
+        path = new LinkedList<>();
+
         for (int v = 0; v < g.V(); v++) {    // run from each vertex to find
-            if (!marked[v]) prim(v);      // minimum spanning forest
+            if (!marked[v]) prim(g, g.getVertex(v));      // minimum spanning forest
             if (edgeTo[v] != null) {
                 String message = "On selectionne l arete " + edgeTo[v] + "\n\n";
                 String structures = "distTo : " + Arrays.toString(distTo)
@@ -96,43 +87,22 @@ public class Prim implements Algorithm{
 
                 path.add(step);
             }
-        }
-    }
 
-    public LinkedList<Step> getPath() throws Exception{
-        System.out.println("Apply Dijkstra algorithme on :");
-        g.print();
-        path = new LinkedList<>();
-        if (isDirected){
-            throw new Exception("Prim ne peut pas être appliquer sur des graphes orientés.");
-           /* String message = "Prim ne peut pas être appliquer sur des graphes orientés.";
+            double weight = 0.0;
+            for (Step e : path)
+                if (e != null)
+                    weight += e.getEdge().getWeigth();
+
             Step step = new Step();
-            step.setMessage(message);
+            step.setMessage("Poids Total : " + weight);
             step.setVertex(g.getVertex(0));
-            path.add(step);*/
+
+            path.add(step);
         }
-        else
-            visit();
-        System.out.println("result : " + path);
         return path;
     }
 
-    /*LinkedList<Edge> mst = new LinkedList<>();
-    for (int v = 0; v < edgeTo.length; v++) {
-        Edge e = edgeTo[v];
-        if (e != null) {
-            mst.add(e);
-        }
-    }
-    return mst;*/
-
-
-    public double weight() throws Exception{
-        double weight = 0.0;
-        for (Step e : getPath())
-            weight += e.getEdge().getWeigth();
-        return weight;
+    public LinkedList<Step> visit(DiGraph g, Vertex source, Vertex target) throws Exception {
+        throw new Exception("Prim ne peut pas être appliquer sur des graphes orientés.");
     }
 }
-
-/* Inspired by University of Princeton course http://algs4.cs.princeton.edu/ */
