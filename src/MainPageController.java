@@ -77,9 +77,6 @@ public class MainPageController
     private float textTranslateX1Digit;
     private float textTranslateY;
 
-
-
-
     private ArrayList<ArrayList<DrawEdge>> drawEdgesGroupList;
 
     private boolean firstVerForEdge = true;
@@ -114,7 +111,7 @@ public class MainPageController
      * we can get the current pane, who is inside of the current Tab
      * @return AnchorePane who contains the graph part of the current Tab
      */
-    private Pane getGraphPane()
+    public Pane getGraphPane()
     {
         Tab currentTab      = (Tab)tabPane.getSelectionModel().getSelectedItem();
         AnchorPane currPage = (AnchorPane) currentTab.getContent();
@@ -145,7 +142,6 @@ public class MainPageController
         drawEdgesGroupList = new ArrayList<>();
         tabMap             = new HashMap<>();
 
-
         liveEdge = new Line();
         liveEdge.setSmooth(true);
         liveEdge.setStrokeWidth(4);
@@ -170,10 +166,10 @@ public class MainPageController
      *
      * @param mainApp
      */
-    private void setMainApp(MainApp mainApp) {
+    public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
-    private void setGreyMain(Boolean b)
+    public void setGreyMain(Boolean b)
     {
         greyMain.setVisible(b);
     }
@@ -273,7 +269,7 @@ public class MainPageController
         return vertex;
     }
 
-    private void handleNewFromAlgoPage(){
+    public void handleNewFromAlgoPage(){
         handleNew();
     }
 
@@ -344,8 +340,8 @@ public class MainPageController
                 int x = (int) point.getX();
                 int y = (int) point.getY();
 
-                String name = graphOpen.getName(i);
-
+                String name = graphOpen.getVertexName(i);
+                // TODO: Régler le soucis qui fait que le 0 est derrière
                 // Create vertex and add it to pane
                 Group node = createVertex(x,y,name);
                 pane.getChildren().add(node);
@@ -722,8 +718,9 @@ public class MainPageController
                             int x = (int) point.getX();
                             int y = (int) point.getY();
 
-                            String name = graphXml.getName(i);
+                            String name = graphXml.getVertexName(i);
                             Group node  = createVertex(x,y,name);
+
                             ap.getChildren().add(node);
 
                             i++;
@@ -732,6 +729,7 @@ public class MainPageController
                         DrawEdge drawEdge = null;
 
                         drawEdgesGroupList.clear();
+
                         i = 0;
                         while (i < graphXml.getNbGroup())
                         {

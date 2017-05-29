@@ -1,5 +1,3 @@
-import graph.Serialisation.ListEdgesCSV;
-import graph.Serialisation.ListEdgesTXT;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
@@ -168,7 +166,7 @@ public class MainApp extends Application {
         fileChooser.setTitle("Save Graph");
 
         //Set extension filter
-        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("GraphN files (*.graphn)", "*.graphn");
         FileChooser.ExtensionFilter pngFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
         FileChooser.ExtensionFilter jpgFilter = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.jpg");
         fileChooser.getExtensionFilters().add(xmlFilter);
@@ -191,7 +189,7 @@ public class MainApp extends Application {
                         // TODO: handle exception here
                     }
                     break;
-                case "xml":
+                case "graphn":
                     try {
                         graph.saveGraphXML(file);
                     } catch (TransformerException e) {
@@ -243,7 +241,7 @@ public class MainApp extends Application {
         fileChooser.setTitle("Open Graph");
 
         //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GraphN files (*.graphn)", "*.graphn");
         fileChooser.getExtensionFilters().add(extFilter);
 
         //set initial directory
@@ -286,7 +284,6 @@ public class MainApp extends Application {
 
                             // change the name of the vertex to have good one (corresponding of the xml file)
                             graphDom.setNameOfVertex(currentNode.getAttribute("name"), vertexAdded);
-
 
                             vertexAdded++;
                         }
