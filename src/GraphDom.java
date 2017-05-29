@@ -315,7 +315,6 @@ public class GraphDom {
         {
             String nameOfStart = ((Element)listGroups.item(j)).getAttribute("start");
             String nameOfEnd = ((Element)listGroups.item(j)).getAttribute("end");
-            System.out.println(nameOfEnd);
 
             if(Integer.valueOf(nameOfStart.substring(4)) > index)
             {
@@ -363,16 +362,6 @@ public class GraphDom {
             //edges.get(j).setAttribute("name", "edge_"+(j+1) );
         }
 
-
-        for(int k = 0; k < groups.size(); k++)
-        {
-            System.out.println(groups.get(k).getAttribute("name") + "   "+groups.get(k).getAttribute("start")+"    "+groups.get(k).getAttribute("end") );
-        }
-
-        for(int k = 0; k < edges.size(); k++)
-        {
-            System.out.println(edges.get(k).getAttribute("name") + "   "+edges.get(k).getAttribute("start")+"    "+edges.get(k).getAttribute("end") );
-        }
         //change name of all edges, and edges_group names some have been deleted
         /*for(int k = 0; k < groups.size(); k++)
         {
