@@ -52,9 +52,8 @@ public class MainPageController {
     private float textTranslateX1Digit;
     private float textTranslateX2Digits;
 
-    // List for bind a circle and it's number
-    //private ArrayList<ArrayList<Shape>> listCircleNumber;
-    private Map<String,ArrayList<Shape>> mapNode;
+
+
 
     private ArrayList<DrawEdge> drawEdgesList;
     private ArrayList<ArrayList<DrawEdge>> drawEdgesGroupList;
@@ -101,7 +100,6 @@ public class MainPageController {
     @FXML
     private void initialize() {
         listGraphXml = new ArrayList<>();
-        mapNode = new HashMap<String, ArrayList<Shape>>();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         DraggingTabPaneSupport support = new DraggingTabPaneSupport();
         handleNew();
@@ -634,7 +632,8 @@ public class MainPageController {
 
                         //deleting graphical elements
                         AnchorPane ap = (AnchorPane) group.getParent();
-                        ap.getChildren().remove(0, ap.getChildren().size());
+                        ap.getChildren().clear();
+                        //ap.getChildren().remove(0, ap.getChildren().size());
 
                         //adding all vertex from xml
                         int i = 0;
@@ -832,7 +831,6 @@ public class MainPageController {
                     Shape shape = (Shape)t.getSource();
                     Group group = (Group)shape.getParent();
                     group.setCursor(Cursor.CLOSED_HAND);
-
 
                     double offsetX = t.getSceneX() - orgSceneX;
                     double offsetY = t.getSceneY() - orgSceneY;
