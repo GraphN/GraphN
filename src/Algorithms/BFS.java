@@ -2,45 +2,18 @@ package Algorithms;
 
 import Algorithms.Utils.Step;
 import Algorithms.Utils.VertexVisit;
-import graph.Edge;
-import graph.Graph;
-import graph.Vertex;
+import graph.*;
 
 import java.util.LinkedList;
 import java.util.Vector;
 /**
  * Created by francoisquellec on 24.03.17.
  */
-public class BFS implements Algorithm{
-    private Graph g;
+public class BFS implements AlgorithmVisitor{
     private Vector<Integer> parent;
     private LinkedList<Step> path;
-    private Vertex source;
 
-    public LinkedList<Step> getPath(){
-        System.out.println("Apply DFS algorithme on :");
-        g.print();
-        visit(source);
-
-        System.out.println("result : " + path);
-        return path;
-    }
-
-    public BFS(Graph g, Vertex source){
-        this.g = g;
-        this.source = source;
-    }
-
-
-    public LinkedList<Step> visit(Vertex v) {
-        parent = new Vector<>(g.V());
-        path = new LinkedList<>();
-        for(int i  = 0; i < g.V(); i++)
-            parent.add(-1);
-        return bfs(v);
-    }
-
-    private LinkedList<Step> bfs(Vertex v) {
+    private LinkedList<Step> bfs(Graph g, Vertex v) {
         LinkedList<Edge> pile = new LinkedList<>();
 
         parent.set(v.getId(), v.getId());
@@ -79,4 +52,19 @@ public class BFS implements Algorithm{
         return path;
     }
 
+    private LinkedList<Step> visit(Graph g, Vertex source){
+        parent = new Vector<>(g.V());
+        path = new LinkedList<>();
+        for(int i  = 0; i < g.V(); i++)
+            parent.add(-1);
+        return bfs(g, source);
+    }
+
+    public LinkedList<Step> visit(UDiGraph g, Vertex source, Vertex target) throws Exception{
+        return visit(g, source);
+    }
+
+    public LinkedList<Step> visit(DiGraph g, Vertex source, Vertex target) throws Exception {
+        return visit(g, source);
+    }
 }

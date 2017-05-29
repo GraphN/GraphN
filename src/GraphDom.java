@@ -23,43 +23,65 @@ import java.util.ArrayList;
 
 public class GraphDom {
 
-    final DocumentBuilderFactory factory;
-    final DocumentBuilder builder;
-    final Document document;
     final Element racine;
-    private String graphName;
+    final Document document;
+    final DocumentBuilder builder;
+    final DocumentBuilderFactory factory;
+
     private int nbVertex = -1;
-    private int nbEdge = 0;
-    private ArrayList<Element> vertexes;
+    private int nbEdge   = 0;
+
+    private String graphName;
+    private String graphType;
     private ArrayList<Element> edges;
     private ArrayList<Element> groups;
+    private ArrayList<Element> vertexes;
     private ArrayList<ArrayList<Element>> edgesGroups;
-    private String graphType;
+
+    private final String POSX                = "posX";
+    private final String POSY                = "posY";
+    private final String EDGE                = "edge";
+    private final String WEIGHT              = "weight";
+    private final String VERTEX              = "vertex";
+    private final String VERNAME             = "ver_";
+    private final String DIGRAPH             = "diGraph";
+    private final String GRAPHTYPE           = "graphType";
+    private final String EDGEGROUP           = "edges_group";
+    private final String GRAPHENAME          = "UDiGraph";
+    private final String NONDIGRAPH          =  "nonDiGraph";
+    private final String ATTRIBUTEND         = "end";
+    private final String ATTRIBUTNAME        = "name";
+    private final String ATTRIBUTEDGE        = "edge_";
+    private final String ATTRIBUTSTART       = "start";
+    private final String ATTRIBUTGROUP       = "group_";
+    private final String WEIGHTEDDIGRAPH     = "weightedDiGraph";
+    private final String WEIGHTEDNONDIGRAPH  = "weightedNonDiGraph";
+
 
     public GraphDom(String name) throws ParserConfigurationException
     {
-        vertexes = new ArrayList<>();
-        edges = new ArrayList<>();
-        groups = new ArrayList<>();
+        edges       = new ArrayList<>();
+        groups      = new ArrayList<>();
+        vertexes    = new ArrayList<>();
+        graphType   = new String();
         edgesGroups = new ArrayList<>();
-        graphType = new String();
 
         graphName = name;
-        factory = DocumentBuilderFactory.newInstance();
-        builder = factory.newDocumentBuilder();
-        document= builder.newDocument();
-        racine = document.createElement("UDiGraph");
-        racine.setAttribute("name", name);
+        factory   = DocumentBuilderFactory.newInstance();
+        builder   = factory.newDocumentBuilder();
+        document  = builder.newDocument();
+        racine    = document.createElement(GRAPHENAME);
+        racine.setAttribute(ATTRIBUTNAME, name);
         document.appendChild(racine);
     }
 
     public void saveGraphXML(File file) throws TransformerException
     {
         final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        final Transformer transformer = transformerFactory.newTransformer();
-        final DOMSource source = new DOMSource(document);
-        //final StreamResult sortie = new StreamResult(new File("./src/savedGraphsXML/"+name+".xml"));
-        final StreamResult sortie = new StreamResult(file);
+        final Transformer transformer               = transformerFactory.newTransformer();
+        final DOMSource source                      = new DOMSource(document);
+        final StreamResult sortie                   = new StreamResult(file);
+
         //use to indent xml file
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.transform(source, sortie);
@@ -68,36 +90,36 @@ public class GraphDom {
     public void addVertex(int posX, int posY)
     {
         nbVertex++;
-        Element vertex = document.createElement("vertex");
-        vertex.setAttribute("name", "ver_"+nbVertex);
-        vertex.setAttribute("posX", String.valueOf(posX));
-        vertex.setAttribute("posY", String.valueOf(posY));
+        Element vertex = document.createElement(VERTEX);
+        vertex.setAttribute(ATTRIBUTNAME, VERNAME+nbVertex);
+        vertex.setAttribute(POSX, String.valueOf(posX));
+        vertex.setAttribute(POSY, String.valueOf(posY));
         racine.appendChild(vertex);
         vertexes.add(vertex);
     }
 
     public  void setNameOfVertex(String name, int index)
     {
-        vertexes.get(index).setAttribute("name", name);
+        vertexes.get(index).setAttribute(ATTRIBUTNAME, name);
     }
     public int addEdge(String vertexStart, String vertexEnd)
     {
         nbEdge++;
         Element group = getGroup(vertexStart, vertexEnd);
+        Element edge1 = document.createElement(EDGE);
 
-        Element edge1 = document.createElement("edge");
-        edge1.setAttribute("name", "edge_"+nbEdge);
-        edge1.setAttribute("start", vertexStart);
-        edge1.setAttribute("end", vertexEnd);
-        /*Element edge2 = document.createElement("edge");
-        edge2.setAttribute("name", "edge_"+nbEdge);
-        edge2.setAttribute("start", vertexEnd);
-        edge2.setAttribute("end", vertexStart);*/
-        racine.setAttribute("graphType", "nonDiGraph");
+        edge1.setAttribute(ATTRIBUTNAME, ATTRIBUTEDGE + nbEdge);
+        edge1.setAttribute(ATTRIBUTSTART, vertexStart);
+        edge1.setAttribute(ATTRIBUTEND, vertexEnd);
+
+        racine.setAttribute(GRAPHTYPE, NONDIGRAPH);
         group.appendChild(edge1);
+
         //group.appendChild(edge2);
         edgesGroups.get(getId(group)).add(edge1);
+
         //edgesGroups.get(getId(group)).add(edge2);
+
         edges.add(edge1);
         //edges.add(edge2);
 
@@ -107,24 +129,21 @@ public class GraphDom {
     {
         nbEdge++;
         Element group = getGroup(vertexStart, vertexEnd);
+        Element edge1 = document.createElement(EDGE);
 
-        Element edge1 = document.createElement("edge");
-        edge1.setAttribute("name", "edge_"+nbEdge);
-        edge1.setAttribute("start", vertexStart);
-        edge1.setAttribute("end", vertexEnd);
-        edge1.setAttribute("weight", weight);
-        racine.setAttribute("graphType", "weightedNonDiGraph");
+        edge1.setAttribute(ATTRIBUTNAME, ATTRIBUTEDGE + nbEdge);
+        edge1.setAttribute(ATTRIBUTSTART, vertexStart);
+        edge1.setAttribute(ATTRIBUTEND, vertexEnd);
+        edge1.setAttribute(WEIGHT, weight);
+        racine.setAttribute(GRAPHTYPE, WEIGHTEDNONDIGRAPH);
         racine.appendChild(edge1);
-        /*Element edge2 = document.createElement("edge");
-        edge2.setAttribute("name", "edge_"+nbEdge);
-        edge2.setAttribute("start", vertexEnd);
-        edge2.setAttribute("end", vertexStart);
-        edge2.setAttribute("weight", weight);
-        racine.setAttribute("graphType", "weightedNonDiGraph");*/
+
         group.appendChild(edge1);
         //group.appendChild(edge2);
+
         edgesGroups.get(getId(group)).add(edge1);
         //edgesGroups.get(getId(group)).add(edge2);
+
         edges.add(edge1);
         //edges.add(edge2);
 
@@ -135,12 +154,13 @@ public class GraphDom {
     {
         nbEdge++;
         Element group = getGroup(vertexStart, vertexEnd);
+        Element edge = document.createElement(EDGE);
 
-        Element edge = document.createElement("edge");
-        edge.setAttribute("name", "edge_"+nbEdge);
-        edge.setAttribute("start", vertexStart);
-        edge.setAttribute("end", vertexEnd);
-        racine.setAttribute("graphType", "diGraph");
+        edge.setAttribute(ATTRIBUTNAME, ATTRIBUTEDGE + nbEdge);
+        edge.setAttribute(ATTRIBUTSTART, vertexStart);
+        edge.setAttribute(ATTRIBUTEND, vertexEnd);
+        racine.setAttribute(GRAPHTYPE, DIGRAPH);
+
         group.appendChild(edge);
         edgesGroups.get(getId(group)).add(edge);
         edges.add(edge);
@@ -152,15 +172,16 @@ public class GraphDom {
     {
         nbEdge++;
         Element group = getGroup(vertexStart, vertexEnd);
+        Element edge = document.createElement(EDGE);
 
-        Element edge = document.createElement("edge");
-        edge.setAttribute("name", "edge_"+nbEdge);
-        edge.setAttribute("start", vertexStart);
-        edge.setAttribute("end", vertexEnd);
-        edge.setAttribute("weight", weight);
+        edge.setAttribute(ATTRIBUTNAME, ATTRIBUTEDGE + nbEdge);
+        edge.setAttribute(ATTRIBUTSTART, vertexStart);
+        edge.setAttribute(ATTRIBUTEND, vertexEnd);
+        edge.setAttribute(WEIGHT, weight);
         group.appendChild(edge);
+
         edgesGroups.get(getId(group)).add(edge);
-        racine.setAttribute("graphType", "weightedDiGraph");
+        racine.setAttribute(GRAPHTYPE, WEIGHTEDDIGRAPH);
         edges.add(edge);
 
         return getId(group);
@@ -186,12 +207,12 @@ public class GraphDom {
         {
             Element currentNode = (Element) nodes.item(i);
 
-            if(currentNode.getNodeName().equals("vertex"))
+            if(currentNode.getNodeName().equals(VERTEX))
             {
-                if(currentNode.getAttribute("name").equals(vertex))
+                if(currentNode.getAttribute(ATTRIBUTNAME).equals(vertex))
                 {
-                    currentNode.setAttribute("posX",String.valueOf(posX) );
-                    currentNode.setAttribute("posY",String.valueOf(posY) );
+                    currentNode.setAttribute(POSX,String.valueOf(posX) );
+                    currentNode.setAttribute(POSY,String.valueOf(posY) );
                 }
             }
         }
@@ -207,8 +228,8 @@ public class GraphDom {
 
         Element node = vertexes.get(index);
 
-        return new Point2D(Integer.valueOf(node.getAttribute("posX")),
-                           Integer.valueOf(node.getAttribute("posY")));
+        return new Point2D(Integer.valueOf(node.getAttribute(POSX)),
+                           Integer.valueOf(node.getAttribute(POSY)));
     }
 
     /**
@@ -222,10 +243,10 @@ public class GraphDom {
         while(i <= nbVertex)
         {
             Element node = vertexes.get(i);
-            if(node.getAttribute("name").equals(name))
+            if(node.getAttribute(ATTRIBUTNAME).equals(name))
             {
-                return new Point2D(Integer.valueOf(node.getAttribute("posX")),
-                                   Integer.valueOf(node.getAttribute("posY")));
+                return new Point2D(Integer.valueOf(node.getAttribute(POSX)),
+                                   Integer.valueOf(node.getAttribute(POSY)));
             }
             i++;
         }
@@ -235,11 +256,11 @@ public class GraphDom {
     public String getName(int index)
     {
         Element node = (Element) racine.getChildNodes().item(index);
-        return node.getAttribute("name");
+        return node.getAttribute(ATTRIBUTNAME);
     }
     public String getVertexName(int index)
     {
-        return vertexes.get(index).getAttribute("name");
+        return vertexes.get(index).getAttribute(ATTRIBUTNAME);
     }
     public String getNodeType(int index)
     {
@@ -250,48 +271,39 @@ public class GraphDom {
     public Line getEdge(int index)
     {
         Element edge = (Element) edges.get(index);
-        String vertex1 = edge.getAttribute("start");
-        String vertex2 = edge.getAttribute("end");
+        String vertex1 = edge.getAttribute(ATTRIBUTSTART);
+        String vertex2 = edge.getAttribute(ATTRIBUTEND);
 
         Point2D ver1 =  getPosOfVertex(vertex1);
         Point2D ver2 =  getPosOfVertex(vertex2);
 
         int startX = (int)ver1.getX();
         int startY = (int)ver1.getY();
-        int endX = (int)ver2.getX();
-        int endY = (int)ver2.getY();
+        int endX   = (int)ver2.getX();
+        int endY   = (int)ver2.getY();
         return new Line(startX, startY, endX, endY);
     }
 
     public void deleteVertex(int index)
     {
 
-        NodeList listEdges = document.getElementsByTagName("edge");
-        NodeList listvertexes = document.getElementsByTagName("vertex");
-        NodeList listGroups = document.getElementsByTagName("edges_group");
+        NodeList listEdges    = document.getElementsByTagName(EDGE);
+        NodeList listvertexes = document.getElementsByTagName(VERTEX);
+        NodeList listGroups   = document.getElementsByTagName(EDGEGROUP);
 
         Element vertex = (Element) vertexes.get(index);
-
-        for(int k = 0; k < groups.size(); k++)
-        {
-            System.out.println(groups.get(k).getAttribute("name") + "   "+groups.get(k).getAttribute("start")+"    "+groups.get(k).getAttribute("end") );
-        }
-
-        for(int k = 0; k < edges.size(); k++)
-        {
-            System.out.println(edges.get(k).getAttribute("name") + "   "+edges.get(k).getAttribute("start")+"    "+edges.get(k).getAttribute("end") );
-        }
-
 
         //removing group_edges connected to the vertex to remove
         for(int i = groups.size()-1; i >= 0 ; i--)
         {
-            if( groups.get(i).getAttribute("start").equals(vertex.getAttribute("name")) ||
-                groups.get(i).getAttribute("end").equals(vertex.getAttribute("name"))    )
+            if( groups.get(i).getAttribute(ATTRIBUTSTART).equals(vertex.getAttribute(ATTRIBUTNAME)) ||
+                groups.get(i).getAttribute(ATTRIBUTEND).equals(vertex.getAttribute(ATTRIBUTNAME))    )
             {
                 Element edgeCurr = (Element) listGroups.item(i);
+
                 //removing the element from the corresponding deleted edge
                 edgeCurr.getParentNode().removeChild(edgeCurr);
+
                 // removing from list
                 groups.remove(i);
                 edgesGroups.remove(i);
@@ -301,76 +313,71 @@ public class GraphDom {
         //removing edges connected to the vertex to remove
         for(int i = edges.size()-1; i >= 0 ; i--)
         {
-            if( edges.get(i).getAttribute("start").equals(vertex.getAttribute("name")) ||
-                    edges.get(i).getAttribute("end").equals(vertex.getAttribute("name"))    )
+            if( edges.get(i).getAttribute(ATTRIBUTSTART).equals(vertex.getAttribute(ATTRIBUTNAME)) ||
+                    edges.get(i).getAttribute(ATTRIBUTEND).equals(vertex.getAttribute(ATTRIBUTNAME))    )
             {
                 // removing from list
                 edges.remove(i);
             }
         }
         Element vertexCurr = (Element) listvertexes.item(index);
+
         //removing the element from the corresponding deleted edge
         vertexCurr.getParentNode().removeChild(vertexCurr);
+
         //removing from list
         vertexes.remove(index);
 
         //and now change the start and end of the edgesGroup
         for (int j = 0; j < listGroups.getLength(); j++)
         {
-            String nameOfStart = ((Element)listGroups.item(j)).getAttribute("start");
-            String nameOfEnd = ((Element)listGroups.item(j)).getAttribute("end");
+            String nameOfStart = ((Element)listGroups.item(j)).getAttribute(ATTRIBUTSTART);
+            String nameOfEnd   = ((Element)listGroups.item(j)).getAttribute(ATTRIBUTEND);
 
             if(Integer.valueOf(nameOfStart.substring(4)) > index)
             {
-                ((Element)listGroups.item(j)).setAttribute( "start", nameOfStart.substring(0, 4) +
+                ((Element)listGroups.item(j)).setAttribute( ATTRIBUTSTART, nameOfStart.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
 
-                groups.get(j).setAttribute( "start", nameOfStart.substring(0, 4) +
+                groups.get(j).setAttribute( ATTRIBUTSTART, nameOfStart.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
             }
             if(Integer.valueOf(nameOfEnd.substring(4)) > index)
             {
-                ((Element)listGroups.item(j)).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                ((Element)listGroups.item(j)).setAttribute( ATTRIBUTEND, nameOfEnd.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
 
-                groups.get(j).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                groups.get(j).setAttribute( ATTRIBUTEND, nameOfEnd.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
             }
 
-            ((Element) listGroups.item(j)).setAttribute("name", "group_"+j);
-            groups.get(j).setAttribute("name", "group_"+j);
+            ((Element) listGroups.item(j)).setAttribute(ATTRIBUTNAME, ATTRIBUTGROUP+j);
+            groups.get(j).setAttribute(ATTRIBUTNAME, ATTRIBUTGROUP+j);
         }
         //and now the names of edges
         for (int j = 0; j < listEdges.getLength(); j++)
         {
-            String nameOfStart = ((Element)listEdges.item(j)).getAttribute("start");
-            String nameOfEnd = ((Element)listEdges.item(j)).getAttribute("end");
+            String nameOfStart = ((Element)listEdges.item(j)).getAttribute(ATTRIBUTSTART);
+            String nameOfEnd   = ((Element)listEdges.item(j)).getAttribute(ATTRIBUTEND);
 
             if(Integer.valueOf(nameOfStart.substring(4)) > index)
             {
-                ((Element)listEdges.item(j)).setAttribute( "start", nameOfStart.substring(0, 4) +
+                ((Element)listEdges.item(j)).setAttribute( ATTRIBUTSTART, nameOfStart.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
 
-                edges.get(j).setAttribute( "start", nameOfStart.substring(0, 4) +
+                edges.get(j).setAttribute( ATTRIBUTSTART, nameOfStart.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
             }
             if(Integer.valueOf(nameOfEnd.substring(4)) > index)
             {
-                ((Element)listEdges.item(j)).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                ((Element)listEdges.item(j)).setAttribute( ATTRIBUTEND, nameOfEnd.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
 
-                edges.get(j).setAttribute( "end", nameOfEnd.substring(0, 4) +
+                edges.get(j).setAttribute( ATTRIBUTEND, nameOfEnd.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
             }
-            ((Element) listEdges.item(j)).setAttribute("name", "edge_"+(j+1));
-            //edges.get(j).setAttribute("name", "edge_"+(j+1) );
+            ((Element) listEdges.item(j)).setAttribute(ATTRIBUTNAME, ATTRIBUTEDGE + (j+1));
         }
-
-        //change name of all edges, and edges_group names some have been deleted
-        /*for(int k = 0; k < groups.size(); k++)
-        {
-            groups.get(k).setAttribute("name", "group_"+k);
-        }*/
 
         //we have here to change the name of the vertexes who are bigger than the deleted one.
         //for example if we have 5 vertexes : ver_0, ver_1, ver_2, ver_3, ver_4
@@ -378,42 +385,28 @@ public class GraphDom {
         for(int i = index; i < vertexes.size(); i++)
         {
             Element vCurr = (Element) listvertexes.item(i);
-            int newIndex = Integer.valueOf(vCurr.getAttribute("name").substring(4)) - 1;
-            //System.out.println( vCurr.getAttribute("name").substring(0,4) + String.valueOf(newIndex));
-            vCurr.setAttribute("name", vCurr.getAttribute("name").substring(0,4) + String.valueOf(newIndex));
-        }
-        //and now change the start and end of the edges
-        /*for (int j = 0; j < edges.size(); j++)
-        {
-            String nameOfStart = edges.get(j).getAttribute("start");
-            String nameOfEnd = edges.get(j).getAttribute("end");
-            if(Integer.valueOf(nameOfStart.substring(4)) > index)
-            {
-                edges.get(j).setAttribute( "start", nameOfStart.substring(0, 4) +
-                                           String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
-            }
-            if(Integer.valueOf(nameOfEnd.substring(4)) > index)
-            {
-                edges.get(j).setAttribute( "end", nameOfEnd.substring(0, 4) +
-                        String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
-            }
-        }*/
+            int newIndex  = Integer.valueOf(vCurr.getAttribute(ATTRIBUTNAME).substring(4)) - 1;
 
+            vCurr.setAttribute(ATTRIBUTNAME, vCurr.getAttribute(ATTRIBUTNAME).substring(0,4) + String.valueOf(newIndex));
+        }
         nbVertex--;
     }
 
-    public ArrayList<DrawEdge> getDrawEdges(int index){
+    public ArrayList<DrawEdge> getDrawEdges(int index)
+    {
         ArrayList<Element> edges = edgesGroups.get(index);
-        ArrayList<DrawEdge> res = new ArrayList<>();
+        ArrayList<DrawEdge> res  = new ArrayList<>();
 
-        for(int i = 0; i < edges.size(); i++) {
-            String vertex1 = edges.get(i).getAttribute("start");
-            String vertex2 = edges.get(i).getAttribute("end");
+        for(int i = 0; i < edges.size(); i++)
+        {
+            String vertex1 = edges.get(i).getAttribute(ATTRIBUTSTART);
+            String vertex2 = edges.get(i).getAttribute(ATTRIBUTEND);
 
-            int bending = 0;
+            int bending    = 0;
             int bendFactor = 0;
+
             if (edges.size() > 1) {
-                if (groups.get(index).getAttribute("start").equals(vertex1))
+                if (groups.get(index).getAttribute(ATTRIBUTSTART).equals(vertex1))
                     bending = (i % 2) + 1;
                 else
                     bending = 2 - (i % 2);
@@ -426,17 +419,17 @@ public class GraphDom {
 
             int startX = (int)ver1.getX();
             int startY = (int)ver1.getY();
-            int endX = (int)ver2.getX();
-            int endY = (int)ver2.getY();
-            System.out.println(graphType);
-            if(graphType.equals("nonDiGraph"))
+            int endX   = (int)ver2.getX();
+            int endY   = (int)ver2.getY();
+
+            if(graphType.equals(NONDIGRAPH))
                 res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor));
-            else if (graphType.equals("diGraph"))
+            else if (graphType.equals(DIGRAPH))
                 res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true));
-            else if (graphType.equals("weightedDiGraph"))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true, new Text(edges.get(i).getAttribute("weight"))));
-            else if (graphType.equals("weightedNonDiGraph"))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, false, new Text(edges.get(i).getAttribute("weight"))));
+            else if (graphType.equals(WEIGHTEDDIGRAPH))
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true, new Text(edges.get(i).getAttribute(WEIGHT))));
+            else if (graphType.equals(WEIGHTEDNONDIGRAPH))
+                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, false, new Text(edges.get(i).getAttribute(WEIGHT))));
         }
 
         return res;
@@ -446,29 +439,31 @@ public class GraphDom {
     {
         //Element edge = (Element) edges.get(index);
         for(Element edge:edges){
-            if(!edge.getAttribute("start").isEmpty() && !edge.getAttribute("end").isEmpty()) {
-                if (Integer.parseInt(edge.getAttribute("start").replaceAll("[\\D]", "")) == from &&
-                        Integer.parseInt(edge.getAttribute("end").replaceAll("[\\D]", "")) == to &&
-                        (weight == 0 || Integer.parseInt(edge.getAttribute("weight").replaceAll("[\\D]", "")) == weight)) {
+            if(!edge.getAttribute(ATTRIBUTSTART).isEmpty() && !edge.getAttribute(ATTRIBUTEND).isEmpty())
+            {
+                if (Integer.parseInt(edge.getAttribute(ATTRIBUTSTART).replaceAll("[\\D]", "")) == from &&
+                        Integer.parseInt(edge.getAttribute(ATTRIBUTEND).replaceAll("[\\D]", "")) == to &&
+                        (weight == 0 || Integer.parseInt(edge.getAttribute(WEIGHT).replaceAll("[\\D]", "")) == weight)) {
 
-                    String vertex1 = edge.getAttribute("start");
-                    String vertex2 = edge.getAttribute("end");
+                    String vertex1 = edge.getAttribute(ATTRIBUTSTART);
+                    String vertex2 = edge.getAttribute(ATTRIBUTEND);
 
                     Point2D ver1 = getPosOfVertex(vertex1);
                     Point2D ver2 = getPosOfVertex(vertex2);
 
                     int startX = (int) ver1.getX();
                     int startY = (int) ver1.getY();
-                    int endX = (int) ver2.getX();
-                    int endY = (int) ver2.getY();
-                    if(graphType.equals("nonDiGraph"))
+                    int endX   = (int) ver2.getX();
+                    int endY   = (int) ver2.getY();
+
+                    if(graphType.equals(NONDIGRAPH))
                         return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0);
-                    else if (graphType.equals("weightedNonDiGraph"))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, false, new Text(edge.getAttribute("weight")));
-                    else if (graphType.equals("diGraph"))
+                    else if (graphType.equals(WEIGHTEDNONDIGRAPH))
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, false, new Text(edge.getAttribute(WEIGHT)));
+                    else if (graphType.equals(DIGRAPH))
                         return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true);
-                    else if (graphType.equals("weightedDiGraph"))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true, new Text(edge.getAttribute("weight")));
+                    else if (graphType.equals(WEIGHTEDDIGRAPH))
+                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true, new Text(edge.getAttribute(WEIGHT)));
                     return null;
                 }
             }else {
@@ -477,40 +472,41 @@ public class GraphDom {
         }
         return null;
     }
-    public double getEdgeWeigth(int gIndex, int eIndex){
-        if(graphType.equals("nonDiGraph")||graphType.equals("diGraph"))
+    public double getEdgeWeigth(int gIndex, int eIndex)
+    {
+        if(graphType.equals(NONDIGRAPH)||graphType.equals(DIGRAPH))
             return 0;
         else
-            return Double.parseDouble(edgesGroups.get(gIndex).get(eIndex).getAttribute("weight").replaceAll("[^1234567890.\\-]", ""));
+            return Double.parseDouble(edgesGroups.get(gIndex).get(eIndex).getAttribute(WEIGHT).replaceAll("[^1234567890.\\-]", ""));
     }
     public int getFrom(int gIndex, int eIndex){
-        return Integer.parseInt(edgesGroups.get(gIndex).get(eIndex).getAttribute("start").replaceAll("[\\D]", ""));
+        return Integer.parseInt(edgesGroups.get(gIndex).get(eIndex).getAttribute(ATTRIBUTSTART).replaceAll("[\\D]", ""));
     }
     public int getTo(int gIndex, int eIndex){
-        return Integer.parseInt(edgesGroups.get(gIndex).get(eIndex).getAttribute("end").replaceAll("[\\D]", ""));
+        return Integer.parseInt(edgesGroups.get(gIndex).get(eIndex).getAttribute(ATTRIBUTEND).replaceAll("[\\D]", ""));
     }
     public String getEdgeStartName(int index)
     {
         Element edge = (Element) edges.get(index);
-        return edge.getAttribute("start");
+        return edge.getAttribute(ATTRIBUTSTART);
     }
 
     public String getEdgeEndName(int index)
     {
         Element edge = (Element) edges.get(index);
-        return edge.getAttribute("end");
+        return edge.getAttribute(ATTRIBUTEND);
     }
 
     public String getEdgeStartName(int gIndex, int eIndex)
     {
         Element edge = (Element) edgesGroups.get(gIndex).get(eIndex);
-        return edge.getAttribute("start");
+        return edge.getAttribute(ATTRIBUTSTART);
     }
 
     public String getEdgeEndName(int gIndex, int eIndex)
     {
         Element edge = (Element) edgesGroups.get(gIndex).get(eIndex);
-        return edge.getAttribute("end");
+        return edge.getAttribute(ATTRIBUTEND);
     }
 
     public void setGraphType(String graphType) {
@@ -531,18 +527,18 @@ public class GraphDom {
         }
 
         for(Element group:groups) {
-            if (group.getAttribute("start").isEmpty() || group.getAttribute("end").isEmpty())
+            if (group.getAttribute(ATTRIBUTSTART).isEmpty() || group.getAttribute(ATTRIBUTEND).isEmpty())
                 continue;
-            if (Integer.parseInt(group.getAttribute("start").replaceAll("[\\D]", "")) == from &&
-                    Integer.parseInt(group.getAttribute("end").replaceAll("[\\D]", "")) == to)
+            if (Integer.parseInt(group.getAttribute(ATTRIBUTSTART).replaceAll("[\\D]", "")) == from &&
+                    Integer.parseInt(group.getAttribute(ATTRIBUTEND).replaceAll("[\\D]", "")) == to)
                 res = group;
         }
 
         if(res == null) {
-            res = document.createElement("edges_group");
-            res.setAttribute("name", "group_"+groups.size());
-            res.setAttribute("start", "ver_"+from);
-            res.setAttribute("end", "ver_"+to);
+            res = document.createElement(EDGEGROUP);
+            res.setAttribute(ATTRIBUTNAME, ATTRIBUTGROUP+groups.size());
+            res.setAttribute(ATTRIBUTSTART, VERNAME+from);
+            res.setAttribute(ATTRIBUTEND, VERNAME+to);
             racine.appendChild(res);
             groups.add(res);
             edgesGroups.add(new ArrayList<Element>());
