@@ -25,6 +25,7 @@ public class ImportController {
     private File fileSave;
     private String algorithme = "";
     private String structure = "";
+    LinkedList<Step> path;
 
 
     @FXML
@@ -137,53 +138,34 @@ public class ImportController {
             return;
         }
 
-        Algorithm algo;
-        switch (choiceAlgo.getValue()){
-            case "BFS":
-                algo = new BFS(g, g.getVertex(start));
-                break;
-            case "DFS":
-                algo = new DFS(g, g.getVertex(start));
-                break;
-            case "Kruskal":
-                algo = new Kruskall(g);
-                break;
-            case "Prim":
-                algo = new Prim(g);
-                break;
-            case "Bellman-Ford":
-                algo = new Bellman_Ford(g, g.getVertex(start), g.getVertex(end));
-                break;
-            case "Dijkstra":
-                algo = new Dijkstra(g, g.getVertex(start), g.getVertex(end));
-                break;
-            default:
-                alertMessage("Algorithme Not found !!");
-                return;
-        }
+
+
 
         try{
-            LinkedList<Step> path = algo.getPath();
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Save");
-            alert.setHeaderText("The algorithm pass without problems");
-            alert.setContentText("Do you want to save the result?");
-            ButtonType buttonTypeSave = new ButtonType("Save");
-            ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(getClass().getResource("assets/css/alertGood.css").toExternalForm());
-            dialogPane.getStyleClass().add("myDialog");
-            Optional<ButtonType> result = alert.showAndWait();
-            if(result.get() == buttonTypeSave){
-                handleSave();
+            switch (choiceAlgo.getValue()){
+                case "BFS":
+                    path = g.accept(new BFS(), g.getVertex(start), null);
+                    break;
+                case "DFS":
+                    path = g.accept(new DFS(), g.getVertex(start), null);
+                    break;
+                case "Kruskal":
+                    path = g.accept(new Kruskall(), null, null);
+                    break;
+                case "Prim":
+                    path = g.accept(new Prim(), null, null);
+                    break;
+                case "Bellman-Ford":
+                    path = g.accept(new Bellman_Ford(), g.getVertex(start), g.getVertex(end));
+                    break;
+                case "Dijkstra":
+                    path = g.accept(new Dijkstra(), g.getVertex(start), g.getVertex(end));
+                    break;
+                default:
+                    alertMessage("Algorithme Not found !!");
+                    return;
             }
 
-            if (fileSave != null) {
-                serialiseur = getSerialiseur(fileOpen);
-                if (serialiseur == null ) return;
-                serialiseur.exportGraph(g, path, fileSave.getAbsolutePath());
-            }
         }catch(Exception e){
             e.printStackTrace();
             alertMessage(e.getMessage());
@@ -252,11 +234,29 @@ public class ImportController {
         File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
         if (file != null) {
             fileSave = file;
-            /*try {
-                graph.saveGraphXML(file);
-            } catch (TransformerException e) {
-                e.printStackTrace();
-            }*/
+        }
+    }
+
+    void alertSuccess(Graph g){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Save");
+        alert.setHeaderText("The algorithm pass without problems");
+        alert.setContentText("Do you want to save the result?");
+        ButtonType buttonTypeSave = new ButtonType("Save");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alertGood.css").toExternalForm());
+        dialogPane.getStyleClass().add("myDialog");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == buttonTypeSave){
+            handleSave();
+        }
+
+        if (fileSave != null) {
+            Serialiseur serialiseur = getSerialiseur(fileOpen);
+            if (serialiseur == null ) return;
+            serialiseur.exportGraph(g, path, fileSave.getAbsolutePath());
         }
     }
 

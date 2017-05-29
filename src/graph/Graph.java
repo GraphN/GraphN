@@ -1,11 +1,10 @@
 package graph;
 
+import Algorithms.AlgorithmVisitor;
+import Algorithms.Utils.Step;
 import graph.Stockage.StockageType;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 /**
  * Created by francoisquellec on 22.03.17.
@@ -33,11 +32,11 @@ public abstract class Graph {
         }
     }
 
+    // Getter/Setter Vertex
     public void addVertex(Vertex v){
         vertexList.add(v.getId(), v);
         V++;
     }
-
     public Vertex getVertex(int id){
         if (id < vertexList.size())
             return vertexList.get(id);
@@ -46,12 +45,28 @@ public abstract class Graph {
     }
     public LinkedList<Vertex> getVertexsList(){return vertexList;}
 
+    // Getter/Setter Edge
+    public void addEdge(Edge e){
+        stockage.addEdge(e);
+        E++;
+    }
+    public abstract void addEdge(Vertex v, Vertex w);
+    public abstract void addEdge(Vertex v, Vertex w, double weigth);
     public Edge getEdge(Vertex v, Vertex w){
         return stockage.getEdge(v, w);
     }
+    public LinkedList<Edge> getEdgesList(){
+        return stockage.getEdgesList();
+    }
 
+
+    // Parcourt graphe
+    public  LinkedList<Vertex> adjacentVertex(Vertex v){return stockage.adjacentVertex(v);}
+    public  LinkedList<Edge> adjacentEdges(Vertex v){return stockage.adjacentEdges(v);}
+
+    // Base infos
     public int V(){
-     return V;
+        return V;
     }
     public int E(){
         return E;
@@ -60,28 +75,18 @@ public abstract class Graph {
         return TYPE;
     }
 
+    // Pattern Visitor
+    public abstract LinkedList<Step> accept(AlgorithmVisitor v, Vertex source, Vertex target) throws Exception;
 
-    public  LinkedList<Vertex> adjacentVertex(Vertex v){return stockage.adjacentVertex(v);}
-    public  LinkedList<Edge> adjacentEdges(Vertex v){return stockage.adjacentEdges(v);}
-
-    public void addEdge(Edge e){
-        stockage.addEdge(e);
-        E++;
-    }
-    public abstract void addEdge(Vertex v, Vertex w);
-    public abstract void addEdge(Vertex v, Vertex w, double weigth);
-
-    public void print(){
-        System.out.println(this.getClass() + "nbVertex = " + V);
+    // Fonctions Utilitaires
+    public String toString(){
+        String ret = this.getClass() + "nbVertex = " + V + "\n";
         for(Vertex v : vertexList){
-            System.out.print("Sommet " + v.getId() + " : ");
+            ret += "Sommet " + v.getId() + " : ";
             for(Edge e : adjacentEdges(v))
-                System.out.print("Edge(v1: " + e.getFrom().getId() + ", v2: " + e.getTo().getId() + ", Weigth : " + e.getWeigth()+"); ");
-            System.out.println();
+                ret += "Edge(v1: " + e.getFrom().getId() + ", v2: " + e.getTo().getId() + ", Weigth : " + e.getWeigth()+"); ";
+            ret += "\n";
         }
-    }
-
-    public LinkedList<Edge> getEdgesList(){
-        return stockage.getEdgesList();
+        return ret;
     }
 }

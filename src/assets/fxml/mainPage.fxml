@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPageController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPageController">
    <children>
       <BorderPane id="mainPage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -43,6 +43,7 @@
                   <Button id="saveButton" ellipsisString="" layoutX="98.0" layoutY="9.0" maxHeight="24.0" maxWidth="25.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="24.0" prefWidth="24.0" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="9.0" />
                   <Button id="openFileButton" ellipsisString="" layoutX="134.0" layoutY="9.0" maxHeight="25.0" maxWidth="28.0" mnemonicParsing="false" onAction="#handleOpen" prefHeight="25.0" prefWidth="25.0" AnchorPane.leftAnchor="124.0" AnchorPane.topAnchor="9.0" />
                   <Button id="importButton" ellipsisString="" layoutX="168.0" layoutY="9.0" maxHeight="25.0" maxWidth="29.0" mnemonicParsing="false" onAction="#handleImport" prefHeight="25.0" prefWidth="25.0" AnchorPane.leftAnchor="158.0" AnchorPane.topAnchor="8.0" />
+                  <Button id="helpButton" ellipsisString="" layoutX="193.0" layoutY="9.0" maxHeight="28.0" maxWidth="29.0" mnemonicParsing="false" onAction="#handleHelp" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="110.0" />
                </children>
             </AnchorPane>
          </top>
