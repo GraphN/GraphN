@@ -2,9 +2,7 @@ package Algorithms;
 
 import Algorithms.Utils.Step;
 import Algorithms.Utils.UnionFind;
-import graph.DiGraph;
-import graph.Edge;
-import graph.Graph;
+import graph.*;
 
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -12,23 +10,16 @@ import java.util.PriorityQueue;
 /**
  * Created by francoisquellec on 24.03.17.
  */
-public class Kruskall implements Algorithm{
-    private Graph g; // Kruskall ne prend en parametre que des graphes non orientes
-
-    private double weight;                        // weight of MST
+public class Kruskall implements AlgorithmVisitor{
     private LinkedList<Step> path;
-    boolean isDirected;
 
-    public Kruskall(Graph g) {
-        isDirected = g instanceof DiGraph;
-        this.g = g;
-    }
-
-    public LinkedList<Step> visit() {
+    public LinkedList<Step> visit(UDiGraph g, Vertex source, Vertex target) throws Exception{
         PriorityQueue<Edge> pq = new PriorityQueue<>();
+        path = new LinkedList<>();
         for (Edge e : g.getEdgesList()) {
             pq.add(e);
         }
+        double weight = 0;
 
         // run greedy algorithm
         UnionFind uf = new UnionFind(g.V());
@@ -53,27 +44,16 @@ public class Kruskall implements Algorithm{
             }
         }
 
+        String message = "Algorithme terminé, poids Total : " + weight;
+        Step step = new Step();
+        step.setMessage(message);
+        step.setVertex(g.getVertex(0));
+        path.add(step);
+
         return path;
     }
 
-    public LinkedList<Step> getPath() throws Exception{
-        System.out.println("Apply Kruskal algorithme on :");
-        g.print();
-        path = new LinkedList<>();
-        if (isDirected){
-            throw new Exception("Kruskall ne peut pas être appliquer sur des graphes orientés.");
-            /*String message = "Kruskall ne peut pas être appliquer sur des graphes orientés.";
-            Step step = new Step();
-            step.setMessage(message);
-            step.setVertex(g.getVertex(0));
-            path.add(step);*/
-        }
-        else
-            visit();
-
-        System.out.println("result : " + path);
-        return path;
+    public LinkedList<Step> visit(DiGraph g, Vertex source, Vertex target) throws Exception {
+        throw new Exception("Kruskall ne peut pas être appliquer sur des graphes orientés.");
     }
-
-    public double getWeight(){return weight;}
 }

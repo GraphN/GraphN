@@ -71,8 +71,6 @@ public class AlgorithmPageController {
 
     Graph graph;
 
-    Algorithm algo;
-
     LinkedList<Step> path;
 
     final private Color UNCOLORED = Color.web("da5630");
@@ -187,7 +185,6 @@ public class AlgorithmPageController {
         description.getItems().clear();
         structure.getItems().clear();
         path = null;
-        algo = null;
 
         activateButtons();
     }
@@ -204,8 +201,7 @@ public class AlgorithmPageController {
     @FXML
     private void handleKruskall(){
         try {
-            this.algo = new Kruskall(graph);
-            this.path = algo.getPath();
+            this.path = graph.accept(new Kruskall(), null, null);
             setDividerPosition(0.2);
             desactivateButtons(kruskall);
         } catch (Exception e){
@@ -220,8 +216,7 @@ public class AlgorithmPageController {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
             //pane.getChildren().remove(edgeList.get(0).getRoot());
-            this.algo = new DFS(graph, graph.getVertex(startVertex));
-            this.path = algo.getPath();
+            this.path = graph.accept(new DFS(),  graph.getVertex(startVertex), null);
 
             setColoredVertex(startVertex);
             desactivateButtons(dfs);
@@ -236,8 +231,7 @@ public class AlgorithmPageController {
         try {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
-            this.algo = new BFS(graph, graph.getVertex(startVertex));
-            this.path = algo.getPath();
+            this.path = graph.accept(new BFS(), graph.getVertex(startVertex), null);
 
             setColoredVertex(startVertex);
             desactivateButtons(bfs);
@@ -255,8 +249,7 @@ public class AlgorithmPageController {
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
             int endVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "End Vertex");
 
-            this.algo = new Bellman_Ford(graph, graph.getVertex(startVertex), graph.getVertex(endVertex));
-            this.path = algo.getPath();
+            this.path = graph.accept(new Bellman_Ford(), graph.getVertex(startVertex), graph.getVertex(endVertex));
 
             setColoredVertex(startVertex);
             desactivateButtons(bellman);
@@ -273,9 +266,7 @@ public class AlgorithmPageController {
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
             int endVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "End Vertex");
             //pane.getChildren().remove(edgeList.get(0).getRoot());
-            this.algo = new Dijkstra(graph, graph.getVertex(startVertex), graph.getVertex(endVertex));
-            this.path = algo.getPath();
-
+            this.path = graph.accept(new Dijkstra(), graph.getVertex(startVertex), graph.getVertex(endVertex));
             setColoredVertex(startVertex);
             desactivateButtons(dijkstra);
         }catch (Exception e){
@@ -288,9 +279,7 @@ public class AlgorithmPageController {
     private void handlePrim(){
         try {
             setDividerPosition(0.2);
-            this.algo = new Prim(graph);
-            this.path = algo.getPath();
-
+            this.path = graph.accept(new Prim(), null, null);
             desactivateButtons(prim);
         }catch (Exception e){
             e.printStackTrace();
