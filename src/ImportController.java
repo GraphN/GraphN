@@ -5,14 +5,11 @@ import graph.Serialisation.*;
 import graph.Stockage.AdjacencyStockage;
 import graph.Stockage.EdgeListStockage;
 import graph.Stockage.StockageType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

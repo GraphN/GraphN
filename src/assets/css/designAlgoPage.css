@@ -17,7 +17,6 @@
 
 #buttonForwardPlay:hover{
 -fx-background-image: url("../img/fast-forward-on.png");
-
 }
 #buttonForwardPlay{
 -fx-background-image: url('../img/fast-forward.png');

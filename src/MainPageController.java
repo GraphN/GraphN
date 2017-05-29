@@ -269,8 +269,66 @@ public class MainPageController
         return vertex;
     }
 
-    public void handleNewFromAlgoPage(){
-        handleNew();
+    public void handleNewFromAlgoPage(GraphDom graphAlgoPage){
+
+            //if no graphDom had been selected, we do nothing
+            if(graphAlgoPage == null) return;
+
+            //adding this xml to the list
+            listGraphXml.add(graphAlgoPage);
+            Tab tab = createNewTab(graphAlgoPage.getName());
+
+            tab.setOnClosed(new EventHandler<Event>(){
+                @Override
+                public void handle(Event e){
+                    if(tabPane.getTabs().size() < 1)
+                        handleNew();
+                }
+            });
+
+            //get the Anchorpane who we need to fill
+            AnchorPane paneBack = (AnchorPane) tab.getContent();
+            AnchorPane pane     = (AnchorPane) paneBack.getChildren().get(0);
+
+            //adding all vertex from xml
+            int i = 0;
+            while (i <= graphAlgoPage.getNbVertex())
+            {
+                Point2D point = graphAlgoPage.getPosOfVertex(i);
+                int x = (int) point.getX();
+                int y = (int) point.getY();
+
+                String name = graphAlgoPage.getVertexName(i);
+                // TODO: Régler le soucis qui fait que le 0 est derrière
+                // Create vertex and add it to pane
+                Group node = createVertex(x,y,name);
+                pane.getChildren().add(node);
+
+                i++;
+            }
+
+            tabMap.put(tab,graphAlgoPage.getGraphType());
+
+            DrawEdge drawEdge = null;
+
+            i = 0;
+            while (i < graphAlgoPage.getNbGroup())
+            {
+                ArrayList<DrawEdge> edges = graphAlgoPage.getDrawEdges(i);
+                drawEdgesGroupList.add(edges);
+
+                for(int j = 0; j < edges.size(); j++)
+                {
+                    Group cirleStart = (Group) getChildrenVertexById(pane, graphAlgoPage.getEdgeStartName(i, j));
+                    Group cirleEnd   = (Group) getChildrenVertexById(pane, graphAlgoPage.getEdgeEndName(i, j));
+
+                    moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, i, j, pane);
+                    pane.getChildren().add(1, edges.get(j).getRoot());
+                }
+                i++;
+            }
+
+            tabPane.getTabs().add(tab);
     }
 
     @FXML
