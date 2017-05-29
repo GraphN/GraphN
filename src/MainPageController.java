@@ -12,7 +12,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -26,6 +29,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
@@ -381,6 +385,44 @@ public class MainPageController
     @FXML
     private void handleImport(){
         mainApp.showImportPage();
+    }
+
+    @FXML
+    private void handleHelp()
+    {
+        //stage contening help
+        Stage helpPage = new Stage();
+        helpPage.setTitle("help Page");
+        helpPage.setMinHeight(500);
+        helpPage.setMinWidth(500);
+        ScrollPane page = new ScrollPane();
+        Image help1  = new Image(getClass().getResourceAsStream("assets/img/help1.png"));
+
+        page.setContent(new ImageView(help1));
+
+        page.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        page.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        page.setPannable(true);
+        page.setMaxHeight(600);
+        page.setMaxWidth(600);
+
+        Group root = new Group();
+        Scene scene = new Scene(root, 600, 600);
+        helpPage.setScene(scene);
+
+        root.getChildren().add(page);
+        helpPage.show();
+
+
+        /*Alert helpPage        = new Alert(Alert.AlertType.INFORMATION);
+        helpPage.setTitle("Vous avez demandé de l'aide?");
+        DialogPane dialogPane = helpPage.getDialogPane();
+        dialogPane.setMinSize(500,500);
+        dialogPane.setContent();
+        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+        dialogPane.getStyleClass().add("myDialog");
+        helpPage.showAndWait();
+        */
     }
 
     @FXML

@@ -422,14 +422,20 @@ public class GraphDom {
             int endX   = (int)ver2.getX();
             int endY   = (int)ver2.getY();
 
-            if(graphType.equals(NONDIGRAPH))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor));
-            else if (graphType.equals(DIGRAPH))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true));
-            else if (graphType.equals(WEIGHTEDDIGRAPH))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true, new Text(edges.get(i).getAttribute(WEIGHT))));
-            else if (graphType.equals(WEIGHTEDNONDIGRAPH))
-                res.add(new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, false, new Text(edges.get(i).getAttribute(WEIGHT))));
+            switch (graphType) {
+                case NONDIGRAPH:
+                    res.add(new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, bending, bendFactor));
+                    break;
+                case DIGRAPH:
+                    res.add(new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true));
+                    break;
+                case WEIGHTEDDIGRAPH:
+                    res.add(new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, true, new Text(edges.get(i).getAttribute(WEIGHT))));
+                    break;
+                case WEIGHTEDNONDIGRAPH:
+                    res.add(new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, bending, bendFactor, false, new Text(edges.get(i).getAttribute(WEIGHT))));
+                    break;
+            }
         }
 
         return res;
@@ -437,8 +443,8 @@ public class GraphDom {
 
     public DrawEdge getEdge(int from, int to, double weight)
     {
-        //Element edge = (Element) edges.get(index);
-        for(Element edge:edges){
+        for(Element edge:edges)
+        {
             if(!edge.getAttribute(ATTRIBUTSTART).isEmpty() && !edge.getAttribute(ATTRIBUTEND).isEmpty())
             {
                 if (Integer.parseInt(edge.getAttribute(ATTRIBUTSTART).replaceAll("[\\D]", "")) == from &&
@@ -456,14 +462,17 @@ public class GraphDom {
                     int endX   = (int) ver2.getX();
                     int endY   = (int) ver2.getY();
 
-                    if(graphType.equals(NONDIGRAPH))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0);
-                    else if (graphType.equals(WEIGHTEDNONDIGRAPH))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, false, new Text(edge.getAttribute(WEIGHT)));
-                    else if (graphType.equals(DIGRAPH))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true);
-                    else if (graphType.equals(WEIGHTEDDIGRAPH))
-                        return new DrawEdge((double)startX, (double) startY, (double) endX, (double) endY, 0, 0, true, new Text(edge.getAttribute(WEIGHT)));
+                    switch (graphType)
+                    {
+                        case NONDIGRAPH:
+                            return new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, 0, 0);
+                        case WEIGHTEDNONDIGRAPH:
+                            return new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, 0, 0, false, new Text(edge.getAttribute(WEIGHT)));
+                        case DIGRAPH:
+                            return new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, 0, 0, true);
+                        case WEIGHTEDDIGRAPH:
+                            return new DrawEdge((double) startX, (double) startY, (double) endX, (double) endY, 0, 0, true, new Text(edge.getAttribute(WEIGHT)));
+                    }
                     return null;
                 }
             }else {
@@ -520,13 +529,15 @@ public class GraphDom {
     private Element getGroup(int from, int to) {
         Element res = null;
 
-        if (from > to) {
+        if (from > to)
+        {
             int tmp = to;
-            to = from;
-            from = tmp;
+            to      = from;
+            from    = tmp;
         }
 
-        for(Element group:groups) {
+        for(Element group:groups)
+        {
             if (group.getAttribute(ATTRIBUTSTART).isEmpty() || group.getAttribute(ATTRIBUTEND).isEmpty())
                 continue;
             if (Integer.parseInt(group.getAttribute(ATTRIBUTSTART).replaceAll("[\\D]", "")) == from &&
@@ -534,7 +545,8 @@ public class GraphDom {
                 res = group;
         }
 
-        if(res == null) {
+        if(res == null)
+        {
             res = document.createElement(EDGEGROUP);
             res.setAttribute(ATTRIBUTNAME, ATTRIBUTGROUP+groups.size());
             res.setAttribute(ATTRIBUTSTART, VERNAME+from);

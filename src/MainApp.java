@@ -24,6 +24,7 @@ import java.io.IOException;
 public class MainApp extends Application {
 
     private Stage algoStage;
+    private Stage helpStage;
     private Stage primaryStage;
     private AnchorPane rootLayout;
     private MainPageController mainPageController;
@@ -61,15 +62,14 @@ public class MainApp extends Application {
         }
     }
 
-    //
-    public void showAlgoPage(GraphDom graph) {
+    public void showAlgoPage(GraphDom graph)
+    {
         try {
 
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("assets/fxml/algorithmPage.fxml"));
 
-            //loader.setLocation(MainApp.class.getResource("algoPage.fxml"));
             BorderPane page = (BorderPane) loader.load();
 
             // Create the dialog Stage.

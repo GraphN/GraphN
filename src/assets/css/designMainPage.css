@@ -7,7 +7,7 @@
 #vertex1Button, #vertex1ButtonActivate, #vertex2Button,#edgeButton, #diEdgeButton,
 #diEdgeWeightedButton, #textButton, #commentButton, #edgeButtonActivate,
 #edgeButtonWeighted, #weightedEdgeButtonActivate, #weightedEdgeButton, #diEdgeButtonActivate,
-#weightedDiEdgeButtonActivate, #weightedDiEdgeButton, #eraserButton, #eraserButtonActivate
+#weightedDiEdgeButtonActivate, #weightedDiEdgeButton, #eraserButton, #eraserButtonActivate, #helpButton
 {
 -fx-background-color: #232323;
 }
@@ -37,6 +37,14 @@
 
 #importButton:hover{
 -fx-background-image: url("../img/import-on.png");
+
+}
+#helpButton{
+-fx-background-image: url('../img/help.png');
+}
+
+#helpButton:hover{
+-fx-background-image: url("../img/help-on.png");
 
 }
 #importButton{
