@@ -634,7 +634,7 @@ public class MainPageController {
                             Point2D point = graphXml.getPosOfVertex(i);
                             int x = (int) point.getX();
                             int y = (int) point.getY();
-                            String name = graphXml.getName(i);
+                            String name = graphXml.getVertexName(i);
                             Group node = createVertex(x,y,name);
                             ap.getChildren().add(node);
 

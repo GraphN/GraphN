@@ -18,7 +18,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import jdk.nashorn.internal.runtime.ECMAException;
 
 import java.util.*;
 
@@ -335,7 +334,7 @@ public class AlgorithmPageController {
             Point2D point = graphDom.getPosOfVertex(i);
             int x = (int) point.getX()-10;
             int y = (int) point.getY()-10;
-            String name = graphDom.getName(i);
+            String name = graphDom.getVertexName(i);
 
             //adding vertex created to pane
 
@@ -461,7 +460,7 @@ public class AlgorithmPageController {
                             && edgeList.get(i).getEndY() == test.getStartY()
                             && edgeList.get(i).getStartX() == test.getEndX()
                             && edgeList.get(i).getStartY() == test.getEndY()))
-                            && (edgeList.get(i).getText().toString().equals(test.getText().toString()))) {
+                            && (test.getText() != null && (edgeList.get(i).getText().toString().equals(test.getText().toString())))) {
                         edgeList.get(i).setColored();
                     }
                 }
