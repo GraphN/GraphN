@@ -52,9 +52,6 @@ public class MainPageController {
     private float textTranslateX1Digit;
     private float textTranslateX2Digits;
 
-
-
-
     private ArrayList<ArrayList<DrawEdge>> drawEdgesGroupList;
 
     private boolean firstVerForEdge = true;
@@ -87,7 +84,6 @@ public class MainPageController {
 
     public Pane getGraphPane(){
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
-
         AnchorPane currPage = (AnchorPane) currentTab.getContent();
 
         return currPage;
@@ -105,7 +101,6 @@ public class MainPageController {
         support.addSupport(tabPane);
         drawEdgesGroupList = new ArrayList<>();
         tabMap = new HashMap<>();
-
 
         liveEdge = new Line();
         liveEdge.setStrokeWidth(4);
@@ -310,7 +305,7 @@ public class MainPageController {
                 Point2D point = graphOpen.getPosOfVertex(i);
                 int x = (int) point.getX();
                 int y = (int) point.getY();
-                String name = graphOpen.getName(i);
+                String name = graphOpen.getVertexName(i);
                 // TODO: Régler le soucis qui fait que le 0 est derrière
                 // Create vertex and add it to pane
                 Group node = createVertex(x,y,name);
@@ -649,6 +644,7 @@ public class MainPageController {
                         DrawEdge drawEdge = null;
 
                         drawEdgesGroupList.clear();
+
                         i = 0;
                         while (i < graphXml.getNbGroup()) {
                             ArrayList<DrawEdge> edges = graphXml.getDrawEdges(i);

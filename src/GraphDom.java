@@ -237,6 +237,10 @@ public class GraphDom {
         Element node = (Element) racine.getChildNodes().item(index);
         return node.getAttribute("name");
     }
+    public String getVertexName(int index)
+    {
+        return vertexes.get(index).getAttribute("name");
+    }
     public String getNodeType(int index)
     {
         NodeList nodes = racine.getChildNodes();

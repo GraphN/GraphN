@@ -285,7 +285,6 @@ public class MainApp extends Application {
                             // change the name of the vertex to have good one (corresponding of the xml file)
                             graphDom.setNameOfVertex(currentNode.getAttribute("name"), vertexAdded);
 
-
                             vertexAdded++;
                         }
                         else if (currentNode.getNodeName().equals("edges_group"))
