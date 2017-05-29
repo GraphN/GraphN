@@ -23,26 +23,25 @@ import java.io.IOException;
 
 public class MainApp extends Application {
 
-    private Stage primaryStage;
     private Stage algoStage;
+    private Stage primaryStage;
     private AnchorPane rootLayout;
     private MainPageController mainPageController;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage)
+    {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("GraphN");
 
-        //primaryStage.setFullScreen(true);
         initRootLayout();
-
-        //showPersonOverview();
     }
 
     /**
      * Initializes the root layout.
      */
-    public void initRootLayout() {
+    public void initRootLayout()
+    {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
@@ -61,13 +60,15 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
     }
-    // dans le futur, passer un graphe en paramètre
+
+    //
     public void showAlgoPage(GraphDom graph) {
         try {
-            System.out.println(graph.getName());
+
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("assets/fxml/algorithmPage.fxml"));
+
             //loader.setLocation(MainApp.class.getResource("algoPage.fxml"));
             BorderPane page = (BorderPane) loader.load();
 
@@ -82,28 +83,24 @@ public class MainApp extends Application {
 
             AlgorithmPageController controller = loader.getController();
             controller.setMainApp(this);
+
             //setting the graph pane to the algo page
             controller.setGraph(graph);
 
-            // Set the person into the controller.
-            /*PersonEditDialogController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setPerson(person);*/
-
             //set the mainwindow grey
             mainPageController.setGreyMain(true);
+
             // Show the dialog and wait until the user closes it
             algoStage.showAndWait();
 
             //we change the grey color of parent stage
              mainPageController.setGreyMain(false);
-            //return controller.isOkClicked();
         } catch (IOException e) {
             e.printStackTrace();
-            //return false;
         }
     }
-    public int showWeightPage() {
+    public int showWeightPage()
+    {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -327,23 +324,6 @@ public class MainApp extends Application {
         algoStage.close();
     }
 
-    /**
-     * Shows the person overview inside the root layout.
-     */
-   /* public void showPersonOverview() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/PersonOverview.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
-
-            // Set person overview into the center of root layout.
-            rootLayout.setCenter(personOverview);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-*/
     /**
      * Returns the main stage.
      * @return
