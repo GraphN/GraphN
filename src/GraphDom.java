@@ -262,23 +262,46 @@ public class GraphDom {
     public void deleteVertex(int index)
     {
 
-        NodeList listEdges = document.getElementsByTagName("edges_group");
+        NodeList listEdges = document.getElementsByTagName("edge");
         NodeList listvertexes = document.getElementsByTagName("vertex");
         NodeList listGroups = document.getElementsByTagName("edges_group");
 
         Element vertex = (Element) vertexes.get(index);
 
-        //removing edges connected to the vertex to remove
+        for(int k = 0; k < groups.size(); k++)
+        {
+            System.out.println(groups.get(k).getAttribute("name") + "   "+groups.get(k).getAttribute("start")+"    "+groups.get(k).getAttribute("end") );
+        }
+
+        for(int k = 0; k < edges.size(); k++)
+        {
+            System.out.println(edges.get(k).getAttribute("name") + "   "+edges.get(k).getAttribute("start")+"    "+edges.get(k).getAttribute("end") );
+        }
+
+
+        //removing group_edges connected to the vertex to remove
         for(int i = groups.size()-1; i >= 0 ; i--)
         {
             if( groups.get(i).getAttribute("start").equals(vertex.getAttribute("name")) ||
                 groups.get(i).getAttribute("end").equals(vertex.getAttribute("name"))    )
             {
-                Element edgeCurr = (Element) listEdges.item(i);
+                Element edgeCurr = (Element) listGroups.item(i);
                 //removing the element from the corresponding deleted edge
                 edgeCurr.getParentNode().removeChild(edgeCurr);
                 // removing from list
                 groups.remove(i);
+                edgesGroups.remove(i);
+            }
+        }
+
+        //removing edges connected to the vertex to remove
+        for(int i = edges.size()-1; i >= 0 ; i--)
+        {
+            if( edges.get(i).getAttribute("start").equals(vertex.getAttribute("name")) ||
+                    edges.get(i).getAttribute("end").equals(vertex.getAttribute("name"))    )
+            {
+                // removing from list
+                edges.remove(i);
             }
         }
         Element vertexCurr = (Element) listvertexes.item(index);
@@ -298,6 +321,7 @@ public class GraphDom {
             {
                 ((Element)listGroups.item(j)).setAttribute( "start", nameOfStart.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
+
                 groups.get(j).setAttribute( "start", nameOfStart.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
             }
@@ -305,12 +329,15 @@ public class GraphDom {
             {
                 ((Element)listGroups.item(j)).setAttribute( "end", nameOfEnd.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
+
                 groups.get(j).setAttribute( "end", nameOfEnd.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
             }
 
-            ((Element) listEdges.item(j)).setAttribute("name", "group_"+j);
+            ((Element) listGroups.item(j)).setAttribute("name", "group_"+j);
+            groups.get(j).setAttribute("name", "group_"+j);
         }
+        //and now the names of edges
         for (int j = 0; j < listEdges.getLength(); j++)
         {
             String nameOfStart = ((Element)listEdges.item(j)).getAttribute("start");
@@ -320,6 +347,7 @@ public class GraphDom {
             {
                 ((Element)listEdges.item(j)).setAttribute( "start", nameOfStart.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
+
                 edges.get(j).setAttribute( "start", nameOfStart.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfStart.substring(4))-1) );
             }
@@ -327,16 +355,29 @@ public class GraphDom {
             {
                 ((Element)listEdges.item(j)).setAttribute( "end", nameOfEnd.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
+
                 edges.get(j).setAttribute( "end", nameOfEnd.substring(0, 4) +
                         String.valueOf(Integer.valueOf(nameOfEnd.substring(4))-1) );
             }
-            ((Element) listEdges.item(j)).setAttribute("name", "edge_"+j);
+            ((Element) listEdges.item(j)).setAttribute("name", "edge_"+(j+1));
+            //edges.get(j).setAttribute("name", "edge_"+(j+1) );
         }
-        //change name of all edges, and edges_group names some have been deleted
+
+
         for(int k = 0; k < groups.size(); k++)
         {
-            groups.get(k).setAttribute("name", "group_"+k);
+            System.out.println(groups.get(k).getAttribute("name") + "   "+groups.get(k).getAttribute("start")+"    "+groups.get(k).getAttribute("end") );
         }
+
+        for(int k = 0; k < edges.size(); k++)
+        {
+            System.out.println(edges.get(k).getAttribute("name") + "   "+edges.get(k).getAttribute("start")+"    "+edges.get(k).getAttribute("end") );
+        }
+        //change name of all edges, and edges_group names some have been deleted
+        /*for(int k = 0; k < groups.size(); k++)
+        {
+            groups.get(k).setAttribute("name", "group_"+k);
+        }*/
 
         //we have here to change the name of the vertexes who are bigger than the deleted one.
         //for example if we have 5 vertexes : ver_0, ver_1, ver_2, ver_3, ver_4
