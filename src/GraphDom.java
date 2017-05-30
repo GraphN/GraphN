@@ -57,7 +57,11 @@ public class GraphDom {
     private final String WEIGHTEDDIGRAPH     = "weightedDiGraph";
     private final String WEIGHTEDNONDIGRAPH  = "weightedNonDiGraph";
 
-
+    /**
+     * costructor of graphDom. Instanciation of some arrayLists and racine etc.
+     * @param name name of the graph
+     * @throws ParserConfigurationException
+     */
     public GraphDom(String name) throws ParserConfigurationException
     {
         edges       = new ArrayList<>();
@@ -75,6 +79,11 @@ public class GraphDom {
         document.appendChild(racine);
     }
 
+    /**
+     * save the xml of the graph in the File file
+     * @param file file to fill with xml
+     * @throws TransformerException
+     */
     public void saveGraphXML(File file) throws TransformerException
     {
         final TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -87,6 +96,11 @@ public class GraphDom {
         transformer.transform(source, sortie);
     }
 
+    /**
+     * adding vertex to the Dom
+     * @param posX position x of the vertex
+     * @param posY position y of the vertex
+     */
     public void addVertex(int posX, int posY)
     {
         nbVertex++;
@@ -98,10 +112,22 @@ public class GraphDom {
         vertexes.add(vertex);
     }
 
+    /**
+     * set the name of the vertex index, with the name name
+     * @param name name to set
+     * @param index index of vertex where to set name
+     */
     public  void setNameOfVertex(String name, int index)
     {
         vertexes.get(index).setAttribute(ATTRIBUTNAME, name);
     }
+
+    /**
+     * add edge to the dom
+     * @param vertexStart edge's vertex of start
+     * @param vertexEnd edge's vertex of end
+     * @return
+     */
     public int addEdge(String vertexStart, String vertexEnd)
     {
         nbEdge++;
@@ -125,6 +151,14 @@ public class GraphDom {
 
         return getId(group);
     }
+
+    /**
+     * add weighted edge to the dom
+     * @param vertexStart edge's vertex of start
+     * @param vertexEnd edge's vertex of end
+     * @param weight weight of the edge
+     * @return id of the group
+     */
     public int addWeightedEdge(String vertexStart, String vertexEnd, String weight)
     {
         nbEdge++;
@@ -150,6 +184,12 @@ public class GraphDom {
         return getId(group);
     }
 
+    /**
+     * add directed edge to the dom
+     * @param vertexStart edge's vertex of start
+     * @param vertexEnd edge's vertex of end
+     * @return id of the group
+     */
     public int addDiEdge(String vertexStart, String vertexEnd)
     {
         nbEdge++;
@@ -168,6 +208,13 @@ public class GraphDom {
         return getId(group);
     }
 
+    /**
+     * add weighted directed edge to the dom
+     * @param vertexStart edge's vertex of start
+     * @param vertexEnd edge's vertex of end
+     * @param weight weight of the edge
+     * @return id of the group
+     */
     public int addDiWeightedEdge(String vertexStart, String vertexEnd, String weight)
     {
         nbEdge++;
@@ -186,19 +233,40 @@ public class GraphDom {
 
         return getId(group);
     }
+
+    /**
+     *
+     * @return name of the graph
+     */
     public String getName()
     {
         return graphName;
     }
+
+    /**
+     *
+     * @return number of vertexes
+     */
     public int getNbVertex()
     {
         return nbVertex;
     }
+
+    /**
+     *
+     * @return number of edges
+     */
     public int getNbEdge()
     {
         return nbEdge;
     }
 
+    /**
+     * set position to a vertex
+     * @param vertex vertex to set position
+     * @param posX position x to set
+     * @param posY position y to set
+     */
     public void setPosOfVertex(String vertex, int posX, int posY)
     {
         NodeList nodes = racine.getChildNodes();
@@ -220,8 +288,8 @@ public class GraphDom {
 
     /**
      * get the position of vertex by his number
-     * @param index
-     * @return
+     * @param index index of the vertex
+     * @return Point2d containing the position x, y of the vertex
      */
     public Point2D getPosOfVertex(int index)
     {
@@ -234,8 +302,8 @@ public class GraphDom {
 
     /**
      * get the position of vertex by his name
-     * @param name
-     * @return
+     * @param name name of the vertex
+     * @return Point2d containing the position x, y of the vertex
      */
     public Point2D getPosOfVertex(String name)
     {
@@ -253,21 +321,45 @@ public class GraphDom {
 
         return null;
     }
+
+    /**
+     *
+     * @param index index of the node
+     * @return name of the child of racine at index index
+     */
     public String getName(int index)
     {
         Element node = (Element) racine.getChildNodes().item(index);
         return node.getAttribute(ATTRIBUTNAME);
     }
+
+    /**
+     *
+     * @param index index of vertex in vertexes (list)
+     * @return vertex name
+     */
     public String getVertexName(int index)
     {
         return vertexes.get(index).getAttribute(ATTRIBUTNAME);
     }
+
+    /**
+     *
+     * @param index index of racine child
+     * @return node name
+     */
     public String getNodeType(int index)
     {
         NodeList nodes = racine.getChildNodes();
         Element currentNode = (Element) nodes.item(index);
         return currentNode.getNodeName();
     }
+
+    /**
+     *
+     * @param index index of edges (list of edges)
+     * @return Line the edge a specified index
+     */
     public Line getEdge(int index)
     {
         Element edge = (Element) edges.get(index);
@@ -284,9 +376,13 @@ public class GraphDom {
         return new Line(startX, startY, endX, endY);
     }
 
+    /**
+     * delete the vertex at the index index
+     * @param index position of vertex to delete
+     */
     public void deleteVertex(int index)
     {
-
+        //lists of differents elements from the document, by tag name
         NodeList listEdges    = document.getElementsByTagName(EDGE);
         NodeList listvertexes = document.getElementsByTagName(VERTEX);
         NodeList listGroups   = document.getElementsByTagName(EDGEGROUP);
