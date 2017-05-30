@@ -5,7 +5,6 @@
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
@@ -32,6 +31,7 @@
                 <Button id="buttonStop" minHeight="22.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="11.0" />
                 <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" onAction="#handlePause" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="11.0" />
                 <Button alignment="TOP_RIGHT" layoutX="518.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="28.0" prefWidth="159.0" styleClass="algoButton" text="New From Result" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="5.0" />
+            <Button fx:id="cameraButton" focusTraversable="false" layoutX="473.0" layoutY="3.0" maxHeight="35.0" maxWidth="38.0" minHeight="24.0" minWidth="24.0" mnemonicParsing="false" onAction="#handleScreenShot" prefHeight="35.0" prefWidth="39.0" />
             </children>
         </AnchorPane>
     </top>
@@ -59,11 +59,7 @@
     <center>
         <SplitPane dividerPositions="0.7336683417085427" orientation="VERTICAL" prefHeight="376.0" prefWidth="589.0" BorderPane.alignment="CENTER">
             <items>
-                <AnchorPane fx:id="centerAlgoPage" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="centerPage">
-                    <children>
-                        <Slider fx:id="slider" layoutX="445.0" layoutY="270.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="2.0" />
-                    </children>
-                </AnchorPane>
+                <AnchorPane fx:id="centerAlgoPage" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="centerPage" />
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                     <children>
                         <SplitPane id="bottomSplit" fx:id="splitPane" dividerPositions="0.2" layoutX="-1.0" layoutY="-1.0" prefHeight="105.0" prefWidth="587.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
