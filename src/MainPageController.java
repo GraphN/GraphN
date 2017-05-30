@@ -280,7 +280,7 @@ public class MainPageController
     }
 
     public void handleNewFromAlgoPage(GraphDom graphAlgoPage){
-
+/*
             //if no graphDom had been selected, we do nothing
             if(graphAlgoPage == null) return;
 
@@ -325,20 +325,21 @@ public class MainPageController
             while (i < graphAlgoPage.getNbGroup())
             {
                 ArrayList<DrawEdge> edges = graphAlgoPage.getDrawEdges(i);
-                drawEdgesGroupList.add(edges);
+                tabDrawEdgesList.get(cTab).add(edges);
 
                 for(int j = 0; j < edges.size(); j++)
                 {
                     Group cirleStart = (Group) getChildrenVertexById(pane, graphAlgoPage.getEdgeStartName(i, j));
                     Group cirleEnd   = (Group) getChildrenVertexById(pane, graphAlgoPage.getEdgeEndName(i, j));
 
-                    moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, i, j, pane);
+                    moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, i, j, tab, pane);
                     pane.getChildren().add(1, edges.get(j).getRoot());
                 }
                 i++;
             }
 
             tabPane.getTabs().add(tab);
+            */
     }
 
     @FXML

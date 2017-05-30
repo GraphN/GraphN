@@ -90,7 +90,7 @@ public class Prim implements AlgorithmVisitor{
 
             double weight = 0.0;
             for (Step e : path)
-                if (e != null)
+                if (e.getEdge() != null)
                     weight += e.getEdge().getWeigth();
 
             Step step = new Step();
