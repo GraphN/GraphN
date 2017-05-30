@@ -24,9 +24,13 @@ import javafx.stage.FileChooser;
 import mainProgram.MainApp;
 
 import javax.imageio.ImageIO;
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -652,7 +656,7 @@ public class AlgorithmPageController {
         fileChooser.getExtensionFilters().add(jpgFilter);
 
         //set initial directory
-        File directory = new File("./src/savedGraphsXML");
+        File directory = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
         fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
