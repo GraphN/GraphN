@@ -13,20 +13,12 @@ import java.util.LinkedList;
  */
 public interface Serialiseur {
     /**
-     * Export the directed graph g with the specified path in the specified file
-     * @param g the directed graph to export
+     * Export the graph g with the specified path in the specified file
+     * @param g the graph to export
      * @param path the path to export
      * @param outputFile the file to use
      */
-    void exportGraph(DiGraph g, LinkedList<Step> path, String outputFile);
-
-    /**
-     * Export the undirected graph g with the specified path in the specified file
-     * @param g the undirected graph to export
-     * @param path the path to export
-     * @param outputFile the file to use
-     */
-    void exportGraph(UDiGraph g, LinkedList<Step> path, String outputFile);
+    void exportGraph(Graph g, LinkedList<Step> path, String outputFile);
 
     /**
      * Import a graph from a specified input file, use a specified stockageType

@@ -19,28 +19,19 @@ public class ListEdgesTXT implements Serialiseur {
     static final String EXTENSION_FILE = ".txt";
 
     /**
-     * Export the directed graph g with the specified path in the specified file
-     * @param g the directed graph to export
+     * Export the graph g with the specified path in the specified file
+     * @param g the graph to export
      * @param path the path to export
      * @param outputFile the file to use
      */
-    public void exportGraph(DiGraph g, LinkedList<Step> path, String outputFile){
-        export(g, path, outputFile, "DIRECTED");
-    }
-
-    /**
-     * Export the undirected graph g with the specified path in the specified file
-     * @param g the undirected graph to export
-     * @param path the path to export
-     * @param outputFile the file to use
-     */
-    public void exportGraph(UDiGraph g, LinkedList<Step> path, String outputFile){
-        export(g, path, outputFile, "UNDIRECTED");
+    public void exportGraph(Graph g, LinkedList<Step> path, String outputFile){
+        String type = g instanceof DiGraph ? "DIRECTED" : "UNDIRECTED";
+        export(g, path, outputFile, type);
     }
 
     /**
      * Export the graph g with the specified path in the specified file
-     * @param g the undirected graph to export
+     * @param g the graph to export
      * @param path the path to export
      * @param outputFile the file to use
      * @param type the type of the graph
