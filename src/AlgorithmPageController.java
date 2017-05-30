@@ -461,8 +461,8 @@ public class AlgorithmPageController {
                             && (test.getText() == null || test.getText() != null && (edgeList.get(i).getText().toString().equals(test.getText().toString())))) {
                         edgeList.get(i).setColored();
 
-                        // Essais pour newFromResult
-                        boolean startExists = false, endExists = false;
+                        // FIXME: Essais pour newFromResult
+                       /* boolean startExists = false, endExists = false;
                         System.out.println("TESTEU" +graphNewFromResult.getNbVertex());
                         for(int j = 0; i<=graphNewFromResult.getNbVertex(); i++) {
                             if (graphNewFromResult.getPosOfVertex(j) == new Point2D((int) edgeList.get(i).getStartX(), (int) edgeList.get(i).getStartY()))
@@ -474,7 +474,7 @@ public class AlgorithmPageController {
                             graphNewFromResult.addVertex((int) edgeList.get(i).getStartX(), (int) edgeList.get(i).getStartY());
                         if(!endExists)
                             graphNewFromResult.addVertex((int) edgeList.get(i).getEndX(), (int) edgeList.get(i).getEndX());
-                        graphNewFromResult.addEdge(graphNewFromResult.getVertexName(0), graphNewFromResult.getVertexName(1));
+                        graphNewFromResult.addEdge(graphNewFromResult.getVertexName(0), graphNewFromResult.getVertexName(1));*/
                     }
                 }
             }
