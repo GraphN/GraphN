@@ -60,14 +60,8 @@ public class AlgorithmPageController {
     @FXML
     private ListView<String> structure;
 
-    public void setGraph(GraphDom g)
-    {
-        centerAlgoPage.getChildren().add(recreateAnchorWithXML(g));
-    }
-
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-    }
+    @FXML
+    private Slider slider;
 
     ArrayList<DrawEdge> edgeList;
 
@@ -88,10 +82,14 @@ public class AlgorithmPageController {
     @FXML
     private SplitPane splitPane;
 
+    /**
+     *  Function called when the window is show
+     *  work like a default constructor for JavaFx class
+     */
     @FXML
     private void initialize()
     {
-        initZoom();
+        //initZoom();
         edgeList = new ArrayList<DrawEdge>();
         vertexList = new ArrayList<>();
         timer = new Timer();
@@ -151,10 +149,10 @@ public class AlgorithmPageController {
 
         });
     }
-    @FXML
-    private Slider slider;
 
-
+    /**
+     *  Create a subgraph with the
+      */
     @FXML
     private void handleNewFromResult(){
         mainApp.newFromAlgoPage(graphNewFromResult);
@@ -296,7 +294,7 @@ public class AlgorithmPageController {
         }
     }
 
-    private void initZoom(){
+    /*private void initZoom(){
         slider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> ov,
@@ -305,7 +303,7 @@ public class AlgorithmPageController {
                 System.out.println(new_val);
             }
         });
-    }
+    }*/
 
 
     private AnchorPane recreateAnchorWithXML(GraphDom graphD) {
@@ -560,6 +558,24 @@ public class AlgorithmPageController {
         kruskall.setDisable(false);
         kruskall.setSelected(false);
 
+    }
+
+    /**
+     * Set the graph builded in the main page
+     * @param g graphDom
+     */
+    public void setGraph(GraphDom g)
+    {
+        centerAlgoPage.getChildren().add(recreateAnchorWithXML(g));
+    }
+
+    /**
+     * Referency to the mainApp for lauching the start and end vertex question
+     * and the newFromResult
+     * @param mainApp
+     */
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
     }
 
     /**

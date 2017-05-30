@@ -87,6 +87,15 @@
 -fx-font-size: 11pt;
 }*/
 
+#cameraButton{
+-fx-background-image: url('../img/camera.png');
+-fx-background-color: #232323;
+}
+
+#cameraButton:hover{
+-fx-background-image: url("../img/camera-on.png");
+-fx-background-color: #232323;
+}
 
 .split-pane *.split-pane-divider {
     -fx-padding: 0 1 0 1;
