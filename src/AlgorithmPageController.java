@@ -160,23 +160,34 @@ public class AlgorithmPageController {
     }
 
     /**
-     *  Create a subgraph with the
+     *  Open the subgraph returned by the algorithm in the mainPage.
       */
     @FXML
     private void handleNewFromResult(){
         mainApp.newFromAlgoPage(graphNewFromResult);
     }
 
+    /**
+     * Run colorNextEdge until the end of the graph with a period of 2s
+     */
     @FXML
     private void handlePlayTimer(){
         timer.schedule(new TimerListener(), 1000, 2000);
     }
+
+    /**
+     * Stop the timer
+     */
     @FXML
     private void handlePause(){
         timer.cancel();
         // Once a timer is cancelled we can't reuse it
         timer = new Timer();
     }
+
+    /**
+     * Reset the page at the initial state
+     */
     @FXML
     private void handleStop(){
         for (DrawEdge edge : edgeList) {
@@ -201,30 +212,46 @@ public class AlgorithmPageController {
 
         try{graphNewFromResult = new GraphDom(graphDom.getName());}
         catch (Exception e){System.err.println("ParserException");}
-
     }
 
+    /**
+     * Color all edges
+     */
     @FXML
     private void handlePlay(){
         while(colorNextEdge());
     }
+
+    /**
+     * Color one edge
+     */
     @FXML
     private void handleStepByStep(){
         colorNextEdge();
     }
 
+
+    /**
+     * Apply BFS Algorithm
+     */
     @FXML
-    private void handleKruskall(){
+    private void handleBFS(){
         try {
             setDividerPosition(0.2);
-            this.path = graph.accept(new Kruskall(), null, null);
-            desactivateButtons(kruskall);
-        } catch (Exception e){
+            int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
+            this.path = graph.accept(new BFS(), graph.getVertex(startVertex), null);
+
+            setColoredVertex(startVertex);
+            desactivateButtons(bfs);
+        }catch (Exception e){
             e.printStackTrace();
             alertMessage(e.getMessage());
             handleStop();
         }
     }
+    /**
+     * Apply DFS Algorithm
+     */
     @FXML
     private void handleDFS(){
         try {
@@ -241,15 +268,19 @@ public class AlgorithmPageController {
             handleStop();
         }
     }
+    /**
+     * Apply Dijkstra Algorithm
+     */
     @FXML
-    private void handleBFS(){
+    private void handleDijkstra(){
         try {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
-            this.path = graph.accept(new BFS(), graph.getVertex(startVertex), null);
-
+            int endVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "End Vertex");
+            //pane.getChildren().remove(edgeList.get(0).getRoot());
+            this.path = graph.accept(new Dijkstra(), graph.getVertex(startVertex), graph.getVertex(endVertex));
             setColoredVertex(startVertex);
-            desactivateButtons(bfs);
+            desactivateButtons(dijkstra);
         }catch (Exception e){
             e.printStackTrace();
             alertMessage(e.getMessage());
@@ -257,6 +288,39 @@ public class AlgorithmPageController {
         }
     }
 
+    /**
+     * Apply Kruskal Algorithm
+     */
+    @FXML
+    private void handleKruskall(){
+        try {
+            setDividerPosition(0.2);
+            this.path = graph.accept(new Kruskall(), null, null);
+            desactivateButtons(kruskall);
+        } catch (Exception e){
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            handleStop();
+        }
+    }
+    /**
+     * Apply Prim Algorithm
+     */
+    @FXML
+    private void handlePrim(){
+        try {
+            setDividerPosition(0.2);
+            this.path = graph.accept(new Prim(), null, null);
+            desactivateButtons(prim);
+        }catch (Exception e){
+            e.printStackTrace();
+            alertMessage(e.getMessage());
+            handleStop();
+        }
+    }
+    /**
+     * Apply Bellman Algorithm
+     */
     @FXML
     private void handleBellman(){
         try {
@@ -274,47 +338,13 @@ public class AlgorithmPageController {
             handleStop();
         }
     }
-    @FXML
-    private void handleDijkstra(){
-        try {
-            setDividerPosition(0.2);
-            int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
-            int endVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "End Vertex");
-            //pane.getChildren().remove(edgeList.get(0).getRoot());
-            this.path = graph.accept(new Dijkstra(), graph.getVertex(startVertex), graph.getVertex(endVertex));
-            setColoredVertex(startVertex);
-            desactivateButtons(dijkstra);
-        }catch (Exception e){
-            e.printStackTrace();
-            alertMessage(e.getMessage());
-            handleStop();
-        }
-    }
-    @FXML
-    private void handlePrim(){
-        try {
-            setDividerPosition(0.2);
-            this.path = graph.accept(new Prim(), null, null);
-            desactivateButtons(prim);
-        }catch (Exception e){
-            e.printStackTrace();
-            alertMessage(e.getMessage());
-            handleStop();
-        }
-    }
 
-    /*private void initZoom(){
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov,
-                                Number old_val, Number new_val) {
-                // Do something
-                System.out.println(new_val);
-            }
-        });
-    }*/
-
-
+    /**
+     * Add all the edges and vertexes from the graphDom create in the main page on a new pane.
+     * Then the pane is added to the page.
+     * @param graphD
+     * @return an AnchorPane
+     */
     private AnchorPane recreateAnchorWithXML(GraphDom graphD) {
         //AnchorPane pane = new AnchorPane();
 
@@ -383,14 +413,28 @@ public class AlgorithmPageController {
         return pane;
     }
 
+    /**
+     * Set a vertex to the color define in the start of the
+     * @param i index of the vertex
+     */
     void setColoredVertex(int i){
         Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
         circle.setFill(COLORED);
     }
+    /**
+     * Set a vertex to the color define in the start of the
+     * @param i index of the vertex
+     */
     void setUncoloredVertex(int i){
         Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
         circle.setFill(UNCOLORED);
     }
+
+    /**
+     * Add a weight to an vertex
+     * @param i index of the vertex
+     * @param weight weight of the vertex
+     */
     void addTextVertex(int i, String weight){
         removeTextVertex(i);
         Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
@@ -399,43 +443,15 @@ public class AlgorithmPageController {
         text.setTranslateY(circle.getTranslateY()-20);
         vertexList.get(i).getChildren().add(text);
     }
+
+    /**
+     * remove the weight on an edge
+     * @param i index of the edge
+     */
+
     void removeTextVertex(int i){
         if (vertexList.get(i).getChildren().size() > 2)
             vertexList.get(i).getChildren().remove(2);
-    }
-
-    private Circle createVertexShape(double x, double y, String id)
-    {
-        Circle circle_base = new Circle(10.0f, Color.web("da5630"));
-        circle_base.setId(id);
-        circle_base.setTranslateX(x);
-        circle_base.setTranslateY(y);
-        return circle_base;
-    }
-    private Text createVertexNumber(double x, double y, String id){
-        //number of the vertex
-        int nbVertex = Integer.parseInt(id.replaceAll("[\\D]", ""));
-        Text text = new Text(""+nbVertex);
-        //text.setFill(Color.WHITE);
-        text.setId(id);
-        text.setBoundsType(TextBoundsType.VISUAL);
-        //centering the numbers
-        if(nbVertex<10){
-            text.setTranslateX(x-4.5);
-            text.setTranslateY(y+6);
-        }else{
-            text.setTranslateX(x-8.5);
-            text.setTranslateY(y+6);
-        }
-
-        return text;
-    }
-    private List<Shape> createVertex (double x, double y, String id){
-        ArrayList<Shape> node = new ArrayList<>();
-        node.add(createVertexShape(x,y,id));
-        node.add(createVertexNumber(x,y,id));
-
-        return node;
     }
 
     private Boolean colorNextEdge() {
