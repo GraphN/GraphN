@@ -267,7 +267,7 @@ public class ImportController {
     void alertMessage(String message){
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+        dialogPane.getStylesheets().add(getClass().getResource("/assets/css/alert.css").toExternalForm());
         dialogPane.getStyleClass().add("myDialog");
         alert.showAndWait();
     }
