@@ -1251,8 +1251,12 @@ public class MainPageController
         slider.setMin(1.);
         slider.setMax(5.);
         slider.setValue(1.);
+
+        // FIXME: Slider desactivation
+        slider.setDisable(true);
+        slider.setVisible(false);
         //listener when the value of slider change
-        slider.valueProperty().addListener(new ChangeListener<Number>()
+        /*slider.valueProperty().addListener(new ChangeListener<Number>()
         {
             @Override
             public void changed(ObservableValue<? extends Number> ov,
@@ -1264,10 +1268,10 @@ public class MainPageController
                 pane.setTranslateX(-((paneBack.getWidth()*(slider.getValue()-1)) / 2));
                 pane.setTranslateY(-((paneBack.getHeight()*(slider.getValue()-1)) / 2));
             }
-        });
+        });*/
 
         // Scroll de la souris zoom
-        paneBack.setOnScroll(new EventHandler<ScrollEvent>() {
+        /*paneBack.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
                 if(event.getDeltaY()>0)
@@ -1277,7 +1281,7 @@ public class MainPageController
                 else
                     slider.setValue(slider.getValue()*0.95);
             }
-        });
+        });*/
 
         //change the view, if you press the right arrow, the main page move right etc
         paneBack.setOnKeyPressed(new EventHandler<KeyEvent>() {
