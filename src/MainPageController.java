@@ -280,7 +280,7 @@ public class MainPageController
     }
 
     public void handleNewFromAlgoPage(GraphDom graphAlgoPage){
-
+/*
             //if no graphDom had been selected, we do nothing
             if(graphAlgoPage == null) return;
 
@@ -339,6 +339,7 @@ public class MainPageController
             }
 
             tabPane.getTabs().add(tab);
+            */
     }
 
     @FXML
