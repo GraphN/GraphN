@@ -14,12 +14,12 @@ import java.util.LinkedList;
  */
 public class Bellman_Ford implements AlgorithmVisitor{
     private LinkedList<Step> path;
-    private double[] distTo;               // distTo[v] = distance  of shortest s->v path
-    private Edge[] edgeTo;         // edgeTo[v] = last edge on shortest s->v path
-    private boolean[] onQueue;             // onQueue[v] = is v currently on the queue?
-    private LinkedList<Integer> queue;          // queue of vertices to relax
-    private int cost;                      // number of calls to relax()
-    private LinkedList<Edge> cycle;  // negative cycle (or null if no such cycle)
+    private double[] distTo;
+    private Edge[] edgeTo;
+    private boolean[] onQueue;
+    private LinkedList<Integer> queue;
+    private int cost;
+    private LinkedList<Edge> cycle;
 
     private DiGraph g;
     Vertex source;
@@ -41,7 +41,7 @@ public class Bellman_Ford implements AlgorithmVisitor{
     private void pathTo(Vertex v){
         for (Edge e = edgeTo[v.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
             // On notifie que la distance min a changer
-            String message = "On selectionne l'arete "  + e +  "\n\n\n";
+            String message = "On selectionne l'arete " + source.getId() + e +  "\n\n\n";
             String structures = "distTo : " + Arrays.toString(distTo)
                     + "\nedgeTo : " + Arrays.toString(edgeTo)
                     + "\nonQueue : " + Arrays.toString(onQueue)
@@ -51,7 +51,6 @@ public class Bellman_Ford implements AlgorithmVisitor{
             step.setMessage(message);
             step.setStructures(structures);
             step.setEdge(e);
-            step.setVertex(e.getTo());
 
             path.add(step);
         }
@@ -59,13 +58,14 @@ public class Bellman_Ford implements AlgorithmVisitor{
 
     /**
      * Relax a Vertex, part of the bellman ford algorithm
+     * @param G the graph to relax
      * @param v the vertex to relax
      */
-    private void relax(Vertex v) throws Exception{
-        for (Edge e : g.adjacentEdges(g.getVertex(v.getId()))) {
+    private void relax(Graph G, int v) throws Exception{
+        for (Edge e : G.adjacentEdges(G.getVertex(v))) {
             int w = e.getTo().getId();
-            if (distTo[w] > distTo[v.getId()] + e.getWeigth()) {
-                distTo[w] = distTo[v.getId()] + e.getWeigth();
+            if (distTo[w] > distTo[v] + e.getWeigth()) {
+                distTo[w] = distTo[v] + e.getWeigth();
                 edgeTo[w] = e;
 
                 // On notifie que la distance min a changer
@@ -78,8 +78,8 @@ public class Bellman_Ford implements AlgorithmVisitor{
                 Step step = new Step();
                 step.setMessage(message);
                 step.setStructures(structures);
-                g.getVertex(w).setDescription(distTo[w] + "");
-                //step.setVertex(g.getVertex(w));
+                G.getVertex(w).setDescription(distTo[w] + "");
+                step.setVertex(G.getVertex(w));
 
                 path.add(step);
 
@@ -89,12 +89,21 @@ public class Bellman_Ford implements AlgorithmVisitor{
                     onQueue[w] = true;
                 }
             }
-            if (cost++ % g.V() == 0) {
+            if (cost++ % G.V() == 0) {
                 findNegativeCycle();
-                if (cycle != null) return;  // found a negative cycle
+                if (hasNegativeCycle()) return;  // found a negative cycle
             }
         }
     }
+
+    /**
+     * Return true if a negative cycle is find
+     * @return true if a negative cycle is find
+     */
+    private boolean hasNegativeCycle() {
+        return cycle != null;
+    }
+
 
     /**
      * Find negative cycles on a partiel graph of current graph
@@ -115,6 +124,7 @@ public class Bellman_Ford implements AlgorithmVisitor{
                     "Circuit : " + cycle);
         }
     }
+
 
     /**
      * visit function, apply an algorithm on a Undirected Graph, Bellman Ford does not support Undirected graph
@@ -154,22 +164,24 @@ public class Bellman_Ford implements AlgorithmVisitor{
         queue = new LinkedList<>();
         queue.addLast(source.getId());
         onQueue[source.getId()] = true;
-        while (!queue.isEmpty() && cycle != null) {
+        while (!queue.isEmpty() && !hasNegativeCycle()) {
             int v = queue.removeLast();
             onQueue[v] = false;
-            relax(g.getVertex(v));
+            relax(g, v);
         }
+
+        if (hasNegativeCycle()) return path;
 
         // On retourne soit tous les plus court chemin depuis source soit le plus court chemin de source a target
         if (target != null) {
-            if (!hasPathTo(target))
-                throw new Exception("Il n'y a pas de chemin de " + source.getId() + " a " + target.getId());
-            else
+            if (hasPathTo(target))
                 pathTo(target);
+            else
+                throw new Exception("Il n'y a pas de chemin de " + source.getId() + " a " + target.getId());
         } else {
             for (Vertex v : g.getVertexsList())
                 if (v != source)
-                    if(hasPathTo(v))
+                    if (hasPathTo(v))
                         pathTo(v);
         }
 
