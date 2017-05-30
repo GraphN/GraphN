@@ -529,11 +529,11 @@ public class AlgorithmPageController {
             hasChange = true;
         }
 
+        // fill the vertex when visited
         if (v != null) {
             setColoredVertex(v.getId());
             addTextVertex(v.getId(), v.getDescription());
             hasChange = true;
-
         }
 
         // Update the descriptions
