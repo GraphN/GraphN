@@ -481,17 +481,6 @@ public class MainPageController
 
         root.getChildren().add(page);
         helpPage.show();
-
-
-        /*Alert helpPage        = new Alert(Alert.AlertType.INFORMATION);
-        helpPage.setTitle("Vous avez demandé de l'aide?");
-        DialogPane dialogPane = helpPage.getDialogPane();
-        dialogPane.setMinSize(500,500);
-        dialogPane.setContent();
-        dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
-        dialogPane.getStyleClass().add("myDialog");
-        helpPage.showAndWait();
-        */
     }
 
     @FXML
