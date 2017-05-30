@@ -1,3 +1,5 @@
+package view;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -5,8 +7,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.awt.*;
 
 
 /**
@@ -46,7 +46,7 @@ public class VertexController {
         this.text.setText(text);
     }
 
-    int getVertex(){
+    public int getVertex(){
         return vertex;
     }
     public void setStage(Stage dialogStage){

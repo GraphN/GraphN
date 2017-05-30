@@ -1,13 +1,9 @@
 package graph.Serialisation;
 
 import Algorithms.Utils.Step;
-import graph.DiGraph;
-import graph.Edge;
 import graph.Graph;
 import graph.Stockage.StockageType;
-import graph.UDiGraph;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 /**

@@ -1,4 +1,4 @@
-/**
+package view; /**
  * Created by LBX on 31/03/2017.
  */
 
@@ -30,6 +30,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import mainProgram.MainApp;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
@@ -214,7 +215,7 @@ public class MainPageController
             return;
         }
 
-        //calling the showAlgoPage, whit the current GraphDom (graphxml)
+        //calling the showAlgoPage, whit the current view.GraphDom (graphxml)
         mainApp.showAlgoPage(graphXml);
     }
 
@@ -356,12 +357,12 @@ public class MainPageController
 
             tabMap.put(tab,graphAlgoPage.getGraphType());
 
-            DrawEdge drawEdge = null;
+            view.DrawEdge drawEdge = null;
 
             i = 0;
             while (i < graphAlgoPage.getNbGroup())
             {
-                ArrayList<DrawEdge> edges = graphAlgoPage.getDrawEdges(i);
+                ArrayList<view.DrawEdge> edges = graphAlgoPage.getDrawEdges(i);
                 tabDrawEdgesList.get(cTab).add(edges);
 
                 for(int j = 0; j < edges.size(); j++)
@@ -432,7 +433,7 @@ public class MainPageController
      * when we click the open Button, we call showOpenPage of the mainApp,
      * to have popup to open the file.
      *  when its done, we verify if the graphDom is ok, if it is we have to create
-     *  a Tab and read GraphDom to construct graphically its components
+     *  a Tab and read view.GraphDom to construct graphically its components
      */
     @FXML
     private void handleOpen()
@@ -443,7 +444,7 @@ public class MainPageController
             //if no graphDom had been selected, we do nothing
             if(graphOpen == null) return;
 
-            //adding this GraphDom to the list
+            //adding this view.GraphDom to the list
             listGraphXml.add(graphOpen);
 
             //creating new Tab whit the gxml Name
@@ -469,11 +470,11 @@ public class MainPageController
             AnchorPane paneBack = (AnchorPane) tab.getContent();
             AnchorPane pane     = (AnchorPane) paneBack.getChildren().get(0);
 
-            //adding all vertex from GraphDom
+            //adding all vertex from view.GraphDom
             int i = 0;
             while (i <= graphOpen.getNbVertex())
             {
-                //getting position of vertexes in the GraphDom
+                //getting position of vertexes in the view.GraphDom
                 Point2D point = graphOpen.getPosOfVertex(i);
                 int x = (int) point.getX();
                 int y = (int) point.getY();
@@ -492,7 +493,7 @@ public class MainPageController
 
             DrawEdge drawEdge = null;
 
-            //adding all edges of the GraphDom
+            //adding all edges of the view.GraphDom
             i = 0;
             while (i < graphOpen.getNbGroup())
             {

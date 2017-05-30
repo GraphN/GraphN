@@ -6,7 +6,6 @@ import graph.Stockage.StockageType;
 
 import java.io.*;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 /**
  * Created by francoisquellec on 17.05.17.

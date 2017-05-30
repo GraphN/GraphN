@@ -1,7 +1,5 @@
 package graph;
 
-import java.util.ArrayList;
-
 /**
  * Created by Adrian on 22.03.2017.
  */

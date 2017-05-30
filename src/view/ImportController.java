@@ -1,3 +1,5 @@
+package view;
+
 import Algorithms.*;
 import Algorithms.Utils.Step;
 import graph.Graph;
@@ -8,6 +10,7 @@ import graph.Stockage.StockageType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import mainProgram.MainApp;
 
 import java.io.File;
 import java.util.Arrays;
