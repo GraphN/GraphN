@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -207,7 +208,7 @@ public class ImportController {
         fileChooser.getExtensionFilters().add(txtFilter);
 
         //set initial directory
-        File directory = new File("./DataTest");
+        File directory = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
         fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
@@ -228,7 +229,7 @@ public class ImportController {
         fileChooser.getExtensionFilters().add(txtFilter);
 
         //set initial directory
-        File directory = new File("./DataTest");
+        File directory = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
         fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());

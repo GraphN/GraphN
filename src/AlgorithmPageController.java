@@ -4,8 +4,6 @@ import graph.*;
 import graph.Stockage.EdgeListStockage;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -18,16 +16,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
-import javax.xml.transform.TransformerException;
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -653,7 +653,7 @@ public class AlgorithmPageController {
         fileChooser.getExtensionFilters().add(jpgFilter);
 
         //set initial directory
-        File directory = new File("./src/savedGraphsXML");
+        File directory = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
         fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
