@@ -132,7 +132,9 @@ public class MainPageController
     }
 
     /**
-     *
+     * called when, the window is shown.
+     * instanciation of some variables
+     * and call hadleNew to create first Tab
      */
     @FXML
     private void initialize()
@@ -176,10 +178,21 @@ public class MainPageController
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
+
+    /**
+     *
+     * @param b boolean to choose if greyMain, the principal AnchorPane, is visible or not
+     */
     public void setGreyMain(Boolean b)
     {
         greyMain.setVisible(b);
     }
+
+    /**
+     * Called when click on the Launch button (up-right)
+     * if everything is oke, call the showAlgoPage() of the mainApp,
+     * to launch the new window
+     */
     @FXML
     private void handleLaunch()
     {
@@ -187,6 +200,8 @@ public class MainPageController
         Tab currentTab    = (Tab)tabPane.getSelectionModel().getSelectedItem();
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
 
+        //if number of vertex in the xml is -1, (no vertexes in the graph)
+        // we cannot launch the page of graph's resolution, so alert message pops up
         if(graphXml.getNbVertex() < 0)
         {
             Alert alert           = new Alert(Alert.AlertType.ERROR, "Votre graphe est vide");
@@ -198,8 +213,14 @@ public class MainPageController
 
             return;
         }
+
+        //calling the showAlgoPage, whit the current GraphDom (graphxml)
         mainApp.showAlgoPage(graphXml);
     }
+
+    /**
+     * create a new Tab whit a OnClosedListener
+     */
     @FXML
     private void handleNew()
     {
@@ -208,16 +229,21 @@ public class MainPageController
 
         tab.setOnClosed(new EventHandler<Event>(){
             @Override
-            public void handle(Event e){
+            public void handle(Event e)
+            {
+                //if we closed the last tab => we create a new Tab,
+                // we don't want to have no Tab in the TabPane
                 if(tabPane.getTabs().size() < 1) {
                     tabDrawEdgesList.remove(cTab);
                     handleNew();
                 }
             }
         });
+
         tabPane.getTabs().add(tab);
         cTab = tab;
         tabDrawEdgesList.put(tab, new ArrayList());
+
         //creation of the xml file of this tab
         try {
             GraphDom currentGraphDom = new GraphDom(tab.getId());
@@ -230,6 +256,13 @@ public class MainPageController
         }
     }
 
+    /**
+     * to create a vertex, and his number, 0.... n-1
+     * @param x position x of the vertex to create
+     * @param y position y of the vertex to create
+     * @param id name of the vertex to create
+     * @return group constitued of a Circle (the vertex), and a Text on it (the number of the vertex)
+     */
     private Group createVertex (double x, double y, String id){
 
         Circle circle_base = new Circle(RAYON_CERCLE, Color.web(ORANGECOLOR));
@@ -240,8 +273,10 @@ public class MainPageController
         AnchorPane currentPage = (AnchorPane) currentTab.getContent();
         AnchorPane currentPane = (AnchorPane) currentPage.getChildren().get(0);
 
+        //we get the current slider, of the current Tab (the slider of other Tabs can be in other positions)
         Slider currentSlider = (Slider) currentPage.getChildren().get(1);
 
+        //adding Event Listeners to the circle
         circle_base.setOnMousePressed(nodeOnMousePressedEventHandler);
         circle_base.setOnMouseDragged(nodeOnMouseDraggedEventHandler);
         circle_base.setOnMouseEntered(nodeOnMouseEnteredEventHandler);
@@ -265,11 +300,13 @@ public class MainPageController
             text.setTranslateY(textTranslateY);
         }
 
+        //adding Event Listeners to the Text
         text.setOnMousePressed(nodeOnMousePressedEventHandler);
         text.setOnMouseDragged(nodeOnMouseDraggedEventHandler);
         text.setOnMouseEntered(nodeOnMouseEnteredEventHandler);
         text.setOnMouseReleased(nodeOnMouseReleasedEventHandler);
 
+        //creating the Group
         Group vertex = new Group();
         vertex.getChildren().addAll(circle_base,text);
         vertex.setId(id);
@@ -342,10 +379,20 @@ public class MainPageController
             */
     }
 
+    /**
+     * called when we click on the Pane (center of the page)
+     * If some vertex adding button is active, we have to add
+     * a vertex at the position of the click
+     *
+     * @param mouseEvent The mouse Event when we clicked on the pane. critical info, of position etc.
+     */
     @FXML
-    private void panePressed(MouseEvent mouseEvent){
+    private void panePressed(MouseEvent mouseEvent)
+    {
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         cTab = currentTab;
+
+        //if the vertex button is active (once or always)
         if(vertex1Active || vertex1ActiveOnce)
         {
             //adding this vertex to the xml file
@@ -355,7 +402,7 @@ public class MainPageController
             String nameOfVertex = PREFIXVERTEXNAME + graphXml.getNbVertex();
 
             AnchorPane currPage = (AnchorPane) currentTab.getContent();
-            AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
+            AnchorPane currP    = (AnchorPane) currPage.getChildren().get(0);
 
             Group node = createVertex(mouseEvent.getX(), mouseEvent.getY(), nameOfVertex);
             currP.getChildren().add(node);
@@ -368,14 +415,25 @@ public class MainPageController
         }
     }
 
+    /**
+     * when we click the save Button, we call showSavePage of the mainApp,
+     * to have popup to save the file
+     */
     @FXML
     private void handleSave()
     {
         Tab currentTab    = (Tab)tabPane.getSelectionModel().getSelectedItem();
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+
         mainApp.showSavePage(graphXml);
     }
 
+    /**
+     * when we click the open Button, we call showOpenPage of the mainApp,
+     * to have popup to open the file.
+     *  when its done, we verify if the graphDom is ok, if it is we have to create
+     *  a Tab and read GraphDom to construct graphically its components
+     */
     @FXML
     private void handleOpen()
     {
@@ -385,14 +443,19 @@ public class MainPageController
             //if no graphDom had been selected, we do nothing
             if(graphOpen == null) return;
 
-            //adding this xml to the list
+            //adding this GraphDom to the list
             listGraphXml.add(graphOpen);
+
+            //creating new Tab whit the gxml Name
             Tab tab = createNewTab(graphOpen.getName());
 
+            //onClosed listener of Tab
             tab.setOnClosed(new EventHandler<Event>(){
                 @Override
-                public void handle(Event e){
-                    if(tabPane.getTabs().size() < 1) {
+                public void handle(Event e)
+                {
+                    if(tabPane.getTabs().size() < 1)
+                    {
                         tabDrawEdgesList.remove(cTab);
                         handleNew();
                     }
@@ -406,16 +469,18 @@ public class MainPageController
             AnchorPane paneBack = (AnchorPane) tab.getContent();
             AnchorPane pane     = (AnchorPane) paneBack.getChildren().get(0);
 
-            //adding all vertex from xml
+            //adding all vertex from GraphDom
             int i = 0;
             while (i <= graphOpen.getNbVertex())
             {
+                //getting position of vertexes in the GraphDom
                 Point2D point = graphOpen.getPosOfVertex(i);
                 int x = (int) point.getX();
                 int y = (int) point.getY();
 
                 String name = graphOpen.getVertexName(i);
                 // TODO: Régler le soucis qui fait que le 0 est derrière
+
                 // Create vertex and add it to pane
                 Group node = createVertex(x,y,name);
                 pane.getChildren().add(node);
@@ -427,6 +492,7 @@ public class MainPageController
 
             DrawEdge drawEdge = null;
 
+            //adding all edges of the GraphDom
             i = 0;
             while (i < graphOpen.getNbGroup())
             {
@@ -452,11 +518,18 @@ public class MainPageController
         }
     }
 
+    /**
+     * when the import button is clicked, we call the showImportPage() of mainApp,
+     * to pop up the import Window
+     */
     @FXML
     private void handleImport(){
         mainApp.showImportPage();
     }
 
+    /**
+     * called when helpButton is clicked. Show a new Window whit help
+     */
     @FXML
     private void handleHelp()
     {
@@ -465,8 +538,9 @@ public class MainPageController
         helpPage.setTitle("help Page");
         helpPage.setMinHeight(500);
         helpPage.setMinWidth(500);
+
         ScrollPane page = new ScrollPane();
-        Image help1  = new Image(getClass().getResourceAsStream("assets/img/help1.png"));
+        Image help1     = new Image(getClass().getResourceAsStream("assets/img/help1.png"));
 
         page.setContent(new ImageView(help1));
 
@@ -476,7 +550,7 @@ public class MainPageController
         page.setMaxHeight(600);
         page.setMaxWidth(600);
 
-        Group root = new Group();
+        Group root  = new Group();
         Scene scene = new Scene(root, 600, 600);
         helpPage.setScene(scene);
 
@@ -484,6 +558,12 @@ public class MainPageController
         helpPage.show();
     }
 
+    /**
+     * when the buttton vertex is clicked we have to look at the MouseEvent
+     * to see if its double-clicked or just clicked. We activate some boolean
+     * with the differents mouseEvents
+     * @param mouseEvent mouseEvent of the click
+     */
     @FXML
     private void handleVectrice(MouseEvent mouseEvent)
     {
@@ -516,6 +596,9 @@ public class MainPageController
         }
     }
 
+    /**
+     * called when need to desactivate the activation of vertex button
+     */
     private void desactivateVertex()
     {
         vertex1Active     = false;
@@ -523,6 +606,12 @@ public class MainPageController
         vertex1Button.setId(VERTEX1BUTTON);// desactivate button of orange
     }
 
+    /**
+     * when the buttton edge is clicked we have to look at the MouseEvent
+     * to see if its double-clicked or just clicked. We activate some boolean
+     * with the differents mouseEvents
+     * @param mouseEvent mouseEvent of the click
+     */
     @FXML
     private void handleEdge(MouseEvent mouseEvent)
     {
@@ -530,6 +619,9 @@ public class MainPageController
         String graphType  = tabMap.get(currentTab);
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
 
+        // if graphType is null, it's beacause it's the first time
+        // we click on a edge button (directed, weighted etc.),
+        // so we set the corresponding type to the dom
         if(graphType == null)
         {
             tabMap.put(currentTab, NONDIGRAPH);
@@ -570,6 +662,12 @@ public class MainPageController
         }
     }
 
+    /**
+     * when the buttton weightededge is clicked we have to look at the MouseEvent
+     * to see if its double-clicked or just clicked. We activate some boolean
+     * with the differents mouseEvents
+     * @param mouseEvent mouseEvent of the click
+     */
     @FXML
     private void handleWeightedEdge(MouseEvent mouseEvent)
     {
@@ -577,6 +675,9 @@ public class MainPageController
         String graphType  = tabMap.get(currentTab);
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
 
+        // if graphType is null, it's beacause it's the first time
+        // we click on a edge button (directed, weighted etc.),
+        // so we set the corresponding type to the dom
         if(graphType == null)
         {
             tabMap.put(currentTab, WEIGHTEDNONDIGRAPH);
@@ -618,6 +719,12 @@ public class MainPageController
         }
     }
 
+    /**
+     * when the buttton diedge is clicked we have to look at the MouseEvent
+     * to see if its double-clicked or just clicked. We activate some boolean
+     * with the differents mouseEvents
+     * @param mouseEvent mouseEvent of the click
+     */
     @FXML
     private void handleDiEdge(MouseEvent mouseEvent)
     {
@@ -625,6 +732,9 @@ public class MainPageController
         String graphType  = tabMap.get(currentTab);
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
 
+        // if graphType is null, it's beacause it's the first time
+        // we click on a diedge button (directed, weighted etc.),
+        // so we set the corresponding type to the dom
         if(graphType == null)
         {
             tabMap.put(currentTab, DIGRAPH);
@@ -665,6 +775,12 @@ public class MainPageController
         }
     }
 
+    /**
+     * when the buttton weighteddiedge is clicked we have to look at the MouseEvent
+     * to see if its double-clicked or just clicked. We activate some boolean
+     * with the differents mouseEvents
+     * @param mouseEvent mouseEvent of the click
+     */
     @FXML
     private void handleWeightedDiEdge(MouseEvent mouseEvent)
     {
@@ -672,6 +788,9 @@ public class MainPageController
         String graphType  = tabMap.get(currentTab);
         GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
 
+        // if graphType is null, it's beacause it's the first time
+        // we click on a weighteddiedge button (directed, weighted etc.),
+        // so we set the corresponding type to the dom
         if(graphType == null)
         {
             tabMap.put(currentTab, WEIGHTEDDIGRAPH);
@@ -713,18 +832,28 @@ public class MainPageController
         }
     }
 
-
+    /**
+     * desactivate all edges button, called when we click in vertex button for example
+     */
     private void desactivateEdge()
     {
         edge1Active     = false;
         edge1ActiveOnce = false;
 
-        edgeButton.setId(EDGEBUTTON);// desactivate button of orange
+        // desactivate button of orange
+        edgeButton.setId(EDGEBUTTON);
         diEdgeButton.setId(DIEDGEBUTTON);
         weightedDiEdgeButton.setId(WEIGHTEDDIEDGEBUTTON);
         weightedEdgeButton.setId(WEIGHTEDEDGEBUTTON);
     }
 
+
+    /**
+     * when the buttton eraser is clicked we have to look at the MouseEvent
+     * to see if its double-clicked or just clicked. We activate some boolean
+     * with the differents mouseEvents
+     * @param mouseEvent mouseEvent of the click
+     */
     @FXML
     private void handleEraser(MouseEvent mouseEvent)
     {
@@ -756,13 +885,19 @@ public class MainPageController
         }
     }
 
+    /**
+     * desactivate the eraser Button
+     */
     private void desactivateEraser()
     {
-        eraserActive = false;
+        eraserActive     = false;
         eraserActiveOnce = false;
         eraserButton.setId(ERASEBUTTON);// desactivate button of orange
     }
 
+    /**
+     * listener when we are above some element with the mouse
+     */
     private EventHandler<MouseEvent> nodeOnMouseEnteredEventHandler =
             new EventHandler<MouseEvent>() {
                 @Override
@@ -771,9 +906,14 @@ public class MainPageController
                     Shape shape = (Shape)t.getSource();
                     Group group = (Group)shape.getParent();
                     group.setCursor(Cursor.HAND);
+
                 }
             };
 
+    /**
+     * listener when the mouse is pressed, above elements (vertexes)
+     * deleting if the eraser button is activate
+     */
     private EventHandler<MouseEvent> nodeOnMousePressedEventHandler =
 
             new EventHandler<MouseEvent>()
@@ -857,6 +997,11 @@ public class MainPageController
                 }
             };
 
+    /**
+     * when the mouse click is released in the principal pane, to draw edges
+     * we verify if we click in a vertex, and if its the first we click, to have
+     * start of the edge, et second click to have the end.
+     */
     private EventHandler<MouseEvent> nodeOnMouseReleasedEventHandler =
 
             new EventHandler<MouseEvent>()
@@ -870,10 +1015,10 @@ public class MainPageController
 
 
                     //Do when the edge button is activate to draw a edge.
-                    Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
+                    Tab currentTab      = (Tab)tabPane.getSelectionModel().getSelectedItem();
                     AnchorPane currPage = (AnchorPane) currentTab.getContent();
-                    AnchorPane currP = (AnchorPane) currPage.getChildren().get(0);
-                    String graphType = tabMap.get(currentTab);
+                    AnchorPane currP    = (AnchorPane) currPage.getChildren().get(0);
+                    String graphType    = tabMap.get(currentTab);
 
                     if(edge1Active||edge1ActiveOnce)
                     {
@@ -896,19 +1041,22 @@ public class MainPageController
                         else if(groupStart != group)
                         {
 
-                            Group groupEnd = group;
+                            Group groupEnd    = group;
                             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
                             DrawEdge drawEdge = null;
                             ArrayList<DrawEdge> drawEdges;
                             int gIndex;
                             Text weight;
-                            switch (graphType) {
+                            switch (graphType)
+                            {
                                 case NONDIGRAPH:
+
                                     if(graphXml.getEdge(Integer.parseInt(groupStart.getId().replaceAll("[\\D]", "")), Integer.parseInt(groupEnd.getId().replaceAll("[\\D]", "")), 0)!=null) break;
                                     gIndex = graphXml.addEdge(nameVertexStart, groupEnd.getId());
                                     updateGroup(currentTab, gIndex);
                                     break;
                                 case WEIGHTEDNONDIGRAPH:
+
                                       weight = new Text(""+mainApp.showWeightPage());
                                     //so we can modify the text
                                     weight.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -920,10 +1068,12 @@ public class MainPageController
                                     updateGroup(currentTab, gIndex);
                                     break;
                                 case DIGRAPH:
+
                                     gIndex = graphXml.addDiEdge(nameVertexStart, groupEnd.getId());
                                     updateGroup(currentTab, gIndex);
                                     break;
                                 case WEIGHTEDDIGRAPH:
+
                                     weight = new Text(""+mainApp.showWeightPage());
                                     // so we can modify the text
                                     weight.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -947,14 +1097,18 @@ public class MainPageController
                                 switch (graphType)
                                 {
                                     case NONDIGRAPH:
+
                                         edgeButton.setId(EDGEBUTTON);
                                         break;
                                     case WEIGHTEDNONDIGRAPH:
+
                                         weightedEdgeButton.setId(WEIGHTEDEDGEBUTTON);
                                     case DIGRAPH:
+
                                         diEdgeButton.setId(DIEDGEBUTTON);
                                         break;
                                     case WEIGHTEDDIGRAPH:
+
                                         weightedDiEdgeButton.setId(WEIGHTEDDIEDGEBUTTON);
                                 }
                             }
@@ -963,6 +1117,9 @@ public class MainPageController
                 }
             };
 
+    /**
+     * on mousedragged listener to move the vertex when we stay clicked and move in the pane
+     */
     EventHandler<MouseEvent> nodeOnMouseDraggedEventHandler =
             new EventHandler<MouseEvent>() {
                 @Override
@@ -1004,6 +1161,7 @@ public class MainPageController
                 }
             };
 
+
     private EventHandler<MouseEvent> followMouseHandler =
             new EventHandler<MouseEvent>() {
                 @Override
@@ -1022,137 +1180,165 @@ public class MainPageController
                 }
             };
 
-            private GraphDom getXmlOfThisTab(String name)
-            {
-                for (GraphDom aListGraphXml : listGraphXml) {
-                    if (aListGraphXml.getName().equals(name))
-                        return aListGraphXml;
+    /**
+     * return the graphDom associated with the name
+     * @param name name of the xml file
+     * @return graphDom with name name
+     */
+    private GraphDom getXmlOfThisTab(String name)
+    {
+        for (GraphDom aListGraphXml : listGraphXml)
+        {
+            if (aListGraphXml.getName().equals(name))
+                return aListGraphXml;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param name name of the button
+     * @return boolean true if an other button is activate
+     */
+    private boolean isOtherButtonActivate(String name)
+    {
+        switch (name) {
+            case VERTEX1:
+                return (edge1Active || edge1ActiveOnce);
+            case EDGE1:
+                return (vertex1Active || vertex1ActiveOnce);
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * create new Tab with a specifiated name
+     * @param tabName name
+     * @return Tab created
+     */
+    private Tab createNewTab(String tabName)
+    {
+        Tab tab = new Tab();
+        if(tabName.equals(""))
+            tabName = TABNAMEPREFIX + indiceTab++;
+        tab.setText(tabName);
+        tab.setId(tabName);
+
+        // adding Panes in the tab
+        AnchorPane paneBack = new AnchorPane();
+        AnchorPane pane     = new AnchorPane();
+
+        paneBack.setFocusTraversable(true);
+        pane.setFocusTraversable(true);
+
+        pane.setPrefSize(paneBack.getWidth(), paneBack.getHeight());
+
+        //mouselistener to add vertex etc
+        paneBack.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                panePressed(event);
+                paneBack.requestFocus();
+            }
+        });
+
+        // Slider of the current tab created
+        Slider slider = new Slider();
+        slider.setMin(1.);
+        slider.setMax(5.);
+        slider.setValue(1.);
+        //listener when the value of slider change
+        slider.valueProperty().addListener(new ChangeListener<Number>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                pane.setScaleX(slider.getValue());
+                pane.setScaleY(slider.getValue());
+
+                //to have the zoom at the center
+                pane.setTranslateX(-((paneBack.getWidth()*(slider.getValue()-1)) / 2));
+                pane.setTranslateY(-((paneBack.getHeight()*(slider.getValue()-1)) / 2));
+            }
+        });
+
+        // Scroll de la souris zoom
+        paneBack.setOnScroll(new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                if(event.getDeltaY()>0)
+                {
+                    slider.setValue(slider.getValue()*1.05);
                 }
-                return null;
+                else
+                    slider.setValue(slider.getValue()*0.95);
             }
+        });
 
-            private boolean isOtherButtonActivate(String name)
-            {
-                switch (name) {
-                    case VERTEX1:
-                        return (edge1Active || edge1ActiveOnce);
-                    case EDGE1:
-                        return (vertex1Active || vertex1ActiveOnce);
-                    default:
-                        return false;
+        //change the view, if you press the right arrow, the main page move right etc
+        paneBack.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.LEFT && pane.getTranslateX()*(-1) > 0)
+                {
+                    pane.setTranslateX(pane.getTranslateX()+20);
+                }
+                else if(event.getCode() == KeyCode.RIGHT && pane.getTranslateX()*(-1) < paneBack.getWidth()*(slider.getValue() -1))
+                {
+                    pane.setTranslateX(pane.getTranslateX() - 20);
+                }
+                else if(event.getCode() == KeyCode.UP && pane.getTranslateY()*(-1) > 0)
+                {
+                    pane.setTranslateY(pane.getTranslateY() + 20);
+                }
+                else if(event.getCode() == KeyCode.DOWN && pane.getTranslateY()*(-1) < paneBack.getHeight()*(slider.getValue() -1))
+                {
+                    pane.setTranslateY(pane.getTranslateY() - 20);
+                }
+                else if(event.getCode() == KeyCode.ESCAPE)
+                {
+                    // Desactivate edge if active
+                    desactivateEdge();
+
+                    //desactivate vertex if active
+                    desactivateVertex();
                 }
             }
+        });
 
-            private Tab createNewTab(String tabName)
-            {
-                Tab tab = new Tab();
-                if(tabName.equals(""))
-                    tabName = TABNAMEPREFIX + indiceTab++;
-                tab.setText(tabName);
-                tab.setId(tabName);
+        tabPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.ESCAPE)
+                {
+                    // Desactivate edge if active
+                    desactivateEdge();
 
-                // adding Panes in the tab
-                AnchorPane paneBack = new AnchorPane();
-                AnchorPane pane     = new AnchorPane();
-
-                paneBack.setFocusTraversable(true);
-                pane.setFocusTraversable(true);
-
-                pane.setPrefSize(paneBack.getWidth(), paneBack.getHeight());
-
-                //mouselistener to add vertex etc
-                paneBack.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        panePressed(event);
-                        paneBack.requestFocus();
-                    }
-                });
-
-                // Slider of the current tab created
-                Slider slider = new Slider();
-                slider.setMin(1.);
-                slider.setMax(5.);
-                slider.setValue(1.);
-                slider.valueProperty().addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> ov,
-                                        Number old_val, Number new_val) {
-                        pane.setScaleX(slider.getValue());
-                        pane.setScaleY(slider.getValue());
-
-                        //to have the zoom at the center
-                        pane.setTranslateX(-((paneBack.getWidth()*(slider.getValue()-1)) / 2));
-                        pane.setTranslateY(-((paneBack.getHeight()*(slider.getValue()-1)) / 2));
-                    }
-                });
-
-                // Scroll de la souris zoom
-                paneBack.setOnScroll(new EventHandler<ScrollEvent>() {
-                    @Override
-                    public void handle(ScrollEvent event) {
-                        if(event.getDeltaY()>0)
-                        {
-                            slider.setValue(slider.getValue()*1.05);
-                        }
-                        else
-                            slider.setValue(slider.getValue()*0.95);
-                    }
-                });
-
-                //change the view, if you press the right arrow, the main page move right etc
-                paneBack.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-                    public void handle(KeyEvent event) {
-                        if(event.getCode() == KeyCode.LEFT && pane.getTranslateX()*(-1) > 0)
-                        {
-                            pane.setTranslateX(pane.getTranslateX()+20);
-                        }
-                        else if(event.getCode() == KeyCode.RIGHT && pane.getTranslateX()*(-1) < paneBack.getWidth()*(slider.getValue() -1))
-                        {
-                            pane.setTranslateX(pane.getTranslateX() - 20);
-                        }
-                        else if(event.getCode() == KeyCode.UP && pane.getTranslateY()*(-1) > 0)
-                        {
-                            pane.setTranslateY(pane.getTranslateY() + 20);
-                        }
-                        else if(event.getCode() == KeyCode.DOWN && pane.getTranslateY()*(-1) < paneBack.getHeight()*(slider.getValue() -1))
-                        {
-                            pane.setTranslateY(pane.getTranslateY() - 20);
-                        }
-                        else if(event.getCode() == KeyCode.ESCAPE)
-                        {
-                            // Desactivate edge if active
-                            desactivateEdge();
-
-                            //desactivate vertex if active
-                            desactivateVertex();
-                        }
-                    }
-                });
-
-                tabPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                    public void handle(KeyEvent event) {
-                        if(event.getCode() == KeyCode.ESCAPE)
-                        {
-                            // Desactivate edge if active
-                            desactivateEdge();
-
-                            //desactivate vertex if active
-                            desactivateVertex();
-                        }
-                    }
-                });
-
-                AnchorPane.setRightAnchor(slider, 2.0);
-                AnchorPane.setBottomAnchor(slider, 5.0);
-                paneBack.getChildren().add(pane);
-                paneBack.getChildren().add(slider);
-
-                tab.setContent(paneBack);
-                return tab;
+                    //desactivate vertex if active
+                    desactivateVertex();
+                }
             }
+        });
 
+        AnchorPane.setRightAnchor(slider, 2.0);
+        AnchorPane.setBottomAnchor(slider, 5.0);
+        paneBack.getChildren().add(pane);
+        paneBack.getChildren().add(slider);
+
+        tab.setContent(paneBack);
+        return tab;
+    }
+
+    /**
+     * when we move an vertex, we have to move the edges connected to it
+     *
+     * @param groupStart vertex (circle) start
+     * @param groupEnd   vertex (circle) end
+     * @param gIndex     group index in the list
+     * @param eIndex     edge index in the list
+     * @param tab        current Tab
+     * @param currP      current Anchorpane
+     */
     private void moveVertexMoveEdgeListenerDraw(Group groupStart, Group groupEnd, int gIndex, int eIndex, Tab tab, AnchorPane currP)
     {
         //////////////////////////////////moving vertex move edges////////////////////
@@ -1252,6 +1438,12 @@ public class MainPageController
         });
     }
 
+    /**
+     *
+     * @param pane anchorPane to search for the vertex
+     * @param id id of the vertex to find
+     * @return Node (vertex corresponding of the id, or null)
+     */
     private Node getChildrenVertexById(AnchorPane pane, String id)
     {
         for(int i = 0; i < pane.getChildren().size(); i++)
