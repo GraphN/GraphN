@@ -3,6 +3,7 @@ package view; /**
  */
 
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -539,9 +540,10 @@ public class MainPageController
         helpPage.setTitle("help Page");
         helpPage.setMinHeight(500);
         helpPage.setMinWidth(500);
+        helpPage.setResizable(false);
 
         ScrollPane page = new ScrollPane();
-        Image help1     = new Image(getClass().getResourceAsStream("assets/img/help1.png"));
+        Image help1     = new Image(getClass().getResourceAsStream("/assets/img/help1.png"));
 
         page.setContent(new ImageView(help1));
 
@@ -552,7 +554,7 @@ public class MainPageController
         page.setMaxWidth(600);
 
         Group root  = new Group();
-        Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 590, 590);
         helpPage.setScene(scene);
 
         root.getChildren().add(page);
