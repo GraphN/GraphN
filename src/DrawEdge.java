@@ -11,10 +11,11 @@ import javafx.scene.text.Text;
  * Created by LBX on 14/05/2017.
  */
 
-// todo: Mettre la pointe des flèches au bord du cercle
 public class DrawEdge {
     final private Color UNCOLORED = Color.web("da5630");
     final private Color COLORED = Color.web("42f45f");
+    // Taille de la flèche
+    final private double scale=50;
 
     private CubicCurve curve1;
     private Path arrowEnd;
@@ -80,8 +81,7 @@ public class DrawEdge {
         curve1.setStroke(UNCOLORED);
         curve1.setFill(Color.TRANSPARENT);
 
-        // Taille de la flèche
-        double scale=50;
+
         if(directed) {
             double paramEval = Math.sqrt(Math.pow(curve1.getEndX() - curve1.getStartX(), 2) +
                                Math.pow(curve1.getEndY() - curve1.getStartY(), 2));
@@ -100,25 +100,33 @@ public class DrawEdge {
             if(text == null)
                 root.getChildren().addAll(curve1, arrowEnd);
             else{
-                if(bendFactor != 0) {
+                //FIXME Andrea vu que movX et movY sont égal à 0 si il n'y a pas de courbure je peux enlever la partie bendFactir non?
+                /*if(bendFactor != 0) {
                     movX /= bendFactor;
                     movY /= bendFactor;
                 }
                 text.setTranslateX(controlX1 - movX/4 * bendFactor);
-                text.setTranslateY(controlY1 - movY/4 * bendFactor);
+                text.setTranslateY(controlY1 - movY/4 * bendFactor);*/
+                text.setTranslateX(controlX1 - movX/4);
+                text.setTranslateY(controlY1 - movY/4);
                 root.getChildren().addAll(curve1, arrowEnd, text);
             }
         }else{
             if(text == null)
                 root.getChildren().addAll(curve1);
             else{
+                //FIXME Andrea vu que movX et movY sont égal à 0 si il n'y a pas de courbure je peux enlever la partie bendFactir non?
+                /*if(bendFactor != 0) {
+                    movX /= bendFactor;
+                    movY /= bendFactor;
+                }
                 text.setTranslateX(controlX1 - movX/4 * bendFactor);
-                text.setTranslateY(controlY1 - movY/4 * bendFactor);
+                text.setTranslateY(controlY1 - movY/4 * bendFactor);*/
+                text.setTranslateX(controlX1 - movX/4);
+                text.setTranslateY(controlY1 - movY/4);
                 root.getChildren().addAll(curve1, text);
             }
         }
-
-
 
     }
 

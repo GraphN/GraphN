@@ -27,7 +27,7 @@ public class Bellman_Ford implements AlgorithmVisitor{
     private void pathTo(Vertex v){
         for (Edge e = edgeTo[v.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
             // On notifie que la distance min a changer
-            String message = "On selectionne l'arete " + source.getId() + e +  "\n\n";
+            String message = "On selectionne l'arete " + source.getId() + e +  "\n\n\n";
             String structures = "distTo : " + Arrays.toString(distTo)
                     + "\nedgeTo : " + Arrays.toString(edgeTo)
                     + "\nonQueue : " + Arrays.toString(onQueue)
@@ -50,7 +50,7 @@ public class Bellman_Ford implements AlgorithmVisitor{
                 edgeTo[w] = e;
 
                 // On notifie que la distance min a changer
-                String message = "On met à jour la distance qui separe " + source.getId() + " à " + w + ": " + distTo[w] + "\n\n";
+                String message = "On met à jour la distance qui separe " + source.getId() + " à " + w + ": " + distTo[w] + "\n\n\n";
                 String structures = "distTo : " + Arrays.toString(distTo)
                         + "\nedgeTo : " + Arrays.toString(edgeTo)
                         + "\nonQueue : " + Arrays.toString(onQueue)
