@@ -15,6 +15,7 @@ public abstract class Graph {
     protected int E;
     protected int V;
     protected int TYPE;
+    public static int DIRECTED = 1;
 
     // Constructeur d'initialisation
     public Graph(int V, StockageType stockage){
