@@ -4,8 +4,6 @@ import graph.*;
 import graph.Stockage.EdgeListStockage;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -15,9 +13,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+
 import java.util.*;
 
 
@@ -83,20 +81,20 @@ public class AlgorithmPageController {
     private SplitPane splitPane;
 
     /**
-     *  Function called when the window is show
-     *  work like a default constructor for JavaFx class
+     * Function called when the window is show
+     * work like a default constructor for JavaFx class
      */
     @FXML
-    private void initialize()
-    {
-        //initZoom();
+    private void initialize() {
         edgeList = new ArrayList<DrawEdge>();
         vertexList = new ArrayList<>();
         timer = new Timer();
 
+        // init the way that the text is displayed in the ListView
         description.setCellFactory(lv -> new ListCell<String>() {
 
             private final Text text;
+
             {
                 text = new Text();
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
@@ -105,10 +103,11 @@ public class AlgorithmPageController {
                 // bind wrapping width to available size
                 text.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() -> {
                     Insets padding = getPadding();
-                    return getWidth() - padding.getLeft() - padding.getRight() -1;
+                    return getWidth() - padding.getLeft() - padding.getRight() - 1;
                 }, widthProperty(), paddingProperty()));
 
             }
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -124,6 +123,7 @@ public class AlgorithmPageController {
         structure.setCellFactory(lv -> new ListCell<String>() {
 
             private final Text text;
+
             {
                 text = new Text();
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
@@ -132,10 +132,11 @@ public class AlgorithmPageController {
                 // bind wrapping width to available size
                 text.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() -> {
                     Insets padding = getPadding();
-                    return getWidth() - padding.getLeft() - padding.getRight() -1;
+                    return getWidth() - padding.getLeft() - padding.getRight() - 1;
                 }, widthProperty(), paddingProperty()));
 
             }
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -151,10 +152,10 @@ public class AlgorithmPageController {
     }
 
     /**
-     *  Open the subgraph returned by the algorithm in the mainPage.
-      */
+     * Open the subgraph returned by the algorithm in the mainPage.
+     */
     @FXML
-    private void handleNewFromResult(){
+    private void handleNewFromResult() {
         mainApp.newFromAlgoPage(graphNewFromResult);
     }
 
@@ -162,7 +163,7 @@ public class AlgorithmPageController {
      * Run colorNextEdge until the end of the graph with a period of 2s
      */
     @FXML
-    private void handlePlayTimer(){
+    private void handlePlayTimer() {
         timer.schedule(new TimerListener(), 1000, 2000);
     }
 
@@ -170,7 +171,7 @@ public class AlgorithmPageController {
      * Stop the timer
      */
     @FXML
-    private void handlePause(){
+    private void handlePause() {
         timer.cancel();
         // Once a timer is cancelled we can't reuse it
         timer = new Timer();
@@ -180,7 +181,7 @@ public class AlgorithmPageController {
      * Reset the page at the initial state
      */
     @FXML
-    private void handleStop(){
+    private void handleStop() {
         for (DrawEdge edge : edgeList) {
             edge.setUncolored();
         }
@@ -201,23 +202,26 @@ public class AlgorithmPageController {
 
         activateButtons();
 
-        try{graphNewFromResult = new GraphDom(graphDom.getName());}
-        catch (Exception e){System.err.println("ParserException");}
+        try {
+            graphNewFromResult = new GraphDom(graphDom.getName());
+        } catch (Exception e) {
+            System.err.println("ParserException");
+        }
     }
 
     /**
      * Color all edges
      */
     @FXML
-    private void handlePlay(){
-        while(colorNextEdge());
+    private void handlePlay() {
+        while (colorNextEdge()) ;
     }
 
     /**
      * Color one edge
      */
     @FXML
-    private void handleStepByStep(){
+    private void handleStepByStep() {
         colorNextEdge();
     }
 
@@ -226,7 +230,7 @@ public class AlgorithmPageController {
      * Apply BFS Algorithm
      */
     @FXML
-    private void handleBFS(){
+    private void handleBFS() {
         try {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
@@ -234,36 +238,38 @@ public class AlgorithmPageController {
 
             setColoredVertex(startVertex);
             desactivateButtons(bfs);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             alertMessage(e.getMessage());
             handleStop();
         }
     }
+
     /**
      * Apply DFS Algorithm
      */
     @FXML
-    private void handleDFS(){
+    private void handleDFS() {
         try {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
             //pane.getChildren().remove(edgeList.get(0).getRoot());
-            this.path = graph.accept(new DFS(),  graph.getVertex(startVertex), null);
+            this.path = graph.accept(new DFS(), graph.getVertex(startVertex), null);
 
             setColoredVertex(startVertex);
             desactivateButtons(dfs);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             alertMessage(e.getMessage());
             handleStop();
         }
     }
+
     /**
      * Apply Dijkstra Algorithm
      */
     @FXML
-    private void handleDijkstra(){
+    private void handleDijkstra() {
         try {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
@@ -272,7 +278,7 @@ public class AlgorithmPageController {
             this.path = graph.accept(new Dijkstra(), graph.getVertex(startVertex), graph.getVertex(endVertex));
             setColoredVertex(startVertex);
             desactivateButtons(dijkstra);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             alertMessage(e.getMessage());
             handleStop();
@@ -283,37 +289,39 @@ public class AlgorithmPageController {
      * Apply Kruskal Algorithm
      */
     @FXML
-    private void handleKruskall(){
+    private void handleKruskall() {
         try {
             setDividerPosition(0.2);
             this.path = graph.accept(new Kruskall(), null, null);
             desactivateButtons(kruskall);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             alertMessage(e.getMessage());
             handleStop();
         }
     }
+
     /**
      * Apply Prim Algorithm
      */
     @FXML
-    private void handlePrim(){
+    private void handlePrim() {
         try {
             setDividerPosition(0.2);
             this.path = graph.accept(new Prim(), null, null);
             desactivateButtons(prim);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             alertMessage(e.getMessage());
             handleStop();
         }
     }
+
     /**
      * Apply Bellman Algorithm
      */
     @FXML
-    private void handleBellman(){
+    private void handleBellman() {
         try {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
@@ -323,7 +331,7 @@ public class AlgorithmPageController {
 
             setColoredVertex(startVertex);
             desactivateButtons(bellman);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             alertMessage(e.getMessage());
             handleStop();
@@ -333,6 +341,7 @@ public class AlgorithmPageController {
     /**
      * Add all the edges and vertexes from the graphDom create in the main page on a new pane.
      * Then the pane is added to the page.
+     *
      * @param graphD
      * @return an AnchorPane
      */
@@ -341,25 +350,26 @@ public class AlgorithmPageController {
 
         graphDom = graphD;
 
-        try{graphNewFromResult = new GraphDom(graphDom.getName());}
-        catch (Exception e){System.err.println("ParserException");}
-
-        if(graphDom.getGraphType().equals("nonDiGraph") || graphDom.getGraphType().equals("weightedNonDiGraph")) {
-            System.out.println("Algorithme page, construct graph with  " + (graphDom.getNbVertex())+ " vertexs");
-            graph = new UDiGraph(graphDom.getNbVertex() + 1, new EdgeListStockage());
+        try {
+            graphNewFromResult = new GraphDom(graphDom.getName());
+        } catch (Exception e) {
+            System.err.println("ParserException");
         }
-        else {
-            System.out.println("Algorithme page, construct Digraph with  " + (graphDom.getNbVertex())+ " vertexs");
+
+        if (graphDom.getGraphType().equals("nonDiGraph") || graphDom.getGraphType().equals("weightedNonDiGraph")) {
+            System.out.println("Algorithme page, construct graph with  " + (graphDom.getNbVertex()) + " vertexs");
+            graph = new UDiGraph(graphDom.getNbVertex() + 1, new EdgeListStockage());
+        } else {
+            System.out.println("Algorithme page, construct Digraph with  " + (graphDom.getNbVertex()) + " vertexs");
             graph = new DiGraph(graphDom.getNbVertex() + 1, new EdgeListStockage());
         }
 
         //adding all vertex from xml
-        for(int i = 0; i <= graphDom.getNbVertex(); i++)
-        {
+        for (int i = 0; i <= graphDom.getNbVertex(); i++) {
             // Le -10 c'est pour le décalage du stackpane, à vérifier sur d'autres écrans
             Point2D point = graphDom.getPosOfVertex(i);
-            int x = (int) point.getX()-10;
-            int y = (int) point.getY()-10;
+            int x = (int) point.getX() - 10;
+            int y = (int) point.getY() - 10;
             String name = graphDom.getVertexName(i);
 
             //adding vertex created to pane
@@ -370,7 +380,7 @@ public class AlgorithmPageController {
             circle_base.setId(name);
             circle_base.setTranslateX(x);
             circle_base.setTranslateY(y);
-            Text text = new Text(""+nbVertex);
+            Text text = new Text("" + nbVertex);
             //text.setFill(Color.WHITE);
             text.setId(name);
             text.setBoundsType(TextBoundsType.VISUAL);
@@ -379,7 +389,7 @@ public class AlgorithmPageController {
 
 
             StackPane sPane = new StackPane();
-            sPane.getChildren().addAll(circle_base,text);
+            sPane.getChildren().addAll(circle_base, text);
 
             vertexList.add(sPane);
 
@@ -387,14 +397,14 @@ public class AlgorithmPageController {
             pane.getChildren().add(sPane);
         }
 
-        for(int i=0; i < graphDom.getNbGroup(); i++) {
+        for (int i = 0; i < graphDom.getNbGroup(); i++) {
             ArrayList<DrawEdge> edges = graphDom.getDrawEdges(i);
 
-            for(int j=0; j < edges.size(); j++) {
+            for (int j = 0; j < edges.size(); j++) {
                 pane.getChildren().add(0, edges.get(j).getRoot());
                 edgeList.add(edges.get(j));
 
-                if(graphDom.getGraphType().equals("weightedDiGraph") || graphDom.getGraphType().equals("weightedNonDiGraph"))
+                if (graphDom.getGraphType().equals("weightedDiGraph") || graphDom.getGraphType().equals("weightedNonDiGraph"))
                     graph.addEdge(graph.getVertex(graphDom.getFrom(i, j)), graph.getVertex(graphDom.getTo(i, j)), graphDom.getEdgeWeigth(i, j));
                 else
                     graph.addEdge(graph.getVertex(graphDom.getFrom(i, j)), graph.getVertex(graphDom.getTo(i, j)));
@@ -406,52 +416,64 @@ public class AlgorithmPageController {
 
     /**
      * Set a vertex to the color define in the start of the
+     *
      * @param i index of the vertex
      */
-    void setColoredVertex(int i){
-        Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
+    void setColoredVertex(int i) {
+        Circle circle = (Circle) vertexList.get(i).getChildren().get(0);
         circle.setFill(COLORED);
     }
+
     /**
      * Set a vertex to the color define in the start of the
+     *
      * @param i index of the vertex
      */
-    void setUncoloredVertex(int i){
-        Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
+    void setUncoloredVertex(int i) {
+        Circle circle = (Circle) vertexList.get(i).getChildren().get(0);
         circle.setFill(UNCOLORED);
     }
 
     /**
      * Add a weight to an vertex
-     * @param i index of the vertex
+     *
+     * @param i      index of the vertex
      * @param weight weight of the vertex
      */
-    void addTextVertex(int i, String weight){
+    void addTextVertex(int i, String weight) {
         removeTextVertex(i);
-        Circle circle = (Circle)vertexList.get(i).getChildren().get(0);
-        Text text =  new Text(weight);
+        Circle circle = (Circle) vertexList.get(i).getChildren().get(0);
+        Text text = new Text(weight);
         text.setTranslateX(circle.getTranslateX());
-        text.setTranslateY(circle.getTranslateY()-20);
+        text.setTranslateY(circle.getTranslateY() - 20);
         vertexList.get(i).getChildren().add(text);
     }
 
     /**
      * remove the weight on an edge
+     *
      * @param i index of the edge
      */
 
-    void removeTextVertex(int i){
+    void removeTextVertex(int i) {
         if (vertexList.get(i).getChildren().size() > 2)
             vertexList.get(i).getChildren().remove(2);
     }
 
+    /**
+     * Color the edges and the vertexes using the step list gived by the alrogithm.
+     * This function also show the description of the steps
+     *
+     * @return false if there is no more edge to color
+     */
     private Boolean colorNextEdge() {
         boolean hasChange = false;
-        if(path == null || indexPath >= path.size())
+        if (path == null || indexPath >= path.size())
             return hasChange;
 
         Edge e = this.path.get(indexPath).getEdge();
         Vertex v = this.path.get(indexPath).getVertex();
+        // TODO: effacer à la fin
         System.out.println(e);
         System.out.println(v);
 
@@ -496,15 +518,15 @@ public class AlgorithmPageController {
             hasChange = true;
         }
 
-        if(v != null) {
+        if (v != null) {
             setColoredVertex(v.getId());
-            addTextVertex(v.getId(),v.getDescription());
+            addTextVertex(v.getId(), v.getDescription());
             hasChange = true;
 
         }
 
         // Update the descriptions
-        if (hasChange){
+        if (hasChange) {
 
             description.getItems().add(this.path.get(indexPath).getMessage());
             structure.getItems().add(this.path.get(indexPath).getStrutures());
@@ -527,7 +549,7 @@ public class AlgorithmPageController {
     }
 
     private void setDividerPosition(double position) {
-        splitPane.setDividerPosition(0,position);
+        splitPane.setDividerPosition(0, position);
     }
 
     /*class TimerListener extends TimerTask {
@@ -538,17 +560,21 @@ public class AlgorithmPageController {
                     timer.cancel();
             }
         }*/
+
+    /**
+     * Color the edges with a period without impacting the program
+     */
     class TimerListener extends TimerTask {
         @Override
         public void run() {
             Platform.runLater(() -> {
-                if(!colorNextEdge())
+                if (!colorNextEdge())
                     timer.cancel();
             });
         }
     }
 
-    private void desactivateButtons(ToggleButton avoid){
+    private void desactivateButtons(ToggleButton avoid) {
         bfs.setDisable(true);
         prim.setDisable(true);
         dfs.setDisable(true);
@@ -556,7 +582,8 @@ public class AlgorithmPageController {
         bellman.setDisable(true);
         kruskall.setDisable(true);
     }
-    private void activateButtons(){
+
+    private void activateButtons() {
         bfs.setDisable(false);
         bfs.setSelected(false);
         prim.setDisable(false);
@@ -578,16 +605,17 @@ public class AlgorithmPageController {
 
     /**
      * Set the graph builded in the main page
+     *
      * @param g graphDom
      */
-    public void setGraph(GraphDom g)
-    {
+    public void setGraph(GraphDom g) {
         centerAlgoPage.getChildren().add(recreateAnchorWithXML(g));
     }
 
     /**
      * Referency to the mainApp for lauching the start and end vertex question
      * and the newFromResult
+     *
      * @param mainApp
      */
     public void setMainApp(MainApp mainApp) {
@@ -596,9 +624,10 @@ public class AlgorithmPageController {
 
     /**
      * Permet d'ouvrir un popup d'erreur
+     *
      * @param message
      */
-    void alertMessage(String message){
+    void alertMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
