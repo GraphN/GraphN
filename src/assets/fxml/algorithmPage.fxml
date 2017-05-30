@@ -31,7 +31,7 @@
                 <Button id="buttonStop" minHeight="22.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="11.0" />
                 <Button id="buttonPause" focusTraversable="false" minHeight="22.0" mnemonicParsing="false" onAction="#handlePause" prefHeight="22.0" prefWidth="22.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="11.0" />
                 <Button alignment="TOP_RIGHT" layoutX="518.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleNewFromResult" prefHeight="28.0" prefWidth="159.0" styleClass="algoButton" text="New From Result" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="5.0" />
-            <Button fx:id="cameraButton" focusTraversable="false" layoutX="473.0" layoutY="3.0" maxHeight="35.0" maxWidth="38.0" minHeight="24.0" minWidth="24.0" mnemonicParsing="false" onAction="#handleScreenShot" prefHeight="35.0" prefWidth="39.0" />
+            <Button fx:id="cameraButton" focusTraversable="false" layoutX="473.0" layoutY="3.0" maxHeight="35.0" maxWidth="38.0" minHeight="24.0" minWidth="24.0" mnemonicParsing="false" onAction="#handleScreenShot" prefHeight="35.0" prefWidth="39.0" AnchorPane.rightAnchor="177.0" />
             </children>
         </AnchorPane>
     </top>
