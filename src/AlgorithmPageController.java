@@ -505,7 +505,7 @@ public class AlgorithmPageController {
                             && edgeList.get(i).getEndY() == test.getStartY()
                             && edgeList.get(i).getStartX() == test.getEndX()
                             && edgeList.get(i).getStartY() == test.getEndY()))
-                            && (test.getText() == null || test.getText() != null && (edgeList.get(i).getText().toString().equals(test.getText().toString())))) {
+                            && (test.getText().getText() == null || test.getText().getText() != null && (edgeList.get(i).getText().getText().equals(test.getText().getText())))) {
                         edgeList.get(i).setColored();
 
                         // FIXME: Essais pour newFromResult

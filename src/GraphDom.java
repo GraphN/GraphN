@@ -545,7 +545,7 @@ public class GraphDom {
             {
                 if (Integer.parseInt(edge.getAttribute(ATTRIBUTSTART).replaceAll("[\\D]", "")) == from &&
                         Integer.parseInt(edge.getAttribute(ATTRIBUTEND).replaceAll("[\\D]", "")) == to &&
-                        (weight == 0 || Integer.parseInt(edge.getAttribute(WEIGHT).replaceAll("[\\D]", "")) == weight)) {
+                        (weight == 0 || Integer.parseInt(edge.getAttribute(WEIGHT).replaceAll("[^0-9-]", "")) == weight)) {
 
                     String vertex1 = edge.getAttribute(ATTRIBUTSTART);
                     String vertex2 = edge.getAttribute(ATTRIBUTEND);
