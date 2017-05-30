@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import javax.imageio.ImageIO;
+import javax.swing.filechooser.FileSystemView;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -171,7 +172,7 @@ public class MainApp extends Application {
         fileChooser.getExtensionFilters().add(jpgFilter);
 
         //set initial directory
-        File directory = new File("./src/savedGraphsXML");
+        File directory = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
         fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showSaveDialog(primaryStage);
@@ -242,7 +243,7 @@ public class MainApp extends Application {
         fileChooser.getExtensionFilters().add(extFilter);
 
         //set initial directory
-        File directory = new File("./src/savedGraphsXML");
+        File directory = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
         fileChooser.setInitialDirectory(directory);
 
         File file = fileChooser.showOpenDialog(primaryStage);
