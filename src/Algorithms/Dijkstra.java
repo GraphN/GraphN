@@ -123,7 +123,7 @@ public class Dijkstra implements AlgorithmVisitor{
             step.setMessage(message);
             step.setStructures(structures);
             g.getVertex(w).setDescription(distTo[w] + "");
-            //step.setVertex(g.getVertex(w));
+            step.setVertex(g.getVertex(w));
 
             path.add(step);
 
