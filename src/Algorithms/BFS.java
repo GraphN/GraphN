@@ -1,28 +1,35 @@
 package Algorithms;
 
 import Algorithms.Utils.Step;
-import Algorithms.Utils.VertexVisit;
 import graph.*;
-
 import java.util.LinkedList;
 import java.util.Vector;
+
 /**
- * Created by francoisquellec on 24.03.17.
+ * BFS algorithmVisitor
+ * Compute the standard Breath First Search algorithm :
+ * https://fr.wikipedia.org/wiki/Algorithme_de_parcours_en_largeur
  */
 public class BFS implements AlgorithmVisitor{
     private Vector<Integer> parent;
     private LinkedList<Step> path;
 
-    private LinkedList<Step> bfs(Graph g, Vertex v) {
+    /**
+     * bfs algorithm
+     * @param g, the graph to visit
+     * @param source, the starting point of the visit
+     * @return the list of step compute by the algorithm
+     */
+    private LinkedList<Step> bfs(Graph g, Vertex source) {
         LinkedList<Edge> pile = new LinkedList<>();
 
-        parent.set(v.getId(), v.getId());
+        parent.set(source.getId(), source.getId());
 
         do{
             Vertex current;
 
             if(pile.isEmpty())
-                current = v;
+                current = source;
             else
                 current = pile.removeFirst().getTo();
 
@@ -52,6 +59,12 @@ public class BFS implements AlgorithmVisitor{
         return path;
     }
 
+    /**
+     * visit function for apply BFS algorithm initialise the structures, avoid redundancy of code
+     * @param g, the graph to visit
+     * @param source, the starting point of the visit
+     * @return the list of step compute by the algorithm
+     */
     private LinkedList<Step> visit(Graph g, Vertex source){
         parent = new Vector<>(g.V());
         path = new LinkedList<>();
@@ -60,10 +73,26 @@ public class BFS implements AlgorithmVisitor{
         return bfs(g, source);
     }
 
+    /**
+     * visit function, apply an algorithm on a Undirected Graph
+     * @param g, the graph to visit
+     * @param source, the starting point of the visit
+     * @param target, the target point of the visit
+     * @return the list of step compute by the algorithm
+     * @throws Exception if something went wrong in the algorithm
+     */
     public LinkedList<Step> visit(UDiGraph g, Vertex source, Vertex target) throws Exception{
         return visit(g, source);
     }
 
+    /**
+     * visit function, apply an algorithm on a Directed Graph
+     * @param g, the graph to visit
+     * @param source, the starting point of the visit
+     * @param target, the target point of the visit
+     * @return the list of step compute by the algorithm
+     * @throws Exception if something went wrong in the algorithm
+     */
     public LinkedList<Step> visit(DiGraph g, Vertex source, Vertex target) throws Exception {
         return visit(g, source);
     }

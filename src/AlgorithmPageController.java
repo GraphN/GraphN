@@ -4,8 +4,6 @@ import graph.*;
 import graph.Stockage.EdgeListStockage;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -18,13 +16,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
-import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -525,38 +521,32 @@ public class AlgorithmPageController {
                     }
                 }
             }
-
-            hasChange = true;
         }
 
         if (v != null) {
             setColoredVertex(v.getId());
             addTextVertex(v.getId(), v.getDescription());
-            hasChange = true;
-
         }
 
         // Update the descriptions
-        if (hasChange) {
 
-            description.getItems().add(this.path.get(indexPath).getMessage());
-            structure.getItems().add(this.path.get(indexPath).getStrutures());
-            description.scrollTo(description.getItems().size() - 1);
-            structure.scrollTo(structure.getItems().size() - 1);
+        description.getItems().add(this.path.get(indexPath).getMessage());
+        structure.getItems().add(this.path.get(indexPath).getStructures());
+        description.scrollTo(description.getItems().size() - 1);
+        structure.scrollTo(structure.getItems().size() - 1);
 
-            Node n1 = description.lookup(".scroll-bar");
-            if (n1 instanceof ScrollBar) {
-                final ScrollBar bar1 = (ScrollBar) n1;
-                Node n2 = structure.lookup(".scroll-bar");
-                if (n2 instanceof ScrollBar) {
-                    final ScrollBar bar2 = (ScrollBar) n2;
-                    bar1.valueProperty().bindBidirectional(bar2.valueProperty());
-                }
+        Node n1 = description.lookup(".scroll-bar");
+        if (n1 instanceof ScrollBar) {
+            final ScrollBar bar1 = (ScrollBar) n1;
+            Node n2 = structure.lookup(".scroll-bar");
+            if (n2 instanceof ScrollBar) {
+                final ScrollBar bar2 = (ScrollBar) n2;
+                bar1.valueProperty().bindBidirectional(bar2.valueProperty());
             }
         }
 
         indexPath++;
-        return hasChange;
+        return true;
     }
 
     private void setDividerPosition(double position) {
