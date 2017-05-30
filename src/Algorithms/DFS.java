@@ -18,7 +18,7 @@ public class DFS implements AlgorithmVisitor{
 
     private void dfs(Graph g, Vertex v) {
         if(!listLastVisitedVertex.isEmpty()) {
-            String message = "On selectionne le sommet " + v.getId();
+            String message = "On selectionne le sommet " + v.getId() + "\n";
             String structures = "last visited vertex : " + listLastVisitedVertex.getLast().getId()
                                 + "\nmarked : " + marked.toString();
             //System.out.println("Add step : " +lastVisitedVertex.getId() + v.getId());

@@ -18,9 +18,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import jdk.nashorn.internal.runtime.ParserException;
-
-import javax.xml.parsers.ParserConfigurationException;
 import java.util.*;
 
 
@@ -174,7 +171,6 @@ public class AlgorithmPageController {
         timer = new Timer();
     }
     @FXML
-
     private void handleStop(){
         for (DrawEdge edge : edgeList) {
             edge.setUncolored();
@@ -213,8 +209,8 @@ public class AlgorithmPageController {
     @FXML
     private void handleKruskall(){
         try {
-            this.path = graph.accept(new Kruskall(), null, null);
             setDividerPosition(0.2);
+            this.path = graph.accept(new Kruskall(), null, null);
             desactivateButtons(kruskall);
         } catch (Exception e){
             e.printStackTrace();
@@ -465,8 +461,8 @@ public class AlgorithmPageController {
                             && (test.getText() == null || test.getText() != null && (edgeList.get(i).getText().toString().equals(test.getText().toString())))) {
                         edgeList.get(i).setColored();
 
-                        // Essais pour newFromResult
-                        boolean startExists = false, endExists = false;
+                        // FIXME: Essais pour newFromResult
+                       /* boolean startExists = false, endExists = false;
                         System.out.println("TESTEU" +graphNewFromResult.getNbVertex());
                         for(int j = 0; i<=graphNewFromResult.getNbVertex(); i++) {
                             if (graphNewFromResult.getPosOfVertex(j) == new Point2D((int) edgeList.get(i).getStartX(), (int) edgeList.get(i).getStartY()))
@@ -478,7 +474,7 @@ public class AlgorithmPageController {
                             graphNewFromResult.addVertex((int) edgeList.get(i).getStartX(), (int) edgeList.get(i).getStartY());
                         if(!endExists)
                             graphNewFromResult.addVertex((int) edgeList.get(i).getEndX(), (int) edgeList.get(i).getEndX());
-                        graphNewFromResult.addEdge(graphNewFromResult.getVertexName(0), graphNewFromResult.getVertexName(1));
+                        graphNewFromResult.addEdge(graphNewFromResult.getVertexName(0), graphNewFromResult.getVertexName(1));*/
                     }
                 }
             }
@@ -531,9 +527,6 @@ public class AlgorithmPageController {
     class TimerListener extends TimerTask {
         @Override
         public void run() {
-            System.out.print("hello");
-            // FIXME Andrea J'ai du mettre un runLater pour que ça marche, ça fait une threadception mais bon ça marche
-            // FIXME Parce qu'on peut pas appeller une fonction javafx dans un thread non application
             Platform.runLater(() -> {
                 if(!colorNextEdge())
                     timer.cancel();
@@ -569,6 +562,10 @@ public class AlgorithmPageController {
 
     }
 
+    /**
+     * Permet d'ouvrir un popup d'erreur
+     * @param message
+     */
     void alertMessage(String message){
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         DialogPane dialogPane = alert.getDialogPane();

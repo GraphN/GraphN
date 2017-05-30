@@ -11,10 +11,11 @@ import javafx.scene.text.Text;
  * Created by LBX on 14/05/2017.
  */
 
-// todo: Mettre la pointe des flèches au bord du cercle
 public class DrawEdge {
     final private Color UNCOLORED = Color.web("da5630");
     final private Color COLORED = Color.web("42f45f");
+    // Taille de la flèche
+    final private double scale=50;
 
     private CubicCurve curve1;
     private Path arrowEnd;
@@ -24,22 +25,46 @@ public class DrawEdge {
     boolean directed;
     int bending;
     int bendFactor;
+
+    /**
+     * Constructor for creating the nonDiEdge
+     * @param startX starting axial position X
+     * @param startY starting axial position Y
+     * @param endX ending axial position X
+     * @param endY ending axial position Y
+     * @param bending if 0: no bend, if 1: bend on 1 side, if 2: bend on the other
+     * @param bendFactor choose the intensity of the bending
+     */
     DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor){
-        this(startX, startY, endX, endY, bending, bendFactor, null, false);
-    }
-    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, Text text){
-        this(startX, startY, endX, endY, bending, bendFactor, text, true);
+        this(startX, startY, endX, endY, bending, bendFactor, false, null);
     }
 
+    /**
+     * Constructor for creating the diEdge
+     * @param startX starting axial position X
+     * @param startY starting axial position Y
+     * @param endX ending axial position X
+     * @param endY ending axial position Y
+     * @param bending if 0: no bend, if 1: bend on 1 side, if 2: bend on the other
+     * @param bendFactor choose the intensity of the bending
+     * @param directed 1 if directed
+     */
     DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, boolean directed){
-        this(startX, startY, endX, endY, bending, bendFactor, null, directed);
+        this(startX, startY, endX, endY, bending, bendFactor, directed, null);
     }
 
-    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, boolean directed, Text text){
-        this(startX, startY, endX, endY, bending, bendFactor, text, directed);
-    }
-
-    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, Text text, boolean directed){
+    /**
+     * Constructor for creating the 4 type of edges: nonDiEdge, weightedNonDiEdge, diEdge and weightedDiEdge
+     * @param startX starting axial position X
+     * @param startY starting axial position Y
+     * @param endX ending axial position X
+     * @param endY ending axial position Y
+     * @param bending if 0: no bend, if 1: bend on 1 side, if 2: bend on the other
+     * @param bendFactor choose the intensity of the bending
+     * @param directed 1 if directed
+     * @param text The weight of the Edge
+     */
+    DrawEdge(double startX, double startY, double endX, double endY, int bending, int bendFactor, boolean directed,  Text text){
         root = new Group();
         this.text = text;
         this.directed = directed;
@@ -80,8 +105,7 @@ public class DrawEdge {
         curve1.setStroke(UNCOLORED);
         curve1.setFill(Color.TRANSPARENT);
 
-        // Taille de la flèche
-        double scale=50;
+
         if(directed) {
             double paramEval = Math.sqrt(Math.pow(curve1.getEndX() - curve1.getStartX(), 2) +
                                Math.pow(curve1.getEndY() - curve1.getStartY(), 2));
@@ -100,25 +124,33 @@ public class DrawEdge {
             if(text == null)
                 root.getChildren().addAll(curve1, arrowEnd);
             else{
-                if(bendFactor != 0) {
+                //FIXME Andrea vu que movX et movY sont égal à 0 si il n'y a pas de courbure je peux enlever la partie bendFactir non?
+                /*if(bendFactor != 0) {
                     movX /= bendFactor;
                     movY /= bendFactor;
                 }
                 text.setTranslateX(controlX1 - movX/4 * bendFactor);
-                text.setTranslateY(controlY1 - movY/4 * bendFactor);
+                text.setTranslateY(controlY1 - movY/4 * bendFactor);*/
+                text.setTranslateX(controlX1 - movX/4);
+                text.setTranslateY(controlY1 - movY/4);
                 root.getChildren().addAll(curve1, arrowEnd, text);
             }
         }else{
             if(text == null)
                 root.getChildren().addAll(curve1);
             else{
+                //FIXME Andrea vu que movX et movY sont égal à 0 si il n'y a pas de courbure je peux enlever la partie bendFactir non?
+                /*if(bendFactor != 0) {
+                    movX /= bendFactor;
+                    movY /= bendFactor;
+                }
                 text.setTranslateX(controlX1 - movX/4 * bendFactor);
-                text.setTranslateY(controlY1 - movY/4 * bendFactor);
+                text.setTranslateY(controlY1 - movY/4 * bendFactor);*/
+                text.setTranslateX(controlX1 - movX/4);
+                text.setTranslateY(controlY1 - movY/4);
                 root.getChildren().addAll(curve1, text);
             }
         }
-
-
 
     }
 
@@ -158,11 +190,17 @@ public class DrawEdge {
         return p;
     }
 
+    /**
+     * set the edge to the color defined in a constant declared at the start of the function
+     */
     void setColored() {
         curve1.setStroke(COLORED);
         if (directed) arrowEnd.setStroke(COLORED);
     }
 
+    /**
+     * set the edge to the color defined in a constant declared at the start of the function
+     */
     void setUncolored() {
         curve1.setStroke(UNCOLORED);
         if(directed) arrowEnd.setStroke(UNCOLORED);
@@ -215,11 +253,9 @@ public class DrawEdge {
     int getBending() {
         return bending;
     }
-
     int getBendFactor() {
         return bendFactor;
     }
-
     boolean isDirected(){
         return directed;
     }
