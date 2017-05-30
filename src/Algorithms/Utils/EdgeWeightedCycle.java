@@ -1,22 +1,24 @@
 package Algorithms.Utils;
 
-import graph.DiGraph;
 import graph.Edge;
 import graph.Graph;
-import graph.Stockage.EdgeListStockage;
+import graph.Vertex;
 
 import java.util.LinkedList;
 
+/**
+ * Cycle detector on a graph
+ */
 public class EdgeWeightedCycle {
-    private boolean[] marked;             // marked[v] = has vertex v been marked?
-    private Edge[] edgeTo;        // edgeTo[v] = previous edge on path to v
-    private boolean[] onStack;            // onStack[v] = is vertex on the stack?
-    private LinkedList<Edge> cycle;    // directed cycle (or null if no such cycle)
+    private boolean[] marked;
+    private Edge[] edgeTo;
+    private boolean[] onStack;
+    private LinkedList<Edge> cycle;
 
     /**
      * Determines whether the edge-weighted digraph {@code G} has a directed cycle and,
      * if so, finds such a cycle.
-     * @param G the edge-weighted digraph
+     * @param G the graph to check
      */
     public EdgeWeightedCycle(Graph G) {
         marked  = new boolean[G.V()];
@@ -24,18 +26,19 @@ public class EdgeWeightedCycle {
         edgeTo  = new Edge[G.V()];
         for (int v = 0; v < G.V(); v++) {
             if (!marked[v])
-                dfs(G, v);
+                dfs(G, G.getVertex(v));
         }
-
-        // check that digraph has a cycle
-        //assert check();
     }
 
-    // check that algorithm computes either the topological order or finds a directed cycle
-    private void dfs(Graph G, int v) {
-        onStack[v] = true;
-        marked[v] = true;
-        for (Edge e : G.adjacentEdges(G.getVertex(v))) {
+    /**
+     * Run a dfs on a graph g to find if the graph is cyclic
+     * @param G the graph to compute
+     * @param v the starting vertex
+     */
+    private void dfs(Graph G, Vertex v) {
+        onStack[v.getId()] = true;
+        marked[v.getId()] = true;
+        for (Edge e : G.adjacentEdges(v)) {
             int w = e.getTo().getId();
 
             // short circuit if directed cycle found
@@ -44,7 +47,7 @@ public class EdgeWeightedCycle {
                 // found new vertex, so recur
             else if (!marked[w]) {
                 edgeTo[w] = e;
-                dfs(G, w);
+                dfs(G, G.getVertex(w));
             }
 
             // trace back directed cycle
@@ -62,54 +65,25 @@ public class EdgeWeightedCycle {
             }
         }
 
-        onStack[v] = false;
+        onStack[v.getId()] = false;
     }
 
     /**
      * Does the edge-weighted digraph have a directed cycle?
-     * @return {@code true} if the edge-weighted digraph has a directed cycle,
-     * {@code false} otherwise
+     * @return true if the graph has a directed cycle,
+     * false otherwise
      */
     public boolean hasCycle() {
         return cycle != null;
     }
 
     /**
-     * Returns a directed cycle if the edge-weighted digraph has a directed cycle,
-     * and {@code null} otherwise.
-     * @return a directed cycle (as an iterable) if the edge-weighted digraph
-     *    has a directed cycle, and {@code null} otherwise
+     * Returns a directed cycle if the graph has a directed cycle,
+     * and null otherwise.
+     * @return a directed cycle if the graph
+     *    has a directed cycle, and null otherwise
      */
     public LinkedList<Edge> cycle() {
         return cycle;
-    }
-
-
-    // certify that digraph is either acyclic or has a directed cycle
-    private boolean check() {
-
-        // edge-weighted digraph is cyclic
-        if (hasCycle()) {
-            // verify cycle
-            Edge first = null, last = null;
-            for (Edge e : cycle()) {
-                if (first == null) first = e;
-                if (last != null) {
-                    if (last.getTo() != e.getFrom()) {
-                        System.err.printf("cycle edges %s and %s not incident\n", last, e);
-                        return false;
-                    }
-                }
-                last = e;
-            }
-
-            if (last.getTo() != first.getFrom()) {
-                System.err.printf("cycle edges %s and %s not incident\n", last, first);
-                return false;
-            }
-        }
-
-
-        return true;
     }
 }

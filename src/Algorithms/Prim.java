@@ -3,37 +3,44 @@ package Algorithms;
 import Algorithms.Utils.IndexMinPQ;
 import Algorithms.Utils.Step;
 import graph.*;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
- * Created by francoisquellec on 24.03.17.
+ * Prim algorithmVisitor
+ * Compute the standard Prim algorithm :
+ * https://fr.wikipedia.org/wiki/Algorithme_de_Prim
  */
 public class Prim implements AlgorithmVisitor{
-    private Edge[] edgeTo;        // edgeTo[v] = shortest edge from tree vertex to non-tree vertex
-    private double[] distTo;      // distTo[v] = weight of shortest such edge
-    private boolean[] marked;     // marked[v] = true if v on tree, false otherwise
+    private Edge[] edgeTo;
+    private double[] distTo;
+    private boolean[] marked;
     private IndexMinPQ<Double> pq;
-
     LinkedList<Step> path = new LinkedList<>();
 
-
-    // run Prim's algorithm in graph g, starting from vertex s
+    /**
+     * Prim algorithm, starting from vertex s
+     * @param g, the graph to visit
+     * @param s, the starting point of the visit
+     */
     private void prim(Graph g, Vertex s) {
         distTo[s.getId()] = 0.0;
         pq.insert(s.getId(), distTo[s.getId()]);
         while (!pq.isEmpty()) {
             int v = pq.delMin();
-            scan(g, v);
+            scan(g, g.getVertex(v));
         }
     }
 
-    // scan vertex v
-    private void scan(Graph G, int v) {
-        marked[v] = true;
-        for (Edge e : G.adjacentEdges(G.getVertex(v))) {
-            int w = e.getOther(G.getVertex(v)).getId();
+    /**
+     * Scan the vertex v in the graph g
+     * @param g the graph to scan
+     * @param v the vertex to reach
+     */
+    private void scan(Graph g, Vertex v) {
+        marked[v.getId()] = true;
+        for (Edge e : g.adjacentEdges(v)) {
+            int w = e.getOther(v).getId();
             if (marked[w]) continue;         // v-w is obsolete edge
             if (e.getWeigth() < distTo[w]) {
                 distTo[w] = e.getWeigth();
@@ -49,8 +56,8 @@ public class Prim implements AlgorithmVisitor{
                 Step step = new Step();
                 step.setMessage(message);
                 step.setStructures(structures);
-                G.getVertex(w).setDescription(distTo[w] + "");
-                step.setVertex(G.getVertex(w));
+                g.getVertex(w).setDescription(distTo[w] + "");
+                //step.setVertex(g.getVertex(w));
 
                 path.add(step);
 
@@ -61,7 +68,16 @@ public class Prim implements AlgorithmVisitor{
     }
 
 
+    /**
+     * visit function, apply an algorithm on a UNDirected Graph
+     * @param g, the graph to visit
+     * @param source, the starting point of the visit
+     * @param target, the target point of the visit
+     * @return the list of step compute by the algorithm
+     * @throws Exception if something went wrong in the algorithm
+     */
     public LinkedList<Step> visit(UDiGraph g, Vertex source, Vertex target) throws Exception{
+        // initialise les structures
         edgeTo = new Edge[g.V()];
         distTo = new double[g.V()];
         marked = new boolean[g.V()];
@@ -70,8 +86,9 @@ public class Prim implements AlgorithmVisitor{
             distTo[v] = Double.POSITIVE_INFINITY;
         path = new LinkedList<>();
 
-        for (int v = 0; v < g.V(); v++) {    // run from each vertex to find
-            if (!marked[v]) prim(g, g.getVertex(v));      // minimum spanning forest
+        // On demarre l'algorithme de Prim
+        for (int v = 0; v < g.V(); v++) {
+            if (!marked[v]) prim(g, g.getVertex(v));
             if (edgeTo[v] != null) {
                 String message = "On selectionne l arete " + edgeTo[v] + "\n\n";
                 String structures = "distTo : " + Arrays.toString(distTo)
@@ -88,6 +105,7 @@ public class Prim implements AlgorithmVisitor{
                 path.add(step);
             }
 
+            // On calcul le poids total
             double weight = 0.0;
             for (Step e : path)
                 if (e.getEdge() != null)
@@ -95,13 +113,22 @@ public class Prim implements AlgorithmVisitor{
 
             Step step = new Step();
             step.setMessage("Poids Total : " + weight);
-            step.setVertex(g.getVertex(0));
+            //step.setVertex(g.getVertex(0));
 
             path.add(step);
         }
         return path;
     }
 
+    /**
+     * visit function, apply an algorithm on a Directed Graph, throw directly an exception,
+     * Kruskall don't handle Directed graph
+     * @param g, the graph to visit
+     * @param source, the starting point of the visit
+     * @param target, the target point of the visit
+     * @return the list of step compute by the algorithm
+     * @throws Exception if something went wrong in the algorithm
+     */
     public LinkedList<Step> visit(DiGraph g, Vertex source, Vertex target) throws Exception {
         throw new Exception("Prim ne peut pas être appliquer sur des graphes orientés.");
     }

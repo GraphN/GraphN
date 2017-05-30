@@ -4,12 +4,13 @@ import Algorithms.Utils.EdgeWeightedCycle;
 import Algorithms.Utils.Step;
 import graph.*;
 import graph.Stockage.EdgeListStockage;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
- * Created by francoisquellec on 24.03.17.
+ * Bellman Ford algorithmVisitor
+ * Compute the standard Bellman-Ford algorithm :
+ * https://fr.wikipedia.org/wiki/Algorithme_de_Bellman-Ford
  */
 public class Bellman_Ford implements AlgorithmVisitor{
     private LinkedList<Step> path;
@@ -24,10 +25,23 @@ public class Bellman_Ford implements AlgorithmVisitor{
     Vertex source;
 
 
+    /**
+     * Check if there is a path from vertex source to vertex v in g
+     * @param v the vertex to reach
+     * @return true if there is a path
+     */
+    public boolean hasPathTo(Vertex v) {
+        return distTo[v.getId()] < Double.POSITIVE_INFINITY;
+    }
+
+    /**
+     * Compute the step to have the path from source to vertex v
+     * @param v the vertex to reach
+     */
     private void pathTo(Vertex v){
         for (Edge e = edgeTo[v.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
             // On notifie que la distance min a changer
-            String message = "On selectionne l'arete " + source.getId() + e +  "\n\n\n";
+            String message = "On selectionne l'arete "  + e +  "\n\n\n";
             String structures = "distTo : " + Arrays.toString(distTo)
                     + "\nedgeTo : " + Arrays.toString(edgeTo)
                     + "\nonQueue : " + Arrays.toString(onQueue)
@@ -37,16 +51,21 @@ public class Bellman_Ford implements AlgorithmVisitor{
             step.setMessage(message);
             step.setStructures(structures);
             step.setEdge(e);
+            step.setVertex(e.getTo());
 
             path.add(step);
         }
     }
 
-    private void relax(Graph G, int v) throws Exception{
-        for (Edge e : G.adjacentEdges(G.getVertex(v))) {
+    /**
+     * Relax a Vertex, part of the bellman ford algorithm
+     * @param v the vertex to relax
+     */
+    private void relax(Vertex v) throws Exception{
+        for (Edge e : g.adjacentEdges(g.getVertex(v.getId()))) {
             int w = e.getTo().getId();
-            if (distTo[w] > distTo[v] + e.getWeigth()) {
-                distTo[w] = distTo[v] + e.getWeigth();
+            if (distTo[w] > distTo[v.getId()] + e.getWeigth()) {
+                distTo[w] = distTo[v.getId()] + e.getWeigth();
                 edgeTo[w] = e;
 
                 // On notifie que la distance min a changer
@@ -59,8 +78,8 @@ public class Bellman_Ford implements AlgorithmVisitor{
                 Step step = new Step();
                 step.setMessage(message);
                 step.setStructures(structures);
-                G.getVertex(w).setDescription(distTo[w] + "");
-                step.setVertex(G.getVertex(w));
+                g.getVertex(w).setDescription(distTo[w] + "");
+                //step.setVertex(g.getVertex(w));
 
                 path.add(step);
 
@@ -70,18 +89,17 @@ public class Bellman_Ford implements AlgorithmVisitor{
                     onQueue[w] = true;
                 }
             }
-            if (cost++ % G.V() == 0) {
+            if (cost++ % g.V() == 0) {
                 findNegativeCycle();
-                if (hasNegativeCycle()) return;  // found a negative cycle
+                if (cycle != null) return;  // found a negative cycle
             }
         }
     }
 
-    private boolean hasNegativeCycle() {
-        return cycle != null;
-    }
-
-
+    /**
+     * Find negative cycles on a partiel graph of current graph
+     * that contain the current smaller edges
+     */
     private void findNegativeCycle() throws Exception{
         int V = edgeTo.length;
         Graph spt = new DiGraph(V, new EdgeListStockage());
@@ -94,21 +112,31 @@ public class Bellman_Ford implements AlgorithmVisitor{
 
         if (cycle != null) {
             throw new Exception("Un circuit absorbant est détécté sur ce graphe, impossible de trouver un plus court chemin !\n" +
-            "Circuit : " + cycle);
+                    "Circuit : " + cycle);
         }
     }
 
-    private void validateVertex(int v) throws Exception{
-        int V = distTo.length;
-        if (v < 0 || v >= V)
-            throw new Exception("Le sommet " + v + " n'est pas valide, max : " + (V-1));
-    }
-
-
+    /**
+     * visit function, apply an algorithm on a Undirected Graph, Bellman Ford does not support Undirected graph
+     * so throw directly a exception.
+     * @param g, the graph to visit
+     * @param source, the starting point of the visit
+     * @param target, the target point of the visit
+     * @return the list of step compute by the algorithm
+     * @throws Exception if something went wrong in the algorithm
+     */
     public LinkedList<Step> visit(UDiGraph g, Vertex source, Vertex target) throws Exception{
         throw new Exception("Bellman-Ford ne peut pas être appliquer sur des graphes non orientés.");
     }
 
+    /**
+     * visit function, apply an algorithm on a Directed Graph
+     * @param g, the graph to visit
+     * @param source, the starting point of the visit
+     * @param target, the target point of the visit
+     * @return the list of step compute by the algorithm
+     * @throws Exception if something went wrong in the algorithm
+     */
     public LinkedList<Step> visit(DiGraph g, Vertex source, Vertex target) throws Exception {
         this.g = g;
         this.source = source;
@@ -126,21 +154,23 @@ public class Bellman_Ford implements AlgorithmVisitor{
         queue = new LinkedList<>();
         queue.addLast(source.getId());
         onQueue[source.getId()] = true;
-        while (!queue.isEmpty() && !hasNegativeCycle()) {
+        while (!queue.isEmpty() && cycle != null) {
             int v = queue.removeLast();
             onQueue[v] = false;
-            relax(g, v);
+            relax(g.getVertex(v));
         }
-
-        if (hasNegativeCycle()) return path;
 
         // On retourne soit tous les plus court chemin depuis source soit le plus court chemin de source a target
         if (target != null) {
-            pathTo(target);
+            if (!hasPathTo(target))
+                throw new Exception("Il n'y a pas de chemin de " + source.getId() + " a " + target.getId());
+            else
+                pathTo(target);
         } else {
             for (Vertex v : g.getVertexsList())
                 if (v != source)
-                    pathTo(v);
+                    if(hasPathTo(v))
+                        pathTo(v);
         }
 
         return path;

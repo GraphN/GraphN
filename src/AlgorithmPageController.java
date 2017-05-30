@@ -525,38 +525,33 @@ public class AlgorithmPageController {
                     }
                 }
             }
-
-            hasChange = true;
         }
 
         // fill the vertex when visited
         if (v != null) {
             setColoredVertex(v.getId());
             addTextVertex(v.getId(), v.getDescription());
-            hasChange = true;
         }
 
         // Update the descriptions
-        if (hasChange) {
 
-            description.getItems().add(this.path.get(indexPath).getMessage());
-            structure.getItems().add(this.path.get(indexPath).getStrutures());
-            description.scrollTo(description.getItems().size() - 1);
-            structure.scrollTo(structure.getItems().size() - 1);
+        description.getItems().add(this.path.get(indexPath).getMessage());
+        structure.getItems().add(this.path.get(indexPath).getStructures());
+        description.scrollTo(description.getItems().size() - 1);
+        structure.scrollTo(structure.getItems().size() - 1);
 
-            Node n1 = description.lookup(".scroll-bar");
-            if (n1 instanceof ScrollBar) {
-                final ScrollBar bar1 = (ScrollBar) n1;
-                Node n2 = structure.lookup(".scroll-bar");
-                if (n2 instanceof ScrollBar) {
-                    final ScrollBar bar2 = (ScrollBar) n2;
-                    bar1.valueProperty().bindBidirectional(bar2.valueProperty());
-                }
+        Node n1 = description.lookup(".scroll-bar");
+        if (n1 instanceof ScrollBar) {
+            final ScrollBar bar1 = (ScrollBar) n1;
+            Node n2 = structure.lookup(".scroll-bar");
+            if (n2 instanceof ScrollBar) {
+                final ScrollBar bar2 = (ScrollBar) n2;
+                bar1.valueProperty().bindBidirectional(bar2.valueProperty());
             }
         }
 
         indexPath++;
-        return hasChange;
+        return true;
     }
 
     private void setDividerPosition(double position) {
