@@ -4,6 +4,8 @@ import graph.*;
 import graph.Stockage.EdgeListStockage;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -16,11 +18,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -501,7 +505,7 @@ public class AlgorithmPageController {
                             && edgeList.get(i).getEndY() == test.getStartY()
                             && edgeList.get(i).getStartX() == test.getEndX()
                             && edgeList.get(i).getStartY() == test.getEndY()))
-                            && (test.getText().getText() == null || test.getText().getText() != null && (edgeList.get(i).getText().getText().equals(test.getText().getText())))) {
+                            && (test.getText() == null || test.getText().getText() != null && (edgeList.get(i).getText().getText().equals(test.getText().getText())))) {
                         edgeList.get(i).setColored();
 
                         // FIXME: Essais pour newFromResult
@@ -523,6 +527,7 @@ public class AlgorithmPageController {
             }
         }
 
+        // fill the vertex when visited
         if (v != null) {
             setColoredVertex(v.getId());
             addTextVertex(v.getId(), v.getDescription());
