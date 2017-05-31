@@ -33,7 +33,6 @@ public abstract class Graph {
      */
     protected void initList(int V) {
         for (int i = 0; i < V; i++) {
-            System.out.print(i);
             vertexList.add(new Vertex(i));
             this.V = V;
         }

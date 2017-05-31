@@ -296,7 +296,6 @@ public class MainApp extends Application {
                         else if (currentNode.getNodeName().equals("edges_group"))
                         {
                             NodeList gNodes = currentNode.getChildNodes();
-                            System.out.println(gNodes.getLength());
                             for(int j = 0; j < gNodes.getLength(); j++) {
                                 if(gNodes.item(j).getNodeName().equals("#text"))
                                     continue;

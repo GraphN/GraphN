@@ -28,7 +28,7 @@ public class VertexController {
             vertex = Integer.parseInt(textField.getText().replaceAll("[\\D]", ""));
             if(vertex > nbVertex || vertex < 0) return;
         }catch (NumberFormatException e){
-            System.out.println("C'eût été plus pertinant de mettre un chiffre ou un nombre");
+            e.printStackTrace();
         }
         dialogStage.close();
     }

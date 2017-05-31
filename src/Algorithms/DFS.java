@@ -26,7 +26,6 @@ public class DFS implements AlgorithmVisitor{
             String message = "On selectionne le sommet " + source.getId() + "\n";
             String structures = "last visited vertex : " + listLastVisitedVertex.getLast().getId()
                     + "\nmarked : " + marked.toString();
-            //System.out.println("Add step : " +lastVisitedVertex.getId() + v.getId());
             Edge e = null;
             while (!listLastVisitedVertex.isEmpty() && (e = g.getEdge(listLastVisitedVertex.removeLast(), source)) == null);
             Step step = new Step();

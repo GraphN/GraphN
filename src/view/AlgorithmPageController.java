@@ -32,10 +32,6 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-/**
- * Created by LBX on 03/04/2017.
- */
 public class AlgorithmPageController {
     private MainApp mainApp;
 
@@ -367,10 +363,8 @@ public class AlgorithmPageController {
         }
 
         if (graphDom.getGraphType().equals("nonDiGraph") || graphDom.getGraphType().equals("weightedNonDiGraph")) {
-            System.out.println("Algorithme page, construct graph with  " + (graphDom.getNbVertex()) + " vertexs");
             graph = new UDiGraph(graphDom.getNbVertex() + 1, new EdgeListStockage());
         } else {
-            System.out.println("Algorithme page, construct Digraph with  " + (graphDom.getNbVertex()) + " vertexs");
             graph = new DiGraph(graphDom.getNbVertex() + 1, new EdgeListStockage());
         }
 
@@ -483,14 +477,10 @@ public class AlgorithmPageController {
 
         Edge e = this.path.get(indexPath).getEdge();
         Vertex v = this.path.get(indexPath).getVertex();
-        // TODO: effacer à la fin
-        System.out.println(e);
-        System.out.println(v);
 
         if (e != null) {
             DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId(), e.getWeigth());
 
-            // TODO : On ne devrait pas avoir a faire ça !!!! mais avec ça ça marche ...
             if (test == null)
                 test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId(), e.getWeigth());
 
@@ -605,6 +595,7 @@ public class AlgorithmPageController {
 
     /**
      * Permet d'ouvrir un popup d'erreur
+     * Allow to open error popup
      *
      * @param message
      */

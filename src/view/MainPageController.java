@@ -313,9 +313,6 @@ public class MainPageController
         vertex.setId(id);
         vertex.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue());
         vertex.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue());
-        System.out.println("x" + x + "getTranslateX" + currentPane.getTranslateX());
-        System.out.println(((x - currentPane.getTranslateX() )/currentSlider.getValue()));
-        System.out.println(vertex.getTranslateX());
         return vertex;
     }
 
@@ -1354,7 +1351,6 @@ public class MainPageController
      * @param gIndex     group index in the list
      * @param eIndex     edge index in the list
      * @param tab        current Tab
-     * @param currP      current Anchorpane
      */
     private void moveVertexMoveEdgeListenerDraw(Group groupStart, Group groupEnd, int gIndex, int eIndex, Tab tab)
     {
@@ -1479,6 +1475,12 @@ public class MainPageController
         return null;
     }
 
+    /**
+     * Update a group of edges on the screen
+     *
+     * @param tab
+     * @param  index
+     */
     private void updateGroup(Tab tab, int index)
     {
         AnchorPane currPage = (AnchorPane) tab.getContent();

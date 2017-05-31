@@ -104,7 +104,6 @@ public class ListEdgesCSV implements Serialiseur{
 
         nbEdges = 0;
         while ((line = br.readLine()) != null) {
-            System.out.println("line while : " + line);
             if (++nbEdges > E)
                 throw new IOException("Ligne " + nbEdges + ": Unsupported Format, Too many lines in the file, make sure the number of edges E is correct");
 
@@ -116,8 +115,6 @@ public class ListEdgesCSV implements Serialiseur{
             Vertex node1 = g.getVertex(Integer.valueOf(edge[0]));
             Vertex node2 = g.getVertex(Integer.valueOf(edge[1]));
             double weight = Double.valueOf(edge[2]);
-
-            System.out.println("Import edge : " + edge[0] + edge[1] + edge[2]);
 
             if (node1 == null)
                 throw new IOException("Ligne " + nbEdges + ": Vertex " + Integer.valueOf(edge[0]) + " doesn't exist");

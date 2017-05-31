@@ -573,8 +573,6 @@ public class GraphDom {
                     }
                     return null;
                 }
-            }else {
-                System.out.println("NUll");
             }
         }
         return null;

@@ -69,7 +69,6 @@ public class Dijkstra implements AlgorithmVisitor{
         path = new LinkedList<>();
 
         for (Edge e : g.getEdgesList()) {
-            System.out.println(e + " p " + e.getWeigth());
             if (e.getWeigth() < 0) {
                 throw new Exception("L'arete  " + e + " a un poids négatif, Dijkstra ne peut pas s'appliquer sur les graphes " +
                         "a poids négatif, essayer Bellman-Ford");
@@ -96,7 +95,6 @@ public class Dijkstra implements AlgorithmVisitor{
                     pathTo(source, target);
         }
 
-        System.out.println("result : " + path);
         return path;
     }
 

@@ -152,7 +152,6 @@ public class ImportController {
     private void handleApply(){
         int start = 0;
         int end = 0;
-        //System.out.println(startVertex.getText());
         if(!startVertex.getText().equals(""))
             start = Integer.parseInt(startVertex.getText().replaceAll("[\\D]", ""));
         if(!endVertex.getText().equals(""))
@@ -187,7 +186,6 @@ public class ImportController {
         try{
             g = serialiseur.importGraph(fileOpen.getAbsolutePath(), stockage);
         }catch (Exception e){
-            System.out.println("Erreur");
             e.printStackTrace();
             alertMessage(e.getMessage());
             return;
