@@ -41,7 +41,7 @@ public class Dijkstra implements AlgorithmVisitor{
 
         for (Edge e = edgeTo[target.getId()]; e != null; e = edgeTo[e.getFrom().getId()]) {
             Step step = new Step();
-            step.setMessage("On selectionne l'arrete " + e);
+            step.setMessage("On selectionne l'arrete " + e + "\n\n");
             step.setStructures("distTo : " + Arrays.toString(distTo)
                     + "\nedgeTo : " + Arrays.toString(edgeTo)
                     + "\nPriorityQueue : " + pq.toString());
