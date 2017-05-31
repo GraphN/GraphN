@@ -631,7 +631,6 @@ public class AlgorithmPageController {
                     try {
                         ImageIO.write(SwingFXUtils.fromFXImage(imagePNG, null), "png", file);
                     } catch (IOException e) {
-                        // TODO: handle exception here
                         e.printStackTrace();
                     }
                     break;
