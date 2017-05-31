@@ -483,14 +483,10 @@ public class AlgorithmPageController {
 
         Edge e = this.path.get(indexPath).getEdge();
         Vertex v = this.path.get(indexPath).getVertex();
-        // TODO: effacer à la fin
-        System.out.println(e);
-        System.out.println(v);
 
         if (e != null) {
             DrawEdge test = graphDom.getEdge(e.getFrom().getId(), e.getTo().getId(), e.getWeigth());
 
-            // TODO : On ne devrait pas avoir a faire ça !!!! mais avec ça ça marche ...
             if (test == null)
                 test = graphDom.getEdge(e.getTo().getId(), e.getFrom().getId(), e.getWeigth());
 
@@ -640,7 +636,6 @@ public class AlgorithmPageController {
                     try {
                         ImageIO.write(SwingFXUtils.fromFXImage(imagePNG, null), "png", file);
                     } catch (IOException e) {
-                        // TODO: handle exception here
                         e.printStackTrace();
                     }
                     break;

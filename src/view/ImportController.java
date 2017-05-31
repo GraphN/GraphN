@@ -152,7 +152,7 @@ public class ImportController {
     private void handleApply(){
         int start = 0;
         int end = 0;
-        //System.out.println(startVertex.getText());
+
         if(!startVertex.getText().equals(""))
             start = Integer.parseInt(startVertex.getText().replaceAll("[\\D]", ""));
         if(!endVertex.getText().equals(""))

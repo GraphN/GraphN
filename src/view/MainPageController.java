@@ -3,7 +3,6 @@ package view; /**
  */
 
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -314,14 +313,18 @@ public class MainPageController
         vertex.setId(id);
         vertex.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue());
         vertex.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue());
-        System.out.println("x" + x + "getTranslateX" + currentPane.getTranslateX());
-        System.out.println(((x - currentPane.getTranslateX() )/currentSlider.getValue()));
-        System.out.println(vertex.getTranslateX());
         return vertex;
     }
 
     public void handleNewFromAlgoPage(GraphDom graphAlgoPage){
 /*
+ *********************************************************************************************************************
+ ***Cette fonction est commenté car nous avons jusqu'au dernier jour tenté de faire fonctionner handleNewFromAlgo ****
+ ***Cette fonction était en optionnelle dans notre cahier des charges. Elle permettait, après avoir appliquer un  ****
+ ***algorithme sur un graphe, de pouvoir recupérer le graphe résultant, et de le charger sur la main page, pour  *****
+ ***pouvoir l'enregister, continuer de travailler dessus (ajout de nouveaux sommets, suppression de certains, ou *****
+ ***relancer un deuxième algorithme sur ce graphe). Comme ce n'était pas tout à fait en ordre, nous le commentons ****
+ *********************************************************************************************************************
             //if no graphDom had been selected, we do nothing
             if(graphAlgoPage == null) return;
 
@@ -350,7 +353,6 @@ public class MainPageController
                 int y = (int) point.getY();
 
                 String name = graphAlgoPage.getVertexName(i);
-                // TODO: Régler le soucis qui fait que le 0 est derrière
                 // Create vertex and add it to pane
                 Group node = createVertex(x,y,name);
                 pane.getChildren().add(node);
@@ -491,7 +493,6 @@ public class MainPageController
                 int y = (int) point.getY();
 
                 String name = graphOpen.getVertexName(i);
-                // TODO: Régler le soucis qui fait que le 0 est derrière
 
                 // Create vertex and add it to pane
                 Group node = createVertex(x,y,name);
@@ -1263,9 +1264,6 @@ public class MainPageController
         slider.setMax(5.);
         slider.setValue(1.);
 
-        // FIXME: Slider desactivation
-        //slider.setDisable(true);
-        //slider.setVisible(false);
         //listener when the value of slider change
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
@@ -1478,8 +1476,6 @@ public class MainPageController
         return null;
     }
 
-    // FIXME Andrea Mettre des commentaires!!!
-    // FIXME Andrea Le soucis de zoom peut être réglé dans cette fonction je penses
     private void updateGroup(Tab tab, int index)
     {
         AnchorPane currPage = (AnchorPane) tab.getContent();
