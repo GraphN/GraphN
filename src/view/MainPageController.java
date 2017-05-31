@@ -517,7 +517,7 @@ public class MainPageController
                     Group cirleStart = (Group) getChildrenVertexById(pane, graphOpen.getEdgeStartName(i, j));
                     Group cirleEnd   = (Group) getChildrenVertexById(pane, graphOpen.getEdgeEndName(i, j));
 
-                    moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, i, j, tab, pane);
+                    moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, i, j, tab);
                     pane.getChildren().add(1, edges.get(j).getRoot());
                 }
                 i++;
@@ -996,7 +996,7 @@ public class MainPageController
                                 Group cirleStart = (Group) getChildrenVertexById(ap, graphXml.getEdgeStartName(i, j));
                                 Group cirleEnd   = (Group) getChildrenVertexById(ap, graphXml.getEdgeEndName(i, j));
 
-                                moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, i, j, currentTab, ap);
+                                moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, i, j, currentTab);
                                 ap.getChildren().add(1, edges.get(j).getRoot());
                             }
                             i++;
@@ -1355,8 +1355,10 @@ public class MainPageController
      * @param tab        current Tab
      * @param currP      current Anchorpane
      */
-    private void moveVertexMoveEdgeListenerDraw(Group groupStart, Group groupEnd, int gIndex, int eIndex, Tab tab, AnchorPane currP)
+    private void moveVertexMoveEdgeListenerDraw(Group groupStart, Group groupEnd, int gIndex, int eIndex, Tab tab)
     {
+        AnchorPane currPage = (AnchorPane) tab.getContent();
+        AnchorPane currP    = (AnchorPane) currPage.getChildren().get(0);
         //////////////////////////////////moving vertex move edges////////////////////
         groupEnd.translateXProperty().addListener(new ChangeListener<Number>()
         {
@@ -1482,6 +1484,7 @@ public class MainPageController
         AnchorPane currP    = (AnchorPane) currPage.getChildren().get(0);
         GraphDom graphXml   = getXmlOfThisTab(tab.getId());
 
+        // Add a new list in case it's a new group
         if(tabDrawEdgesList.get(tab).size() == index)
         {
             if (graphXml != null) {
@@ -1490,13 +1493,16 @@ public class MainPageController
         }
         else
         {
+            // Remove all the edges in the group from the user interface
             for(int i=0; i < tabDrawEdgesList.get(tab).get(index).size(); i++)
             {
                 currP.getChildren().remove(tabDrawEdgesList.get(cTab).get(index).get(i).getRoot());
             }
+            // Get the new / (updated) list of edges
             tabDrawEdgesList.get(cTab).set(index, getXmlOfThisTab(tab.getId()).getDrawEdges(index));
         }
 
+        // Add all the new/updated edges to the user interface
         for(int i = 0; i < tabDrawEdgesList.get(cTab).get(index).size(); i++)
         {
             Group cirleStart = null;
@@ -1509,10 +1515,10 @@ public class MainPageController
                 cirleEnd = (Group) getChildrenVertexById(currP, graphXml.getEdgeEndName(index, i));
             }
 
-            DrawEdge drawEdge = tabDrawEdgesList.get(cTab).get(index).get(i);
-
-            moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, index, i, tab, currP);
-            currP.getChildren().add(1, drawEdge.getRoot());
+            // Add move listener
+            moveVertexMoveEdgeListenerDraw(cirleStart, cirleEnd, index, i, tab);
+            // Add the edge to pane
+            currP.getChildren().add(1, tabDrawEdgesList.get(cTab).get(index).get(i).getRoot());
         }
     }
 }
