@@ -40,7 +40,7 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("GraphN");
         // Set app icon
-        this.primaryStage.getIcons().add(new Image(MainApp.class.getResourceAsStream("assets/img/logo.png")));
+        this.primaryStage.getIcons().add(new Image(MainApp.class.getResourceAsStream("/assets/img/logo.png")));
 
         initRootLayout();
     }
