@@ -1,3 +1,5 @@
+package view;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -30,7 +32,7 @@ public class WeightController {
         if(event.getCode().equals(KeyCode.ENTER))
             handleSendButton();
     }
-    int getWeight(){
+    public int getWeight(){
         return weight;
     }
     public void setStage(Stage dialogStage){

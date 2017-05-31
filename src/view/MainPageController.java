@@ -1,8 +1,9 @@
-/**
+package view; /**
  * Created by LBX on 31/03/2017.
  */
 
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -30,6 +31,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import mainProgram.MainApp;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
@@ -207,14 +209,14 @@ public class MainPageController
             Alert alert           = new Alert(Alert.AlertType.ERROR, "Votre graphe est vide");
             DialogPane dialogPane = alert.getDialogPane();
 
-            dialogPane.getStylesheets().add(getClass().getResource("assets/css/alert.css").toExternalForm());
+            dialogPane.getStylesheets().add(getClass().getResource("/assets/css/alert.css").toExternalForm());
             dialogPane.getStyleClass().add("myDialog");
             alert.showAndWait();
 
             return;
         }
 
-        //calling the showAlgoPage, whit the current GraphDom (graphxml)
+        //calling the showAlgoPage, whit the current view.GraphDom (graphxml)
         mainApp.showAlgoPage(graphXml);
     }
 
@@ -312,7 +314,9 @@ public class MainPageController
         vertex.setId(id);
         vertex.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue());
         vertex.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue());
-
+        System.out.println("x" + x + "getTranslateX" + currentPane.getTranslateX());
+        System.out.println(((x - currentPane.getTranslateX() )/currentSlider.getValue()));
+        System.out.println(vertex.getTranslateX());
         return vertex;
     }
 
@@ -356,12 +360,12 @@ public class MainPageController
 
             tabMap.put(tab,graphAlgoPage.getGraphType());
 
-            DrawEdge drawEdge = null;
+            view.DrawEdge drawEdge = null;
 
             i = 0;
             while (i < graphAlgoPage.getNbGroup())
             {
-                ArrayList<DrawEdge> edges = graphAlgoPage.getDrawEdges(i);
+                ArrayList<view.DrawEdge> edges = graphAlgoPage.getDrawEdges(i);
                 tabDrawEdgesList.get(cTab).add(edges);
 
                 for(int j = 0; j < edges.size(); j++)
@@ -392,11 +396,19 @@ public class MainPageController
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         cTab = currentTab;
 
+
         //if the vertex button is active (once or always)
         if(vertex1Active || vertex1ActiveOnce)
         {
+            //get currentPane to know the slider position
+            AnchorPane anch    = (AnchorPane) currentTab.getContent();
+            Slider slider      = (Slider) anch.getChildren().get(1);
+            double sliderValue = slider.getValue();
+
             //adding this vertex to the xml file
             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+            // If slider
+            //graphXml.addVertex((int)(mouseEvent.getX()*sliderValue), (int)(mouseEvent.getY()*sliderValue));
             graphXml.addVertex((int)mouseEvent.getX(), (int)mouseEvent.getY());
 
             String nameOfVertex = PREFIXVERTEXNAME + graphXml.getNbVertex();
@@ -432,7 +444,7 @@ public class MainPageController
      * when we click the open Button, we call showOpenPage of the mainApp,
      * to have popup to open the file.
      *  when its done, we verify if the graphDom is ok, if it is we have to create
-     *  a Tab and read GraphDom to construct graphically its components
+     *  a Tab and read view.GraphDom to construct graphically its components
      */
     @FXML
     private void handleOpen()
@@ -443,7 +455,7 @@ public class MainPageController
             //if no graphDom had been selected, we do nothing
             if(graphOpen == null) return;
 
-            //adding this GraphDom to the list
+            //adding this view.GraphDom to the list
             listGraphXml.add(graphOpen);
 
             //creating new Tab whit the gxml Name
@@ -469,11 +481,11 @@ public class MainPageController
             AnchorPane paneBack = (AnchorPane) tab.getContent();
             AnchorPane pane     = (AnchorPane) paneBack.getChildren().get(0);
 
-            //adding all vertex from GraphDom
+            //adding all vertex from view.GraphDom
             int i = 0;
             while (i <= graphOpen.getNbVertex())
             {
-                //getting position of vertexes in the GraphDom
+                //getting position of vertexes in the view.GraphDom
                 Point2D point = graphOpen.getPosOfVertex(i);
                 int x = (int) point.getX();
                 int y = (int) point.getY();
@@ -492,7 +504,7 @@ public class MainPageController
 
             DrawEdge drawEdge = null;
 
-            //adding all edges of the GraphDom
+            //adding all edges of the view.GraphDom
             i = 0;
             while (i < graphOpen.getNbGroup())
             {
@@ -538,9 +550,10 @@ public class MainPageController
         helpPage.setTitle("help Page");
         helpPage.setMinHeight(500);
         helpPage.setMinWidth(500);
+        helpPage.setResizable(false);
 
         ScrollPane page = new ScrollPane();
-        Image help1     = new Image(getClass().getResourceAsStream("assets/img/help1.png"));
+        Image help1     = new Image(getClass().getResourceAsStream("/assets/img/help1.png"));
 
         page.setContent(new ImageView(help1));
 
@@ -551,7 +564,7 @@ public class MainPageController
         page.setMaxWidth(600);
 
         Group root  = new Group();
-        Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 590, 590);
         helpPage.setScene(scene);
 
         root.getChildren().add(page);
@@ -1103,6 +1116,7 @@ public class MainPageController
                                     case WEIGHTEDNONDIGRAPH:
 
                                         weightedEdgeButton.setId(WEIGHTEDEDGEBUTTON);
+                                        break;
                                     case DIGRAPH:
 
                                         diEdgeButton.setId(DIEDGEBUTTON);
@@ -1248,6 +1262,10 @@ public class MainPageController
         slider.setMin(1.);
         slider.setMax(5.);
         slider.setValue(1.);
+
+        // FIXME: Slider desactivation
+        //slider.setDisable(true);
+        //slider.setVisible(false);
         //listener when the value of slider change
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
@@ -1460,6 +1478,8 @@ public class MainPageController
         return null;
     }
 
+    // FIXME Andrea Mettre des commentaires!!!
+    // FIXME Andrea Le soucis de zoom peut être réglé dans cette fonction je penses
     private void updateGroup(Tab tab, int index)
     {
         AnchorPane currPage = (AnchorPane) tab.getContent();

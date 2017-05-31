@@ -6,26 +6,48 @@ package graph;
         import java.util.LinkedList;
 
 /**
- * Created by Adrian on 22.03.2017.
+ *  Representation of a Undirected graph
  */
 public class UDiGraph extends Graph {
 
+    /**
+     * Constructor
+     * @param V the number of vertex of the graph
+     * @param s the type of stockage to use
+     */
     public UDiGraph(int V, StockageType s) {
         super(V,s);
-        TYPE = 0;
-        System.out.println(this);
     }
 
+    /**
+     * Add an edge with 0 weight to the graph
+     * @param v the starting vertex
+     * @param w the ending vertex
+     */
     public void addEdge(Vertex v, Vertex w) {
         addEdge(v, w, 0);
     }
 
-    public void addEdge(Vertex v, Vertex w, double weigth) {
-        stockage.addEdge(v, w, weigth);
-        stockage.addEdge(w, v, weigth);
+    /**
+     * Add an edge to the graph
+     * @param v the starting vertex
+     * @param w the ending vertex
+     * @param weight the weight of the edge
+     */
+    public void addEdge(Vertex v, Vertex w, double weight) {
+        stockage.addEdge(v, w, weight);
+        stockage.addEdge(w, v, weight);
         E ++;
     }
 
+    /**
+     * Apply an algorithme(AlgorithmVisitor) to the current graph
+     * @param v the visitor to apply
+     * @param source the source vertex
+     * @param target the vertex to reach
+     * @return A list of step produce by the algorithm visitor
+     * @throws Exception if the algorithm cant finish his execution
+     */
     public LinkedList<Step> accept(AlgorithmVisitor v, Vertex source, Vertex target) throws Exception{
         return v.visit(this, source, target);
     }

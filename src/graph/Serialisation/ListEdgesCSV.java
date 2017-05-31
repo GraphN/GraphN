@@ -11,28 +11,60 @@ import java.io.*;
 import java.util.LinkedList;
 
 /**
- * Created by francoisquellec on 27.05.17.
+ * A parsor for import/export graph from a filePath,
+ * the typo is :
+ * first line : number_of_vertex;number_of_edge;type(DIRECTED or UNDIRECTED)
+ * second line : from;to;weight
+ * ...
+ * number_of_edge+1 line : from;to;weight
+ *
  */
 public class ListEdgesCSV implements Serialiseur{
-        static final String EXTENSION_FILE = ".csv";
+    static final String EXTENSION_FILE = ".csv";
+    /**
+     * Export the graph g with the specified path in the specified file
+     * @param g the undirected graph to export
+     * @param path the path to export
+     * @param outputFile the file to use
+     */
+    public void exportGraph(Graph g, LinkedList<Step> path, String outputFile){
+        String type = g instanceof DiGraph ? "DIRECTED" : "UNDIRECTED";
+        export(g, path, outputFile, type);
+    }
 
-        public void exportGraph(Graph g, LinkedList<Step> path, String outputFile){
-            try{
-                PrintWriter writer = new PrintWriter(outputFile + EXTENSION_FILE, "UTF-8");
-                String graphType = g.getType() == DIRECTED ? "DIRECTED" : "UNDIRECTED";
-                writer.println(g.V() + ";" + g.E() + ";" + graphType);
+    /**
+     * Export the graph g with the specified path in the specified file
+     * @param g the undirected graph to export
+     * @param path the path to export
+     * @param outputFile the file to use
+     * @param type the type of the graph
+     *
+     */
+    private void export(Graph g, LinkedList<Step> path, String outputFile, String type){
+        try{
+            PrintWriter writer = new PrintWriter(outputFile + EXTENSION_FILE, "UTF-8");
+            writer.println(g.V() + ";" + g.E() + ";" + type);
 
-                // On ecrit la liste de edges
-                for(Step e : path)
-                    if (e.getEdge() != null)
-                        writer.println(e.getEdge().getFrom() + ";" + e.getEdge().getTo() + ";" + e.getEdge().getWeigth());
+            // On ecrit la liste de edges
+            for(Step e : path)
+                if (e.getEdge() != null)
+                    writer.println(e.getEdge().getFrom() + ";" + e.getEdge().getTo() + ";" + e.getEdge().getWeigth());
 
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
+
+    /**
+     * Import a graph from a specified input file, use a specified stockageType
+     * for create the graph.
+     * @param inputFile the filepath of the file to import
+     * @param stockage the type of stockage to use
+     * @return the graph imported
+     * @throws Exception if the input file doesn't respect the typo
+     */
     public Graph importGraph(String inputFile, StockageType stockage) throws IOException, NumberFormatException{
         Graph g;
         int V, E;
