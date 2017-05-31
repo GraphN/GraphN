@@ -314,7 +314,9 @@ public class MainPageController
         vertex.setId(id);
         vertex.setTranslateX((x - currentPane.getTranslateX() )/currentSlider.getValue());
         vertex.setTranslateY((y - currentPane.getTranslateY() )/currentSlider.getValue());
-
+        System.out.println("x" + x + "getTranslateX" + currentPane.getTranslateX());
+        System.out.println(((x - currentPane.getTranslateX() )/currentSlider.getValue()));
+        System.out.println(vertex.getTranslateX());
         return vertex;
     }
 
@@ -394,11 +396,19 @@ public class MainPageController
         Tab currentTab = (Tab)tabPane.getSelectionModel().getSelectedItem();
         cTab = currentTab;
 
+
         //if the vertex button is active (once or always)
         if(vertex1Active || vertex1ActiveOnce)
         {
+            //get currentPane to know the slider position
+            AnchorPane anch    = (AnchorPane) currentTab.getContent();
+            Slider slider      = (Slider) anch.getChildren().get(1);
+            double sliderValue = slider.getValue();
+
             //adding this vertex to the xml file
             GraphDom graphXml = getXmlOfThisTab(currentTab.getId());
+            // If slider
+            //graphXml.addVertex((int)(mouseEvent.getX()*sliderValue), (int)(mouseEvent.getY()*sliderValue));
             graphXml.addVertex((int)mouseEvent.getX(), (int)mouseEvent.getY());
 
             String nameOfVertex = PREFIXVERTEXNAME + graphXml.getNbVertex();
@@ -1106,6 +1116,7 @@ public class MainPageController
                                     case WEIGHTEDNONDIGRAPH:
 
                                         weightedEdgeButton.setId(WEIGHTEDEDGEBUTTON);
+                                        break;
                                     case DIGRAPH:
 
                                         diEdgeButton.setId(DIEDGEBUTTON);
@@ -1251,6 +1262,10 @@ public class MainPageController
         slider.setMin(1.);
         slider.setMax(5.);
         slider.setValue(1.);
+
+        // FIXME: Slider desactivation
+        //slider.setDisable(true);
+        //slider.setVisible(false);
         //listener when the value of slider change
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
@@ -1463,6 +1478,8 @@ public class MainPageController
         return null;
     }
 
+    // FIXME Andrea Mettre des commentaires!!!
+    // FIXME Andrea Le soucis de zoom peut être réglé dans cette fonction je penses
     private void updateGroup(Tab tab, int index)
     {
         AnchorPane currPage = (AnchorPane) tab.getContent();

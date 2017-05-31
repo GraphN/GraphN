@@ -267,7 +267,6 @@ public class AlgorithmPageController {
         try {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
-            //pane.getChildren().remove(edgeList.get(0).getRoot());
             this.path = graph.accept(new DFS(), graph.getVertex(startVertex), null);
 
             setColoredVertex(startVertex);
@@ -288,7 +287,6 @@ public class AlgorithmPageController {
             setDividerPosition(0.2);
             int startVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "Start Vertex");
             int endVertex = mainApp.showVertex(graph.getVertexsList().size() - 1, "End Vertex");
-            //pane.getChildren().remove(edgeList.get(0).getRoot());
             this.path = graph.accept(new Dijkstra(), graph.getVertex(startVertex), graph.getVertex(endVertex));
             setColoredVertex(startVertex);
             desactivateButtons(dijkstra);
@@ -360,8 +358,6 @@ public class AlgorithmPageController {
      * @return an AnchorPane
      */
     private AnchorPane recreateAnchorWithXML(GraphDom graphD) {
-        //AnchorPane pane = new AnchorPane();
-
         graphDom = graphD;
 
         try {
@@ -510,21 +506,6 @@ public class AlgorithmPageController {
                             && edgeList.get(i).getStartY() == test.getEndY()))
                             && (test.getText() == null || test.getText().getText() != null && (edgeList.get(i).getText().getText().equals(test.getText().getText())))) {
                         edgeList.get(i).setColored();
-
-                        // FIXME: Essais pour newFromResult
-                       /* boolean startExists = false, endExists = false;
-                        System.out.println("TESTEU" +graphNewFromResult.getNbVertex());
-                        for(int j = 0; i<=graphNewFromResult.getNbVertex(); i++) {
-                            if (graphNewFromResult.getPosOfVertex(j) == new Point2D((int) edgeList.get(i).getStartX(), (int) edgeList.get(i).getStartY()))
-                                startExists = true;
-                            if (graphNewFromResult.getPosOfVertex(j) == new Point2D((int) edgeList.get(i).getEndX(), (int) edgeList.get(i).getEndX()))
-                                endExists = true;
-                        }
-                        if(!startExists)
-                            graphNewFromResult.addVertex((int) edgeList.get(i).getStartX(), (int) edgeList.get(i).getStartY());
-                        if(!endExists)
-                            graphNewFromResult.addVertex((int) edgeList.get(i).getEndX(), (int) edgeList.get(i).getEndX());
-                        graphNewFromResult.addEdge(graphNewFromResult.getVertexName(0), graphNewFromResult.getVertexName(1));*/
                     }
                 }
             }
@@ -560,15 +541,6 @@ public class AlgorithmPageController {
     private void setDividerPosition(double position) {
         splitPane.setDividerPosition(0, position);
     }
-
-    /*class TimerListener extends TimerTask {
-            @Override
-            public void run() {
-                System.out.print("hello");
-                if(!colorNextEdge())
-                    timer.cancel();
-            }
-        }*/
 
     /**
      * Color the edges with a period without impacting the program
@@ -645,7 +617,7 @@ public class AlgorithmPageController {
     }
 
     @FXML
-    void handleScreenShot(){
+    void handleScreenShot() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Screen");
 
@@ -669,6 +641,7 @@ public class AlgorithmPageController {
                         ImageIO.write(SwingFXUtils.fromFXImage(imagePNG, null), "png", file);
                     } catch (IOException e) {
                         // TODO: handle exception here
+                        e.printStackTrace();
                     }
                     break;
                 default:
