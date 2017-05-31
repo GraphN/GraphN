@@ -3,6 +3,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -35,6 +36,8 @@ public class MainApp extends Application {
     {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("GraphN");
+        // Set app icon
+        this.primaryStage.getIcons().add(new Image(MainApp.class.getResourceAsStream("assets/img/logo.png")));
 
         initRootLayout();
     }
@@ -81,6 +84,8 @@ public class MainApp extends Application {
             Scene scene = new Scene(page);
             algoStage.setScene(scene);
             algoStage.setMaximized(true);
+            algoStage.getIcons().add(new Image(MainApp.class.getResourceAsStream("assets/img/logo.png")));
+
 
             AlgorithmPageController controller = loader.getController();
             controller.setMainApp(this);
